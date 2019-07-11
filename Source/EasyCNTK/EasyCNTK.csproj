@@ -24,6 +24,7 @@ Allows train, evaluate and inference deep neural networks in style similar to Ke
 Add SMOTE
 Add Predict method for model (inference)
 Add comments to some methods</PackageReleaseNotes>
+    <Configurations>Debug;Release;Debug2</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

@@ -17,10 +17,12 @@ namespace EasyCNTK.Layers
     public sealed class SelfStabilization : Layer
     {
         private string _name;
-        private static Function selfStabilize(Function input, DeviceDescriptor device, string name)
-        {
+        private DataType _dataType;
 
-            bool isFloatType = input.Output.DataType == DataType.Float;
+        private static Function selfStabilize(Function input, DeviceDescriptor device, string name, DataType dataType)
+        {
+            bool isFloatType = _dataType == DataType.Float || input.Output.DataType == DataType.Float;
+
             Constant f, fInv;
             if (isFloatType)
             {
@@ -49,20 +51,21 @@ namespace EasyCNTK.Layers
         /// <param name="device"></param>
         /// <param name="name"></param>
         /// <returns></returns>
-        public static Function Build(Function input, DeviceDescriptor device, string name)
+        public static Function Build(Function input, DeviceDescriptor device, string name,DataType dataType = DataType.Unknown)
         {
-            return selfStabilize(input, device, name);
+            return selfStabilize(input, device, name, dataType);
         }
         public override Function Create(Function input, DeviceDescriptor device)
         {
-            return selfStabilize(input, device, _name);
+            return selfStabilize(input, device, _name, _dataType);
         }
         /// <summary>
         /// Создает слой самостабилизации для выбора оптимальной скорости обучения.
         /// </summary>
         /// <param name="name"></param>
-        public SelfStabilization(string name = "SelfStabilizer")
+        public SelfStabilization(DataType dataType = DataType.Unknown, string name = "SelfStabilizer")
         {
+            _dataType = dataType;
             _name = name;
         }
         public override string GetDescription()

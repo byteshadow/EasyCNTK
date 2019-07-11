@@ -18,18 +18,18 @@ using System.Linq;
 namespace EasyCNTK
 {
     /// <summary>
-    /// Реализует операции конструирования модели прямого распространения
+    /// Implements the operations of constructing a direct distribution model
     /// </summary>
-    /// <typeparam name="T">Тип данных. Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
+    /// <typeparam name = "T"> Data type. <Seealso cref = "float" />, <seealso cref = "double" /> </typeparam> supported
     public sealed class Sequential<T> : IDisposable where T : IConvertible
     {
-        public const string PREFIX_FILENAME_DESCRIPTION = "ArchitectureDescription";
-        private DeviceDescriptor _device { get; }
-        private Function _model { get; set; }
-        private string _architectureDescription { get; set; }
-        private Dictionary<string, Function> _shortcutConnectionInputs = new Dictionary<string, Function>();
+        public const string PrefixFilenameDescription = "ArchitectureDescription";
+        private DeviceDescriptor Device { get; }
+        private string _architectureDescription;
 
-        private string getArchitectureDescription()
+        private readonly Dictionary<string, Function> _shortcutConnectionInputs = new Dictionary<string, Function>();
+
+        private string GetArchitectureDescription()
         {
             var shortcuts = _shortcutConnectionInputs.Keys.ToList();
             foreach (var shortcut in shortcuts)
@@ -41,15 +41,16 @@ namespace EasyCNTK
             }
             return _architectureDescription + "[OUT]";
         }
+
         /// <summary>
-        /// Загружает модель из файла. Так же пытается прочитать описание архитектуры сети: 
-        /// 1) Из файла ArchitectureDescription{имя_файла_модели}.txt 
-        /// 2) Из имени файла модели ориентируясь на наличение [IN] и [OUT] тегов. Если это не удается, то описание конфигурации: Unknown.
+        /// Loads the model from the file. Also trying to read the description of the network architecture:
+        /// 1) From the ArchitectureDescription file {model_file_name} .txt
+        /// 2) From the model file name, focusing on the presence of [IN] and [OUT] tags. If this fails, then the configuration description: Unknown.
         /// </summary>
-        /// <typeparam name="T">Тип данных. Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
-        /// <param name="device">Устройство для загрузки</param>
-        /// <param name="filePath">Путь к файлу модели</param>
-        /// <param name="modelFormat">Формат модели</param>
+        /// <typeparam name = "T"> Data type. <Seealso cref = "float" />, <seealso cref = "double" /> </typeparam> supported
+        /// <param name = "device"> Device to boot </param>
+        /// <param name = "filePath"> Path to the model file </param>
+        /// <param name = "modelFormat"> Model format </param>
         /// <returns></returns>
         public static Sequential<T> LoadModel(DeviceDescriptor device, string filePath, ModelFormat modelFormat = ModelFormat.CNTKv2)
         {
@@ -57,17 +58,17 @@ namespace EasyCNTK
         }
 
         /// <summary>
-        /// Инициализирeует нейросеть с размерностью входного вектора без слоев
+        /// Initializes the neural network with the dimension of the input vector without layers
         /// </summary>
-        /// <param name="inputShape">Тензор, описывающий форму входа нейросети (входных данных)</param>
-        /// <param name="device">Устройство на котором создается сеть</param>
-        /// <param name="inputDynamicAxes">Список динамических осей. Добавьте ось <seealso cref="Axis.DefaultBatchAxis()"/>, если выход вашей сети - последовательность.</param>
-        /// <param name="isSparce">Указывает, что вход это вектор One-Hot-Encoding и следует использовать внутреннюю оптимизацию CNTK для увеличения производительности.</param>
-        public Sequential(DeviceDescriptor device, int[] inputShape, IList<Axis> inputDynamicAxes = null, bool isSparce = false)
+        /// <param name = "inputShape"> Tensor describing the input form of the neural network (input) </param>
+        /// <param name = "device"> The device on which the network is being created </param>
+        /// <param name = "inputDynamicAxes"> List of dynamic axes. Add the axis <seealso cref = "Axis.DefaultBatchAxis ()" /> if the output of your network is a sequence. </Param>
+        /// <param name = "isSparse"> Indicates that the input is a One-Hot-Encoding vector and you should use the CNTK internal optimization to increase performance. </param>
+        public Sequential(DeviceDescriptor device, int[] inputShape, IList<Axis> inputDynamicAxes = null, bool isSparse = false)
         {
-            _device = device;
+            Device = device;
             var dataType = typeof(T) == typeof(double) ? DataType.Double : DataType.Float;
-            _model = Variable.InputVariable(inputShape, dataType, "Input", inputDynamicAxes, isSparce);
+            Model = Variable.InputVariable(inputShape, dataType, "Input", inputDynamicAxes, isSparse);
             var shape = "";
             inputShape.ToList().ForEach(p =>
             {
@@ -77,33 +78,46 @@ namespace EasyCNTK
             _architectureDescription = $"[IN]{shape}";
         }
 
+        public Sequential(DeviceDescriptor device, Variable input)
+        {
+            Device = device;
+            Model = input;
+            var shape = "";
+            input.Shape.Dimensions.ToList().ForEach(p =>
+            {
+                shape += p.ToString() + "x";
+            });
+            shape = shape.Substring(0, shape.Length - 1);
+            _architectureDescription = $"[IN]{shape}";
+        }
+
         private Sequential(DeviceDescriptor device, string filePath, ModelFormat modelFormat = ModelFormat.CNTKv2)
         {
-            _device = device;
-            _model = Function.Load(filePath, device, modelFormat);
+            Device = device;
+            Model = Function.Load(filePath, device, modelFormat);
             var dataType = typeof(T) == typeof(double) ? DataType.Double : DataType.Float;
-            if (_model.Output.DataType != dataType)
+            if (Model.Output.DataType != dataType)
             {
-                throw new ArgumentException($"Универсальный параметр TElement не сответствует типу данных в модели. Требуемый тип: {_model.Output.DataType}");
+                throw new ArgumentException($"The universal parameter TElement does not match the data type in the model. Required type: {Model.Output.DataType}");
             }
             try
             {
                 _architectureDescription = "Unknown";
 
                 var pathToFolder = Directory.GetParent(filePath).FullName;
-                var descriptionPath = Path.Combine(pathToFolder, $"{PREFIX_FILENAME_DESCRIPTION}_{filePath}.txt");
+                var descriptionPath = Path.Combine(pathToFolder, $"{PrefixFilenameDescription}_{filePath}.txt");
                 if (File.Exists(descriptionPath))
                 {
                     var description = File.ReadAllText(descriptionPath);
-                    var index = description.IndexOf("[OUT]");
+                    var index = description.IndexOf("[OUT]", StringComparison.Ordinal);
                     _architectureDescription = index != -1 ? description.Remove(index) : description;
                     return;
                 }
 
                 var fileName = Path.GetFileName(filePath);
-                var indexIn = fileName.IndexOf("[IN]");
-                var indexOut = fileName.IndexOf("[OUT]");
-                bool fileNameContainsArchitectureDescription = indexIn != -1 && indexOut != -1 && indexIn < indexOut;
+                var indexIn = fileName.IndexOf("[IN]", StringComparison.Ordinal);
+                var indexOut = fileName.IndexOf("[OUT]", StringComparison.Ordinal);
+                var fileNameContainsArchitectureDescription = indexIn != -1 && indexOut != -1 && indexIn < indexOut;
                 if (fileNameContainsArchitectureDescription)
                 {
                     _architectureDescription = fileName.Substring(indexIn, indexOut - indexIn);
@@ -111,109 +125,114 @@ namespace EasyCNTK
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Ошибка загрузки файла конфигурации модели. {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error loading model configuration file. {ex.Message}");
             }
         }
+
         /// <summary>
-        /// Добавляет заданный слой (стыкует к последнему добавленному слою)
+        /// Adds the specified layer (joins to the last added layer)
         /// </summary>
-        /// <param name="layer">Слой для стыковки</param>
+        /// <param name = "layer"> Layer for docking </param>
         public void Add(Layer layer)
         {
-            _model = layer.Create(_model, _device);
+            Model = layer.Create(Model, Device);
             _architectureDescription += $"-{layer.GetDescription()}";
         }
+
         /// <summary>
-        /// Создает входную точку для SC, из которой можно создать соединение к следующим слоям сети. Для одной входной точки должна существовать как минимум одна выходная точка, иначе соединение игнорируется в модели.
+        /// Creates an entry point for SC, from which you can create a connection to the next network layers. At least one output point must exist for one input point, otherwise the connection is ignored in the model.
         /// </summary>
-        /// <param name="nameShortcutConnection">Название точки входа, из которой будет пробрасываться соединение. В рамках сети должно быть уникальным</param>
+        /// <param name = "nameShortcutConnection"> The name of the entry point from which the connection will be forwarded. Within the network must be unique </param>
         public void CreateInputPointForShortcutConnection(string nameShortcutConnection)
         {
-            _shortcutConnectionInputs.Add(nameShortcutConnection, _model);
+            _shortcutConnectionInputs.Add(nameShortcutConnection, Model);
             _architectureDescription += $"-ShortIn({nameShortcutConnection})";
         }
+
         /// <summary>
-        /// Создает выходную точку для SC, к которой пробрасывается соединение из ранее созданной входной точки. Для одной входной точки может существовать несколько выходных точек.
+        /// Creates an output point for SC, to which the connection is forwarded from a previously created input point. For one input point there may be several output points.
         /// </summary>
-        /// <param name="nameShortcutConnection">Название точки входа, из которой пробрасывается соединение.</param>
+        /// <param name = "nameShortcutConnection"> The name of the entry point from which the connection is forwarded. </param>
         public void CreateOutputPointForShortcutConnection(string nameShortcutConnection)
         {
             if (_shortcutConnectionInputs.TryGetValue(nameShortcutConnection, out var input))
             {
-                if (input.Output.Shape.Equals(_model.Output.Shape))
+                if (input.Output.Shape.Equals(Model.Output.Shape))
                 {
-                    _model = CNTKLib.Plus(_model, input);
+                    Model = CNTKLib.Plus(Model, input);
                 }
-                else if (input.Output.Shape.Rank != 1 && _model.Output.Shape.Rank == 1) // [3x4x2] => [5]
+                else if (input.Output.Shape.Rank != 1 && Model.Output.Shape.Rank == 1) // [3x4x2] => [5]
                 {
-                    int targetDim = _model.Output.Shape[0];
+                    int targetDim = Model.Output.Shape[0];
                     int inputDim = input.Output.Shape.Dimensions.Aggregate((d1, d2) => d1 * d2);
                     var inputVector = CNTKLib.Reshape(input, new[] { inputDim });
 
-                    var scale = new Parameter(new[] { targetDim, inputDim }, input.Output.DataType, CNTKLib.UniformInitializer(CNTKLib.DefaultParamInitScale), _device);
+                    var scale = new Parameter(new[] { targetDim, inputDim }, input.Output.DataType, CNTKLib.UniformInitializer(CNTKLib.DefaultParamInitScale), Device);
                     var scaled = CNTKLib.Times(scale, inputVector);
 
-                    var reshaped = CNTKLib.Reshape(scaled, _model.Output.Shape);
-                    _model = CNTKLib.Plus(reshaped, _model);
+                    var reshaped = CNTKLib.Reshape(scaled, Model.Output.Shape);
+                    Model = CNTKLib.Plus(reshaped, Model);
                 }
-                else if (input.Output.Shape.Rank == 1 && _model.Output.Shape.Rank != 1) // [5] => [3x4x2]
+                else if (input.Output.Shape.Rank == 1 && Model.Output.Shape.Rank != 1) // [5] => [3x4x2]
                 {
-                    int targetDim = _model.Output.Shape.Dimensions.Aggregate((d1, d2) => d1 * d2);
+                    int targetDim = Model.Output.Shape.Dimensions.Aggregate((d1, d2) => d1 * d2);
                     var inputDim = input.Output.Shape[0];
-                    var scale = new Parameter(new[] { targetDim, inputDim }, input.Output.DataType, CNTKLib.UniformInitializer(CNTKLib.DefaultParamInitScale), _device);
+                    var scale = new Parameter(new[] { targetDim, inputDim }, input.Output.DataType, CNTKLib.UniformInitializer(CNTKLib.DefaultParamInitScale), Device);
                     var scaled = CNTKLib.Times(scale, input);
 
-                    var reshaped = CNTKLib.Reshape(scaled, _model.Output.Shape);
-                    _model = CNTKLib.Plus(reshaped, _model);
+                    var reshaped = CNTKLib.Reshape(scaled, Model.Output.Shape);
+                    Model = CNTKLib.Plus(reshaped, Model);
                 }
                 else // [3x4x2] => [4x5x1] || [3x1] => [5x7x8x1]
                 {
                     var inputDim = input.Output.Shape.Dimensions.Aggregate((d1, d2) => d1 * d2);
                     var inputVector = CNTKLib.Reshape(input, new[] { inputDim });
 
-                    var targetDim = _model.Output.Shape.Dimensions.Aggregate((d1, d2) => d1 * d2);
-                    var scale = new Parameter(new[] { targetDim, inputDim }, input.Output.DataType, CNTKLib.UniformInitializer(CNTKLib.DefaultParamInitScale), _device);
+                    var targetDim = Model.Output.Shape.Dimensions.Aggregate((d1, d2) => d1 * d2);
+                    var scale = new Parameter(new[] { targetDim, inputDim }, input.Output.DataType, CNTKLib.UniformInitializer(CNTKLib.DefaultParamInitScale), Device);
                     var scaled = CNTKLib.Times(scale, inputVector);
 
-                    var reshaped = CNTKLib.Reshape(scaled, _model.Output.Shape);
-                    _model = CNTKLib.Plus(reshaped, _model);
+                    var reshaped = CNTKLib.Reshape(scaled, Model.Output.Shape);
+                    Model = CNTKLib.Plus(reshaped, Model);
                 }
                 _architectureDescription += $"-ShortOut({nameShortcutConnection})";
             }
         }
+
         /// <summary>
-        /// Сконфигурированная модель CNTK
+        /// Configured CNTK model
         /// </summary>
-        public Function Model { get => _model; }
+        public Function Model { get; private set; }
+
         /// <summary>
-        /// Сохраняет модель в файл.
+        /// Saves the model to a file.
         /// </summary>
-        /// <param name="filePath">Путь для сохранения модели (включая имя файла и расширение)</param>
-        /// <param name="saveArchitectureDescription">Указывает, следует ли сохранить описание архитектуры в отдельном файле: ArchitectureDescription_{имя-файла-модели}.txt</param>
+        /// <param name = "filePath"> Path to save the model (including the file name and extension) </param>
+        /// <param name = "saveArchitectureDescription"> Specifies whether the architecture description should be saved in a separate file: ArchitectureDescription_ {model-file-name} .txt </param>
         public void SaveModel(string filePath, bool saveArchitectureDescription = true)
         {
-            _model.Save(filePath);
+            Model.Save(filePath);
             if (saveArchitectureDescription)
             {
                 var fileName = Path.GetFileName(filePath);
                 var pathToFolder = Directory.GetParent(filePath).FullName;
-                var descriptionPath = Path.Combine(pathToFolder, $"{PREFIX_FILENAME_DESCRIPTION}_{fileName}.txt");
+                var descriptionPath = Path.Combine(pathToFolder, $"{PrefixFilenameDescription}_{fileName}.txt");
                 using (var stream = File.CreateText(descriptionPath))
                 {
-                    stream.Write(getArchitectureDescription());
+                    stream.Write(GetArchitectureDescription());
                 }
             }
         }
 
         public override string ToString()
         {
-            return getArchitectureDescription();
+            return GetArchitectureDescription();
         }
 
         public void Dispose()
         {
             Model.Dispose();
-            _device.Dispose();
+            Device.Dispose();
             foreach (var shortcut in _shortcutConnectionInputs.Values)
             {
                 shortcut.Dispose();

@@ -12,32 +12,33 @@ using CNTK;
 namespace EasyCNTK.Layers
 {
     /// <summary>
-    /// Реализует слой батч-нормализации
+    /// Implements the batch normalization layer
     /// </summary>
     public sealed class BatchNormalization : Layer
-    { 
-        private static Function createBatchNorm(Function input, DeviceDescriptor device)
+    {
+        private static Function CreateBatchNorm(Function input, DeviceDescriptor device)
         {
             var scale = new Parameter(input.Output.Shape, input.Output.DataType, 1, device);
             var bias = new Parameter(input.Output.Shape, input.Output.DataType, 0, device);
             var runningMean = new Constant(input.Output.Shape, input.Output.DataType, 0, device);
             var runningInvStd = new Constant(input.Output.Shape, input.Output.DataType, 0, device);
-            var runningCount = new Constant(new int[] { 1 }, input.Output.DataType, 0, device);
+            var runningCount = new Constant(new[] { 1 }, input.Output.DataType, 0, device);
             return CNTKLib.BatchNormalization(input.Output, scale, bias, runningMean, runningInvStd, runningCount, false);
         }
+
         /// <summary>
-        /// Создает слой батч-нормализации
+        /// Creates a layer of batch normalization
         /// </summary>
-        /// <param name="input"></param>
-        /// <param name="device"></param>
-        /// <returns></returns>
+        /// <param name = "input"> </param>
+        /// <param name = "device"> </param>
+        /// <returns> </returns>
         public static Function Build(Function input, DeviceDescriptor device)
         {
-            return createBatchNorm(input, device);
+            return CreateBatchNorm(input, device);
         }
         public override Function Create(Function input, DeviceDescriptor device)
         {
-            return createBatchNorm(input, device);
+            return CreateBatchNorm(input, device);
         }
 
         public override string GetDescription()
