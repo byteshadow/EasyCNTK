@@ -11,32 +11,38 @@ using System.Collections.Generic;
 namespace EasyCNTK.Learning
 {
     /// <summary>
-    /// Представляет результат одной сессии обучения
+    /// Represents the result of a single training session.
     /// </summary>
     public class FitResult
     {
         /// <summary>
-        /// Средняя ошибка функции потерь по результатам сессии обучения
+        /// The average error of the loss function on the results of the training session
         /// </summary>
         public double LossError { get; set; }
+
         /// <summary>
-        /// Средняя ошибка оценочной функции по результатам сессии обучения
+        /// The average error of the loss function on the results of the training session
         /// </summary>
         public double EvaluationError { get; set; }
+
         /// <summary>
-        /// Продолжительность сессии обучения
+        /// Duration of the training session
         /// </summary>
         public TimeSpan Duration { get; set; }
+
         /// <summary>
-        /// Количество эпох обучения
+        /// Number of learning epochs
         /// </summary>
         public int EpochCount { get; set; }
+
         /// <summary>
-        /// Кривая ошибок функции потерь в процессе обучения
+        /// Error curve of the loss function in the learning process
         /// </summary>
+
         public List<double> LossCurve { get; set; }
+
         /// <summary>
-        /// Кривая ошибок оценочной функции в процессе обучения
+        /// Error curve of the evaluation function in the learning process
         /// </summary>
         public List<double> EvaluationCurve { get; set; }
     }

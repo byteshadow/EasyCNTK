@@ -20,6 +20,92 @@ namespace EasyCNTK.Learning
     public static class LearnExtensions
     {
         #region Extensions for Function
+
+        public static FitResult Fit(this Trainer trainer,
+            DeviceDescriptor device,
+            MinibatchSource miniBatchSource, uint miniBatchSize,
+            Dictionary<Variable, StreamInformation> streamInfos,
+            Learner learner, double learningRate,
+            int epochs,
+            Func<int, double, double> ruleUpdateLearningRate = null,
+            Func<FitResult, bool> actionPerEpoch = null,
+            IProgress<double> progress = null)
+        {
+            var losses = new List<double>(epochs);
+            var evals = new List<double>(epochs);
+
+            var sw = new Stopwatch();
+            sw.Start();
+
+            var epochCount = 1;
+            while (epochCount <= epochs)
+            {
+                var miniBatchData = miniBatchSource.GetNextMinibatch(miniBatchSize, device);
+
+                var arguments = streamInfos.ToDictionary(kv => kv.Key, kv => miniBatchData[kv.Value]);
+
+                trainer.TrainMinibatch(arguments, device);
+
+                losses.Add(trainer.PreviousMinibatchLossAverage());
+                evals.Add(trainer.PreviousMinibatchEvaluationAverage());
+
+                if (actionPerEpoch != null)
+                {
+                    var result = new FitResult()
+                    {
+                        Duration = sw.Elapsed,
+                        EpochCount = epochCount,
+                        EvaluationCurve = evals,
+                        EvaluationError = evals[epochCount - 1],
+                        LossCurve = losses,
+                        LossError = losses[epochCount - 1]
+                    };
+
+                    var stopTraining = actionPerEpoch(result);
+
+                    if (stopTraining)
+                    {
+                        progress?.Report(1);
+                        break;
+                    }
+                }
+
+                if (ruleUpdateLearningRate != null)
+                    learningRate = UpdateLearningRate(ruleUpdateLearningRate, epochCount, learningRate, learner);
+
+                if (!MiniBatchDataIsSweepEnd(miniBatchData.Values)) continue;
+
+                epochCount++;
+                progress?.Report(1d * epochCount / epochs);
+            }
+
+            sw.Stop();
+
+            return new FitResult()
+            {
+                LossError = losses[losses.Count - 1],
+                EvaluationError = evals[evals.Count - 1],
+                Duration = sw.Elapsed,
+                EpochCount = epochCount,
+                LossCurve = losses,
+                EvaluationCurve = evals
+            };
+        }
+
+        private static double UpdateLearningRate(Func<int, double, double> ruleUpdateLearningRate, int epochCount, double learningRate, Learner learner)
+        {
+            var proposedLearningRate = ruleUpdateLearningRate(epochCount, learningRate);
+
+            if (!(Math.Abs(proposedLearningRate - learningRate) > double.Epsilon)) return learningRate;
+
+            learningRate = proposedLearningRate;
+            learner.SetLearningRateSchedule(new TrainingParameterScheduleDouble(learningRate));
+            return learningRate;
+        }
+
+        public static bool MiniBatchDataIsSweepEnd(ICollection<MinibatchData> miniBatchValues) => miniBatchValues.Any(a => a.sweepEnd);
+
+
         /// <summary>
         /// Обучает модель. Поддерживает реккурентные сети.
         /// </summary>
@@ -48,7 +134,8 @@ namespace EasyCNTK.Learning
            Func<int, double, double, bool> actionPerEpoch = null)
         {
             var inputVariable = source.Inputs.Single(p => p.Name.ToUpper() == "INPUT");
-            var outputVariable = isReccurentModel ? Variable.InputVariable(source.Output.Shape, source.Output.DataType, "output", new List<Axis> { Axis.DefaultBatchAxis() })
+            var outputVariable = isReccurentModel
+                ? Variable.InputVariable(source.Output.Shape, source.Output.DataType, "output", new List<Axis> { Axis.DefaultBatchAxis() })
                 : Variable.InputVariable(source.Output.Shape, source.Output.DataType, "output");
 
             var loss = lossFunction.GetLoss(source, outputVariable, device);

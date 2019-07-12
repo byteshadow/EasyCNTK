@@ -24,7 +24,7 @@ namespace EasyCNTK.Learning.Optimizers
         private double _epsilon;
         private double _varianceMomentumSchedule;
         private bool _unitGain;        
-        private int _minibatchSize;
+        private uint _minibatchSize;
         public override double LearningRate { get; }
         /// <summary>
         /// Инициализирует оптимизатор Adam
@@ -41,7 +41,7 @@ namespace EasyCNTK.Learning.Optimizers
         /// <param name="unitGain">Указывает, что момент используется в режиме усиления</param>        
         public Adam(double learningRate, 
             double momentum, 
-            int minibatchSize,            
+            uint minibatchSize,            
             double l1RegularizationWeight = 0, 
             double l2RegularizationWeight = 0,
             double gradientClippingThresholdPerSample = double.PositiveInfinity,

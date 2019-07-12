@@ -12,16 +12,16 @@ using CNTK;
 namespace EasyCNTK.Layers
 {
     /// <summary>
-    /// Реализует слой самостаблизации для выбора оптимальной скорости обучения. Источник: https://github.com/Microsoft/CNTK/blob/release/latest/Examples/TrainingCSharp/Common/LSTMSequenceClassifier.cs
+    /// Implements a self-stabilization layer for choosing the optimal learning speed. A source: https://github.com/Microsoft/CNTK/blob/release/latest/Examples/TrainingCSharp/Common/LSTMSequenceClassifier.cs
     /// </summary>
     public sealed class SelfStabilization : Layer
     {
-        private string _name;
-        private DataType _dataType;
+        private readonly string _name;
+        private readonly DataType _dataType;
 
-        private static Function selfStabilize(Function input, DeviceDescriptor device, string name, DataType dataType)
+        private static Function SelfStabilize(Function input, DeviceDescriptor device, string name, DataType dataType)
         {
-            bool isFloatType = _dataType == DataType.Float || input.Output.DataType == DataType.Float;
+            var isFloatType = dataType == DataType.Float || input.Output.DataType == DataType.Float;
 
             Constant f, fInv;
             if (isFloatType)
@@ -44,30 +44,36 @@ namespace EasyCNTK.Layers
                 "beta");
             return Function.Alias(CNTKLib.ElementTimes(beta, input), name);
         }
+
         /// <summary>
-        /// Создает слой самостабилизации для выбора оптимальной скорости обучения.
+        /// Creates a layer of self-stabilization for choosing the optimal learning speed.
         /// </summary>
         /// <param name="input"></param>
         /// <param name="device"></param>
         /// <param name="name"></param>
+        /// <param name="dataType"></param>
         /// <returns></returns>
         public static Function Build(Function input, DeviceDescriptor device, string name,DataType dataType = DataType.Unknown)
         {
-            return selfStabilize(input, device, name, dataType);
+            return SelfStabilize(input, device, name, dataType);
         }
+
         public override Function Create(Function input, DeviceDescriptor device)
         {
-            return selfStabilize(input, device, _name, _dataType);
+            return SelfStabilize(input, device, _name, _dataType);
         }
+
         /// <summary>
-        /// Создает слой самостабилизации для выбора оптимальной скорости обучения.
+        /// Creates a self-stabilization layer for choosing the optimal learning speed.
         /// </summary>
+        /// <param name="dataType"></param>
         /// <param name="name"></param>
         public SelfStabilization(DataType dataType = DataType.Unknown, string name = "SelfStabilizer")
         {
             _dataType = dataType;
             _name = name;
         }
+
         public override string GetDescription()
         {
             return "SS";

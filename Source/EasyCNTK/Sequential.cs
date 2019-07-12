@@ -64,11 +64,11 @@ namespace EasyCNTK
         /// <param name = "device"> The device on which the network is being created </param>
         /// <param name = "inputDynamicAxes"> List of dynamic axes. Add the axis <seealso cref = "Axis.DefaultBatchAxis ()" /> if the output of your network is a sequence. </Param>
         /// <param name = "isSparse"> Indicates that the input is a One-Hot-Encoding vector and you should use the CNTK internal optimization to increase performance. </param>
-        public Sequential(DeviceDescriptor device, int[] inputShape, IList<Axis> inputDynamicAxes = null, bool isSparse = false)
+        public Sequential(DeviceDescriptor device, int[] inputShape, string inputName = "", IList<Axis> inputDynamicAxes = null, bool isSparse = false)
         {
             Device = device;
             var dataType = typeof(T) == typeof(double) ? DataType.Double : DataType.Float;
-            Model = Variable.InputVariable(inputShape, dataType, "Input", inputDynamicAxes, isSparse);
+            Model = Variable.InputVariable(inputShape, dataType, string.IsNullOrEmpty(inputName) ? "Input" : inputName, inputDynamicAxes, isSparse);
             var shape = "";
             inputShape.ToList().ForEach(p =>
             {
