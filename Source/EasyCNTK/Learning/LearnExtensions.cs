@@ -25,26 +25,30 @@ namespace EasyCNTK.Learning
             DeviceDescriptor device,
             MinibatchSource miniBatchSource, uint miniBatchSize,
             Dictionary<Variable, StreamInformation> streamInfos,
-            Learner learner, double learningRate,
+            Learner learner,
+            double learningRate,
             int epochs,
             Func<int, double, double> ruleUpdateLearningRate = null,
             Func<FitResult, bool> actionPerEpoch = null,
             IProgress<double> progress = null)
         {
-            var losses = new List<double>(epochs);
-            var evals = new List<double>(epochs);
+            var losses = new List<double>();
+            var evals = new List<double>();
 
             var sw = new Stopwatch();
             sw.Start();
 
             var epochCount = 1;
+            var failureCount = 0;
             while (epochCount <= epochs)
             {
-                var miniBatchData = miniBatchSource.GetNextMinibatch(miniBatchSize, device);
+                if (!TrainSingleEpoch(trainer, device, miniBatchSource, miniBatchSize, streamInfos) && failureCount < 3)
+                {
+                    failureCount++;
+                    Console.WriteLine($"Attempt: {failureCount + 1} to train Epoch: {epochCount}");
+                    continue;
+                }
 
-                var arguments = streamInfos.ToDictionary(kv => kv.Key, kv => miniBatchData[kv.Value]);
-
-                trainer.TrainMinibatch(arguments, device);
 
                 losses.Add(trainer.PreviousMinibatchLossAverage());
                 evals.Add(trainer.PreviousMinibatchEvaluationAverage());
@@ -56,9 +60,9 @@ namespace EasyCNTK.Learning
                         Duration = sw.Elapsed,
                         EpochCount = epochCount,
                         EvaluationCurve = evals,
-                        EvaluationError = evals[epochCount - 1],
+                        EvaluationError = evals.Last(),
                         LossCurve = losses,
-                        LossError = losses[epochCount - 1]
+                        LossError = losses.Last()
                     };
 
                     var stopTraining = actionPerEpoch(result);
@@ -73,10 +77,11 @@ namespace EasyCNTK.Learning
                 if (ruleUpdateLearningRate != null)
                     learningRate = UpdateLearningRate(ruleUpdateLearningRate, epochCount, learningRate, learner);
 
-                if (!MiniBatchDataIsSweepEnd(miniBatchData.Values)) continue;
+
+
+                progress?.Report(1d * epochCount / epochs);
 
                 epochCount++;
-                progress?.Report(1d * epochCount / epochs);
             }
 
             sw.Stop();
@@ -90,6 +95,33 @@ namespace EasyCNTK.Learning
                 LossCurve = losses,
                 EvaluationCurve = evals
             };
+        }
+
+        private static bool TrainSingleEpoch(Trainer trainer, DeviceDescriptor device,
+            MinibatchSource miniBatchSource, uint miniBatchSize,
+            Dictionary<Variable, StreamInformation> streamInfos)
+        {
+
+            try
+            {
+                var miniBatchData = miniBatchSource.GetNextMinibatch(miniBatchSize, device);
+
+                while (!MiniBatchDataIsSweepEnd(miniBatchData.Values))
+                {
+                    var arguments = streamInfos.ToDictionary(kv => kv.Key, kv => miniBatchData[kv.Value]);
+
+                    trainer.TrainMinibatch(arguments, device);
+
+                    miniBatchData = miniBatchSource.GetNextMinibatch(miniBatchSize, device);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                return false;
+            }
         }
 
         private static double UpdateLearningRate(Func<int, double, double> ruleUpdateLearningRate, int epochCount, double learningRate, Learner learner)
