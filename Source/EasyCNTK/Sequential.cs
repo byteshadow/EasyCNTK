@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Saigo.Core.Graphs;
 
 namespace EasyCNTK
 {
@@ -28,6 +29,8 @@ namespace EasyCNTK
         private string _architectureDescription;
 
         private readonly Dictionary<string, Function> _shortcutConnectionInputs = new Dictionary<string, Function>();
+
+        private TreeNode<Layer> _tree;
 
         private string GetArchitectureDescription()
         {
@@ -137,6 +140,11 @@ namespace EasyCNTK
         {
             Model = layer.Create(Model, Device);
             _architectureDescription += $"-{layer.GetDescription()}";
+            
+            if(_tree == null)
+                _tree = new TreeNode<Layer>(layer);
+            else
+                _tree.AddChild(layer);
         }
 
         /// <summary>

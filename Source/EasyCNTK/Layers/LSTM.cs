@@ -9,6 +9,7 @@
 //
 using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using CNTK;
 
 namespace EasyCNTK.Layers
@@ -67,19 +68,19 @@ namespace EasyCNTK.Layers
                 return gateInput;
             }
 
-            Variable forgetProjection    = CreateInput(lstmCellDimension, lstmOutputDimension);
-            Variable inputProjection     = CreateInput(lstmCellDimension, lstmOutputDimension);
+            Variable forgetProjection = CreateInput(lstmCellDimension, lstmOutputDimension);
+            Variable inputProjection = CreateInput(lstmCellDimension, lstmOutputDimension);
             Variable candidateProjection = CreateInput(lstmCellDimension, lstmOutputDimension);
-            Variable outputProjection    = CreateInput(lstmCellDimension, lstmOutputDimension);
+            Variable outputProjection = CreateInput(lstmCellDimension, lstmOutputDimension);
 
-            Function forgetGate    = CNTKLib.Sigmoid(forgetProjection);// gate "forgetting" (from the input in step t)
-            Function inputGate     = CNTKLib.Sigmoid(inputProjection); // input gate (from the input in step t)         
+            Function forgetGate = CNTKLib.Sigmoid(forgetProjection);// gate "forgetting" (from the input in step t)
+            Function inputGate = CNTKLib.Sigmoid(inputProjection); // input gate (from the input in step t)         
             Function candidateGate = CNTKLib.Tanh(candidateProjection); // valve for selecting candidates for memorization in the cellular state (from the input data in step t)
-            Function outputGate    = CNTKLib.Sigmoid(outputProjection); // output gate (from the input in step t)
+            Function outputGate = CNTKLib.Sigmoid(outputProjection); // output gate (from the input in step t)
 
             Function forgetState = CNTKLib.ElementTimes(prevCellState, forgetGate); // forget what you need to forget in the cellular state
-            Function inputState  = CNTKLib.ElementTimes(inputGate, candidateProjection); // we get what we need to save in the cellular state (from the input data in step t) 
-            Function cellState   = CNTKLib.Plus(forgetState, inputState); // add new information to the cellular state
+            Function inputState = CNTKLib.ElementTimes(inputGate, candidateProjection); // we get what we need to save in the cellular state (from the input data in step t) 
+            Function cellState = CNTKLib.Plus(forgetState, inputState); // add new information to the cellular state
 
             Function h = CNTKLib.ElementTimes(outputGate, CNTKLib.Tanh(cellState)); // get output / hidden state
             Function c = cellState;
@@ -168,9 +169,29 @@ namespace EasyCNTK.Layers
             _name = name;
         }
 
+        public LSTM(SerializationInfo info, StreamingContext context)
+        {
+            _name = info.GetString(nameof(_name));
+            _lstmOutputDim = info.GetInt32(nameof(_lstmOutputDim));
+            _lstmCellDim = info.GetInt32(nameof(_lstmCellDim));
+            _useShortcutConnections = info.GetBoolean(nameof(_useShortcutConnections));
+            _isLastLstmLayer = info.GetBoolean(nameof(_isLastLstmLayer));
+            _selfStabilizerLayer = (Layer)info.GetValue(nameof(_selfStabilizerLayer), typeof(Layer));
+        }
+
         public override string GetDescription()
         {
             return $"LSTM(C={_lstmCellDim}H={_lstmOutputDim}SC={_useShortcutConnections}SS={_selfStabilizerLayer?.GetDescription() ?? "none"})";
+        }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(nameof(_name), _name);
+            info.AddValue(nameof(_lstmOutputDim), _lstmOutputDim);
+            info.AddValue(nameof(_lstmCellDim), _lstmCellDim);
+            info.AddValue(nameof(_useShortcutConnections), _useShortcutConnections);
+            info.AddValue(nameof(_isLastLstmLayer), _isLastLstmLayer);
+            info.AddValue(nameof(_selfStabilizerLayer), _selfStabilizerLayer);
         }
     }
 }

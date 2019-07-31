@@ -7,6 +7,8 @@
 //
 // Licensed under the MIT license. See LICENSE.txt file in the project root for full license information.
 //
+
+using System.Runtime.Serialization;
 using CNTK;
 
 namespace EasyCNTK.Layers
@@ -16,6 +18,10 @@ namespace EasyCNTK.Layers
     /// </summary>
     public sealed class BatchNormalization : Layer
     {
+        public BatchNormalization() { }
+
+        public BatchNormalization(SerializationInfo info, StreamingContext context) { }
+
         private static Function CreateBatchNorm(Function input, DeviceDescriptor device)
         {
             var scale = new Parameter(input.Output.Shape, input.Output.DataType, 1, device);
@@ -44,6 +50,11 @@ namespace EasyCNTK.Layers
         public override string GetDescription()
         {
             return "BN";
+        }
+
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+
         }
     }
 }

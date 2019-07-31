@@ -29,6 +29,7 @@ namespace EasyCNTK.Learning
             double learningRate,
             int epochs,
             Func<int, double, double> ruleUpdateLearningRate = null,
+            Func<int,uint,uint> ruleUpdateBatchSize = null,
             Func<FitResult, bool> actionPerEpoch = null,
             IProgress<double> progress = null)
         {
@@ -42,6 +43,8 @@ namespace EasyCNTK.Learning
             var failureCount = 0;
             while (epochCount <= epochs)
             {
+                miniBatchSize = ruleUpdateBatchSize?.Invoke(epochCount, miniBatchSize) ?? miniBatchSize;
+
                 if (!TrainSingleEpoch(trainer, device, miniBatchSource, miniBatchSize, streamInfos) && failureCount < 3)
                 {
                     failureCount++;
