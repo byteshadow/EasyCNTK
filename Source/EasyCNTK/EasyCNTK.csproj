@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -27,11 +27,7 @@ Add comments to some methods</PackageReleaseNotes>
     <Configurations>Debug;Release;Debug2;Debug3</Configurations>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DocumentationFile>f:\repos\EasyCNTK\Source\EasyCNTK\EasyCNTK.xml</DocumentationFile>
-  </PropertyGroup>
-
-  <ItemGroup>
+  <ItemGroup>	  
     <PackageReference Include="CNTK.GPU" Version="2.7.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
   </ItemGroup>
