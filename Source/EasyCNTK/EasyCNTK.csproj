@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
@@ -6,10 +6,10 @@
     <LangVersion>latest</LangVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Version>0.3.0</Version>
+    <Version>0.4.2</Version>
     <Authors>Stanislav Grigoriev</Authors>
     <Company>Stanislav Grigoriev</Company>
-    <Description>C# library for easy Deep Learning. It is wrapper over C# CNTK API. Has implementation of layers (LSTM, Convolution etc.), optimizers, losses, shortcut-connections, sequential model etc. 
+    <Description>C# library for easy Deep Learning and Deep Reinforcement Learning. It is wrapper over C# CNTK API. Has implementation of layers (LSTM, Convolution etc.), optimizers, losses, shortcut-connections, sequential model, sequential  multi-output model, agent teachers, policy gradients, actor-critic etc. 
 Contains helpers for work with dataset (split, statistics, SMOTE etc).
 Allows train, evaluate and inference deep neural networks in style similar to Keras.</Description>
     <Copyright>Stanislav Grigoriev (c)</Copyright>
@@ -20,14 +20,17 @@ Allows train, evaluate and inference deep neural networks in style similar to Ke
     <RepositoryType>public</RepositoryType>
     <PackageId>EasyCNTK</PackageId>
     <PackageIconUrl>https://raw.githubusercontent.com/StanislavGrigoriev/EasyCNTK/master/logo.ico</PackageIconUrl>
-    <PackageReleaseNotes>Add classification metrics (precision, recall)
-Add SMOTE
-Add Predict method for model (inference)
-Add comments to some methods</PackageReleaseNotes>
-    <Configurations>Debug;Release;Debug2;Debug3</Configurations>
+    <PackageReleaseNotes>Bugfix: https://github.com/StanislavGrigoriev/EasyCNTK/issues/2
+</PackageReleaseNotes>
+    <FileVersion>0.4.2.0</FileVersion>
+    <AssemblyVersion>0.4.2.0</AssemblyVersion>
   </PropertyGroup>
 
-  <ItemGroup>	  
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DocumentationFile>EasyCNTK.xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
     <PackageReference Include="CNTK.GPU" Version="2.7.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
   </ItemGroup>
