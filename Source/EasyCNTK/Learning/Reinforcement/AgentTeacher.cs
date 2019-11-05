@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -16,7 +16,7 @@ using System.Text;
 namespace EasyCNTK.Learning.Reinforcement
 {
     /// <summary>
-    /// Базовый класс для создания учителей, содержит определение среды и вспомогательные методы для вычисления промежуточных результатов
+    /// The base class for creating teachers, contains the definition of the environment and auxiliary methods for calculating intermediate results
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public abstract class AgentTeacher<T> : IDisposable where T : IConvertible
@@ -56,7 +56,7 @@ namespace EasyCNTK.Learning.Reinforcement
         }
 
         #region IDisposable Support
-        private bool disposedValue = false; // Для определения избыточных вызовов
+        private bool disposedValue = false; // To identify redundant calls
 
         protected virtual void Dispose(bool disposing)
         {
@@ -68,8 +68,8 @@ namespace EasyCNTK.Learning.Reinforcement
                     //Device.Dispose();
                 }
 
-                // TODO: освободить неуправляемые ресурсы (неуправляемые объекты) и переопределить ниже метод завершения.
-                // TODO: задать большим полям значение NULL.
+                // TODO: Release unmanaged resources (unmanaged objects) and override the completion method below.
+                // TODO: set large fields to NULL.
                 Environment = null;               
                 Device = null;
 
@@ -77,19 +77,19 @@ namespace EasyCNTK.Learning.Reinforcement
             }
         }
 
-        // TODO: переопределить метод завершения, только если Dispose(bool disposing) выше включает код для освобождения неуправляемых ресурсов.
+        // TODO: Override the completion method only if Dispose (bool disposing) above includes code to free unmanaged resources.
         ~AgentTeacher()
         {
-            // Не изменяйте этот код. Разместите код очистки выше, в методе Dispose(bool disposing).
+            // Do not modify this code. Place the cleanup code above in the Dispose (bool disposing) method.
             Dispose(false);
         }
 
-        // Этот код добавлен для правильной реализации шаблона высвобождаемого класса.
+        // This code has been added to properly implement the released class template.
         public void Dispose()
         {
-            // Не изменяйте этот код. Разместите код очистки выше, в методе Dispose(bool disposing).
+            // Do not modify this code. Place the cleanup code above in the Dispose (bool disposing) method.
             Dispose(true);
-            // TODO: раскомментировать следующую строку, если метод завершения переопределен выше.
+            // TODO: uncomment the next line if the completion method is overridden above.
             GC.SuppressFinalize(this);
         }
         #endregion

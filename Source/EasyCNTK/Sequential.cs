@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -18,9 +18,9 @@ using System.Linq;
 namespace EasyCNTK
 {
     /// <summary>
-    /// Реализует операции конструирования модели прямого распространения c одним входом и одним выходом
+    /// It implements the operations of constructing a direct distribution model with one input and one output
     /// </summary>
-    /// <typeparam name="T">Тип данных. Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
+    /// <typeparam name="T">Data type. Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
     public sealed class Sequential<T> : IDisposable where T : IConvertible
     {
         public const string PREFIX_FILENAME_DESCRIPTION = "ArchitectureDescription";
@@ -41,14 +41,14 @@ namespace EasyCNTK
             return _architectureDescription + "[OUT]";
         }
         /// <summary>
-        /// Загружает модель из файла. Так же пытается прочитать описание архитектуры сети: 
-        /// 1) Из файла ArchitectureDescription{имя_файла_модели}.txt 
-        /// 2) Из имени файла модели ориентируясь на наличение [IN] и [OUT] тегов. Если это не удается, то описание конфигурации: Unknown.
+        /// Loads a model from a file. Also trying to read the description of the network architecture: 
+        /// 1) From the file ArchitectureDescription {model_file_name} .txt 
+        /// 2) From the model file name, focusing on the presence of [IN] and [OUT] tags. If this fails, then the configuration description is: Unknown.
         /// </summary>
-        /// <typeparam name="T">Тип данных. Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
-        /// <param name="device">Устройство для загрузки</param>
-        /// <param name="filePath">Путь к файлу модели</param>
-        /// <param name="modelFormat">Формат модели</param>
+        /// <typeparam name="T">Data type. Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <param name="device">Boot device</param>
+        /// <param name="filePath">Model file path</param>
+        /// <param name="modelFormat">Model Format</param>
         /// <returns></returns>
         public static Sequential<T> LoadModel(DeviceDescriptor device, string filePath, ModelFormat modelFormat = ModelFormat.CNTKv2)
         {
@@ -56,13 +56,13 @@ namespace EasyCNTK
         }
 
         /// <summary>
-        /// Инициализирeует нейросеть с размерностью входного вектора без слоев
+        /// Initializes a neural network with the dimension of the input vector without layers
         /// </summary>
-        /// <param name="inputShape">Тензор, описывающий форму входа нейросети (входных данных)</param>
-        /// <param name="device">Устройство на котором создается сеть</param>
-        /// <param name="outputIsSequence">Указывает, что выход сети - последовательность.</param>
-        /// <param name="inputName">Имя входа нейросети</param>
-        /// <param name="isSparce">Указывает, что вход это вектор One-Hot-Encoding и следует использовать внутреннюю оптимизацию CNTK для увеличения производительности.</param>
+        /// <param name="inputShape">Tensor describing the input form of the neural network (input data)</param>
+        /// <param name="device">The device on which the network is created</param>
+        /// <param name="outputIsSequence">Indicates that the network output is a sequence.</param>
+        /// <param name="inputName">Neural Network Login</param>
+        /// <param name="isSparce">Indicates that the input is a One-Hot-Encoding vector and that CNTK&#39;s internal optimization should be used to increase performance.</param>
         public Sequential(DeviceDescriptor device, int[] inputShape, bool outputIsSequence = false, string inputName = "Input", bool isSparce = false)
         {
             _device = device;
@@ -117,27 +117,27 @@ namespace EasyCNTK
             }
         }
         /// <summary>
-        /// Добавляет заданный слой (стыкует к последнему добавленному слою)
+        /// Adds the specified layer (joins the last added layer)
         /// </summary>
-        /// <param name="layer">Слой для стыковки</param>
+        /// <param name="layer">Docking layer</param>
         public void Add(Layer layer)
         {
             Model = layer.Create(Model, _device);
             _architectureDescription += $"-{layer.GetDescription()}";
         }
         /// <summary>
-        /// Создает входную точку для SC, из которой можно создать соединение к следующим слоям сети. Для одной входной точки должна существовать как минимум одна выходная точка, иначе соединение игнорируется в модели.
+        /// Creates an entry point for SC from which you can create a connection to the following layers of the network. At least one output point must exist for one input point, otherwise the connection is ignored in the model.
         /// </summary>
-        /// <param name="nameShortcutConnection">Название точки входа, из которой будет пробрасываться соединение. В рамках сети должно быть уникальным</param>
+        /// <param name="nameShortcutConnection">The name of the entry point from which the connection will be forwarded. Within the network must be unique</param>
         public void CreateInputPointForShortcutConnection(string nameShortcutConnection)
         {
             _shortcutConnectionInputs.Add(nameShortcutConnection, Model);
             _architectureDescription += $"-ShortIn({nameShortcutConnection})";
         }
         /// <summary>
-        /// Создает выходную точку для SC, к которой пробрасывается соединение из ранее созданной входной точки. Для одной входной точки может существовать несколько выходных точек.
+        /// Creates an exit point for SC to which a connection is forwarded from a previously created entry point. For one input point, several output points can exist.
         /// </summary>
-        /// <param name="nameShortcutConnection">Название точки входа, из которой пробрасывается соединение.</param>
+        /// <param name="nameShortcutConnection">The name of the entry point from which the connection is forwarded.</param>
         public void CreateOutputPointForShortcutConnection(string nameShortcutConnection)
         {
             if (_shortcutConnectionInputs.TryGetValue(nameShortcutConnection, out var input))
@@ -184,14 +184,14 @@ namespace EasyCNTK
             }
         }
         /// <summary>
-        /// Сконфигурированная модель CNTK
+        /// Configured CNTK Model
         /// </summary>
         public Function Model { get; private set; }
         /// <summary>
-        /// Сохраняет модель в файл.
+        /// Saves the model to a file.
         /// </summary>
-        /// <param name="filePath">Путь для сохранения модели (включая имя файла и расширение)</param>
-        /// <param name="saveArchitectureDescription">Указывает, следует ли сохранить описание архитектуры в отдельном файле: ArchitectureDescription_{имя-файла-модели}.txt</param>
+        /// <param name="filePath">Path to save the model (including file name and extension)</param>
+        /// <param name="saveArchitectureDescription">Specifies whether to save the architecture description in a separate file: ArchitectureDescription_ {model-filename} .txt</param>
         public void SaveModel(string filePath, bool saveArchitectureDescription = true)
         {
             Model.Save(filePath);
@@ -213,7 +213,7 @@ namespace EasyCNTK
         }
 
         #region IDisposable Support
-        private bool disposedValue = false; // Для определения избыточных вызовов
+        private bool disposedValue = false; // To identify redundant calls
 
         void Dispose(bool disposing)
         {
@@ -221,7 +221,7 @@ namespace EasyCNTK
             {
                 if (disposing)
                 {
-                    // TODO: освободить управляемое состояние (управляемые объекты).
+                    // TODO: release managed state (managed objects).
                     Model.Dispose();
                     _device.Dispose();
                     foreach (var shortcut in _shortcutConnectionInputs.Values)
@@ -230,8 +230,8 @@ namespace EasyCNTK
                     }
                 }
 
-                // TODO: освободить неуправляемые ресурсы (неуправляемые объекты) и переопределить ниже метод завершения.
-                // TODO: задать большим полям значение NULL.
+                // TODO: Release unmanaged resources (unmanaged objects) and override the completion method below.
+                // TODO: set large fields to NULL.
                 Model = null;
                 _device = null;
                 _shortcutConnectionInputs = null;
@@ -239,19 +239,19 @@ namespace EasyCNTK
             }
         }
 
-        // TODO: переопределить метод завершения, только если Dispose(bool disposing) выше включает код для освобождения неуправляемых ресурсов.
+        // TODO: Override the completion method only if Dispose (bool disposing) above includes code to free unmanaged resources.
         ~Sequential()
         {
-            // Не изменяйте этот код. Разместите код очистки выше, в методе Dispose(bool disposing).
+            // Do not modify this code. Place the cleanup code above in the Dispose (bool disposing) method.
             Dispose(false);
         }
 
-        // Этот код добавлен для правильной реализации шаблона высвобождаемого класса.
+        // This code has been added to properly implement the released class template.
         public void Dispose()
         {
-            // Не изменяйте этот код. Разместите код очистки выше, в методе Dispose(bool disposing).
+            // Do not modify this code. Place the cleanup code above in the Dispose (bool disposing) method.
             Dispose(true);
-            // TODO: раскомментировать следующую строку, если метод завершения переопределен выше.
+            // TODO: uncomment the next line if the completion method is overridden above.
             GC.SuppressFinalize(this);
         }
         #endregion

@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -13,7 +13,7 @@ using EasyCNTK.ActivationFunctions;
 namespace EasyCNTK.Layers
 {
     /// <summary>
-    /// Реализует полносвязный слой с заданной функцией активации
+    /// Implements a fully connected layer with a given activation function
     /// </summary>
     public sealed class Dense: Layer
     {
@@ -22,13 +22,13 @@ namespace EasyCNTK.Layers
         private string _name;
 
         /// <summary>
-        /// Создает полносвязный слой с заданной функцией активации
+        /// Creates a fully connected layer with the specified activation function.
         /// </summary>
-        /// <param name="input">Входная переменная(слой) заданной разрядности</param>
-        /// <param name="outputDim">Выходная разрядность(кол-во нейронов)</param>
-        /// <param name="activationFunction">Функция активации</param>
-        /// <param name="device">Устройство на котором производится расчет</param>
-        /// <param name="name">Имя слоя</param>
+        /// <param name="input">Input variable (layer) of a given bit depth</param>
+        /// <param name="outputDim">Output capacity (number of neurons)</param>
+        /// <param name="activationFunction">Activation function</param>
+        /// <param name="device">The device on which the calculation is made</param>
+        /// <param name="name">Layer name</param>
         /// <returns></returns>
         private static Function createFullyConnectedLinearLayer(Variable input, int outputDim, ActivationFunction activationFunction, DeviceDescriptor device, string name)
         {
@@ -44,13 +44,13 @@ namespace EasyCNTK.Layers
             return Function.Alias(activatedFullyConnected, name);
         }
         /// <summary>
-        /// Создает полносвязный слой с заданной функцией активации
+        /// Creates a fully connected layer with the specified activation function.
         /// </summary>
-        /// <param name="input">Входная переменная(слой) заданной разрядности</param>
-        /// <param name="outputDim">Выходная разрядность(кол-во нейронов)</param>
-        /// <param name="activationFunction">Функция активации</param>
-        /// <param name="device">Устройство на котором производится расчет</param>
-        /// <param name="name">Имя слоя</param>
+        /// <param name="input">Input variable (layer) of a given bit depth</param>
+        /// <param name="outputDim">Output capacity (number of neurons)</param>
+        /// <param name="activationFunction">Activation function</param>
+        /// <param name="device">The device on which the calculation is made</param>
+        /// <param name="name">Layer name</param>
         /// <returns></returns>
         public static Function Build(Function input, int outputDim, ActivationFunction activationFunction, DeviceDescriptor device, string name = "Dense")
         {
@@ -61,11 +61,11 @@ namespace EasyCNTK.Layers
             return createFullyConnectedLinearLayer(input, _outputDim, _activationFunction, device, _name);
         }
         /// <summary>
-        /// Создает полносвязный слой с заданной функцией активации
+        /// Creates a fully connected layer with the specified activation function.
         /// </summary>
-        /// <param name="outputDimension">Выходная разрядность(кол-во нейронов)</param>
-        /// <param name="activationFunction">Функция активации, null если не требуется</param>
-        /// <param name="name">Имя слоя</param>
+        /// <param name="outputDimension">Output capacity (number of neurons)</param>
+        /// <param name="activationFunction">Activation function, null if not required</param>
+        /// <param name="name">Layer name</param>
         public Dense(int outputDimension, ActivationFunction activationFunction, string name = "Dense")
         {
             _outputDim = outputDimension;

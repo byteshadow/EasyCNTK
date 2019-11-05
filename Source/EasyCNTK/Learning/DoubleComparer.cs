@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -11,18 +11,18 @@ using System.Collections.Generic;
 namespace EasyCNTK.Learning
 {
     /// <summary>
-    /// Выполняет сравнение двух double чисел с заданной погрешностью
+    /// Compares two double numbers with a given error
     /// </summary>
     public class DoubleComparer : IComparer<double>
     {
         /// <summary>
-        /// Погрешность. Задает минимум, на который должны отличаться два числа, чтобы считаться разными
+        /// Error. Sets the minimum by which two numbers must differ in order to be considered different.
         /// </summary>
         public double Epsilon { get; }
         /// <summary>
-        /// Создает экземпляр компаратора
+        /// Creates a comparator instance
         /// </summary>
-        /// <param name="epsilon">Погрешность. Задает минимум, на который должны отличаться два числа, чтобы считаться разными</param>
+        /// <param name="epsilon">Error. Sets the minimum by which two numbers must differ in order to be considered different.</param>
         public DoubleComparer(double epsilon = 0.01)
         {
             Epsilon = epsilon;

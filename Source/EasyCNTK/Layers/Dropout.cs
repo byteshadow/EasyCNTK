@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -12,7 +12,7 @@ using CNTK;
 namespace EasyCNTK.Layers
 {
     /// <summary>
-    /// Реализует слой Dropout
+    /// Implements a Dropout Layer
     /// </summary>
     public sealed class Dropout : Layer
     {
@@ -21,10 +21,10 @@ namespace EasyCNTK.Layers
         private string _name;
 
         /// <summary>
-        ///  Применяет функцию дропаут к последнему добавленному слою
+        ///  Applies the dropout function to the last layer added
         /// </summary>
-        /// <param name="input">Входной слой</param>
-        /// <param name="dropoutRate">Доля отключаемых нейронов в слое</param>
+        /// <param name="input">Input layer</param>
+        /// <param name="dropoutRate">The proportion of disconnected neurons in the layer</param>
         /// <param name="seed"></param>
         /// <param name="name"></param>
         /// <returns></returns>

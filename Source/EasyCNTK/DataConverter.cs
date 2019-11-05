@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -16,17 +16,17 @@ using System.Linq;
 namespace EasyCNTK
 {
     /// <summary>
-    /// Реализует методы преобразования нативных данных в формат пригодный для обучения в CNTK
+    /// Implements methods for converting native data into a format suitable for training at CNTK
     /// </summary>
     public class DataConverter:IDisposable
     {
         protected DeviceDescriptor Device { get; set; }
         /// <summary>
-        /// Разбивает входную последовательность на сегменты (подпоследовательности) равного размера
+        /// Splits an input sequence into segments (subsequences) of equal size
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="source">Исходная последовательность</param>
-        /// <param name="segmentSize">Размер сегмента (количество элементов)</param>
+        /// <param name="source">Source sequence</param>
+        /// <param name="segmentSize">Segment size (number of elements)</param>
         /// <returns></returns>
         protected IEnumerable<IList<T>> GetSegments<T>(IEnumerable<T> source, int segmentSize)
         {
@@ -68,20 +68,20 @@ namespace EasyCNTK
             return matrix.GetLength(1);
         }
         /// <summary>
-        /// Инициализирует конвертер для работы с указанным устройством (CPU, GPU)
+        /// Initializes the converter to work with the specified device (CPU, GPU)
         /// </summary>
-        /// <param name="device">Устройство для расчетов</param>
+        /// <param name="device">Device for calculations</param>
         public DataConverter(DeviceDescriptor device)
         {            
             Device = device ?? throw new ArgumentNullException(nameof(device));
         }
         /// <summary>
-        /// Преобразует датасет в наборы обучающих примеров для использования в реккурентных сетях. 
+        /// Converts a dataset into sets of training examples for use in recursive networks. 
         /// </summary>
-        /// <typeparam name="T">Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
-        /// <param name="features">Набор последовательностей (признаков). Каждая последовательность может быть переменной длинны, но одинаковой размерности (массивы из которых состоит последовательность, должны иметь одинаковую длину)</param>
-        /// <param name="labels">Набор меток. Размерность меток должна быть одинаковая.</param>
-        /// <param name="minibatchSize">Размер минипакета</param>
+        /// <typeparam name="T">Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <param name="features">A set of sequences (traits). Each sequence can be of variable length, but of the same dimension (the arrays of which the sequence consists must have the same length)</param>
+        /// <param name="labels">Set of labels. The dimension of the labels should be the same.</param>
+        /// <param name="minibatchSize">Minipack size</param>
         /// <returns></returns>
         public IEnumerable<Minibatch> ConvertDatasetToMinibatch<T>(IEnumerable<IList<T[]>> features, IEnumerable<T[]> labels, int minibatchSize) where T:IConvertible
         {
@@ -105,13 +105,13 @@ namespace EasyCNTK
         }
 
         /// <summary>
-        /// Преобразует датасет в наборы обучающих примеров для использования в CNTK. 
+        /// Converts a dataset into sets of training examples for use in CNTK. 
         /// </summary>
-        /// <typeparam name="T">Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
-        /// <param name="dataset">Датасет. Каждый пример должен содержать в начале массива признаки размерностью inputDim, а в конце метки классов размерностью outputDim. 
-        /// Например inputDim = 3, outputDim = 2: [f1, f2, f3, l1, l2]</param>
-        /// <param name="minibatchSize">Размер минипакета</param>
-        /// <param name="inputDim">Размерность признаков (разрядность)</param> 
+        /// <typeparam name="T">Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <param name="dataset">Dataset. Each example should contain signs at the beginning of the array with dimensions of inputDim, and at the end of class labels with dimensions of outputDim. 
+        /// For example, inputDim = 3, outputDim = 2: [f1, f2, f3, l1, l2]</param>
+        /// <param name="minibatchSize">Minipack size</param>
+        /// <param name="inputDim">Dimension of signs (capacity)</param> 
         /// <returns></returns>
         public IEnumerable<Minibatch> ConvertDatasetToMinibatch<T>(IEnumerable<T[]> dataset, int inputDim, int minibatchSize) where T : IConvertible
         {
@@ -130,12 +130,12 @@ namespace EasyCNTK
             }
         }
         /// <summary>
-        /// Преобразует датасет в наборы обучающих примеров в 2D для использования в CNTK. 
+        /// Converts a dataset to a set of training examples in 2D for use in CNTK. 
         /// </summary>
-        /// <typeparam name="T">Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
-        /// <param name="features">Набор признаков в 2D</param>
-        /// <param name="labels">Набор меток. Размерность меток должна быть одинаковая.</param>
-        /// <param name="minibatchSize">Размер минипакета</param>
+        /// <typeparam name="T">Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <param name="features">2D Feature Set</param>
+        /// <param name="labels">Set of labels. The dimension of the labels should be the same.</param>
+        /// <param name="minibatchSize">Minipack size</param>
         /// <returns></returns>
         public IEnumerable<Minibatch> ConvertDatasetToMinibatch<T>(IEnumerable<T[,]> features, IEnumerable<T[]> labels, int minibatchSize) where T : IConvertible
         {
@@ -154,11 +154,11 @@ namespace EasyCNTK
             }
         }
         /// <summary>
-        /// Преобразует нативный набор признаков в набор признаков в формате CNTK.
+        /// Converts a native feature set to a feature set in CNTK format.
         /// </summary>
-        /// <typeparam name="T">Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
-        /// <param name="data">Набор признаков для каждого примера(sample)</param>
-        /// <param name="minibatchSize">Размер пакета, по которым разбиваются признаки</param>
+        /// <typeparam name="T">Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <param name="data">A set of attributes for each example (sample)</param>
+        /// <param name="minibatchSize">The size of the packet by which the signs are broken</param>
         /// <returns></returns>
         public IEnumerable<Value> ConvertDataToValue<T>(IEnumerable<T[]> data, int minibatchSize) where T : IConvertible
         {
@@ -171,11 +171,11 @@ namespace EasyCNTK
             }
         }
         /// <summary>
-        /// Преобразует нативный набор признаков (последовательность) в набор признаков в формате CNTK.
+        /// Converts a native feature set (sequence) into a feature set in CNTK format.
         /// </summary>
-        /// <typeparam name="T">Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
-        /// <param name="data">Набор признаков для каждого примера(sample), где пример - последовательность</param>
-        /// <param name="minibatchSize">Размер пакета, по которым разбиваются признаки</param>
+        /// <typeparam name="T">Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <param name="data">A set of attributes for each example (sample), where the example is a sequence</param>
+        /// <param name="minibatchSize">The size of the packet by which the signs are broken</param>
         /// <returns></returns>
         public IEnumerable<Value> ConvertDataToValue<T>(IEnumerable<IList<T[]>> data, int minibatchSize) where T : IConvertible
         {
@@ -190,11 +190,11 @@ namespace EasyCNTK
             }
         }
         /// <summary>
-        /// Преобразует нативный набор признаков (2D) в набор признаков в формате CNTK.
+        /// Converts a native feature set (2D) to a feature set in CNTK format.
         /// </summary>
-        /// <typeparam name="T">Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
-        /// <param name="data">Набор признаков для каждого примера(sample), где пример - 2D</param>
-        /// <param name="minibatchSize">Размер пакета, по которым разбиваются признаки</param>
+        /// <typeparam name="T">Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <param name="data">A set of attributes for each example (sample), where the example is 2D</param>
+        /// <param name="minibatchSize">The size of the packet by which the signs are broken</param>
         /// <returns></returns>
         public IEnumerable<Value> ConvertDataToValue<T>(IEnumerable<T[,]> data, int minibatchSize) where T : IConvertible
         {
@@ -206,12 +206,12 @@ namespace EasyCNTK
             }
         }
         /// <summary>
-        /// Преобразует датасет в наборы обучающих примеров для использования в CNTK. Используется для обучения моделей с несколькими выходами.
+        /// Converts a dataset into sets of training examples for use in CNTK. Used to train models with multiple outputs.
         /// </summary>
-        /// <typeparam name="T">Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
-        /// <param name="features">Набор признаков для каждого примера(sample)</param>
-        /// <param name="labels">Набор меток для каждого выхода модели, размерность для каждого выхода может быть своя. </param>
-        /// <param name="minibatchSize">Размер минипакета</param>
+        /// <typeparam name="T">Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <param name="features">A set of attributes for each example (sample)</param>
+        /// <param name="labels">A set of labels for each output of the model, the dimension for each output may be different.</param>
+        /// <param name="minibatchSize">Minipack size</param>
         /// <returns></returns>
         public IEnumerable<MinibatchMultiOutput> ConvertDatasetToMinibatchMultiOutput<T>(IEnumerable<T[]> features, IEnumerable<T[][]> labels, int minibatchSize)
         {
@@ -238,12 +238,12 @@ namespace EasyCNTK
             }
         }
         /// <summary>
-        /// Преобразует датасет в наборы обучающих примеров для использования в CNTK. Используется для обучения реккурентных моделей с несколькими выходами.
+        /// Converts a dataset into sets of training examples for use in CNTK. Used to train recursive models with multiple outputs.
         /// </summary>
-        /// <typeparam name="T">Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
-        /// <param name="features">Набор признаков для каждого примера(sample), при пример - последовательность</param>
-        /// <param name="labels">Набор меток для каждого выхода модели, размерность для каждого выхода может быть своя. </param>
-        /// <param name="minibatchSize">Размер минипакета</param>
+        /// <typeparam name="T">Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <param name="features">A set of attributes for each example (sample), with an example - a sequence</param>
+        /// <param name="labels">A set of labels for each output of the model, the dimension for each output may be different.</param>
+        /// <param name="minibatchSize">Minipack size</param>
         /// <returns></returns>
         public IEnumerable<MinibatchMultiOutput> ConvertDatasetToMinibatchMultiOutput<T>(IEnumerable<IList<T[]>> features, IEnumerable<T[][]> labels, int minibatchSize)
         {
@@ -270,12 +270,12 @@ namespace EasyCNTK
             }
         }
         /// <summary>
-        /// Преобразует 2D датасет в наборы обучающих примеров для использования в CNTK. Используется для обучения моделей с несколькими выходами.
+        /// Converts a 2D dataset into training case sets for use in CNTK. Used to train models with multiple outputs.
         /// </summary>
-        /// <typeparam name="T">Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
-        /// <param name="features">Набор признаков для каждого примера(sample) в 2D</param>
-        /// <param name="labels">Набор меток для каждого выхода модели, размерность для каждого выхода может быть своя. </param>
-        /// <param name="minibatchSize">Размер минипакета</param>
+        /// <typeparam name="T">Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <param name="features">A set of attributes for each example (sample) in 2D</param>
+        /// <param name="labels">A set of labels for each output of the model, the dimension for each output may be different.</param>
+        /// <param name="minibatchSize">Minipack size</param>
         /// <returns></returns>
         public IEnumerable<MinibatchMultiOutput> ConvertDatasetToMinibatchMultiOutput<T>(IEnumerable<T[,]> features, IEnumerable<T[][]> labels, int minibatchSize) where T:IConvertible
         {            
@@ -303,7 +303,7 @@ namespace EasyCNTK
 
 
         #region IDisposable Support
-        private bool disposedValue = false; // Для определения избыточных вызовов
+        private bool disposedValue = false; // To identify redundant calls
 
         protected virtual void Dispose(bool disposing)
         {
@@ -311,68 +311,68 @@ namespace EasyCNTK
             {
                 if (disposing)
                 {
-                    // TODO: освободить управляемое состояние (управляемые объекты).
+                    // TODO: release managed state (managed objects).
                     Device.Dispose();
                 }
 
-                // TODO: освободить неуправляемые ресурсы (неуправляемые объекты) и переопределить ниже метод завершения.
-                // TODO: задать большим полям значение NULL.
+                // TODO: Release unmanaged resources (unmanaged objects) and override the completion method below.
+                // TODO: set large fields to NULL.
                 Device = null;
                 disposedValue = true;
             }
         }
 
-        // TODO: переопределить метод завершения, только если Dispose(bool disposing) выше включает код для освобождения неуправляемых ресурсов.
+        // TODO: Override the completion method only if Dispose (bool disposing) above includes code to free unmanaged resources.
         ~DataConverter()
         {
-            // Не изменяйте этот код. Разместите код очистки выше, в методе Dispose(bool disposing).
+            // Do not modify this code. Place the cleanup code above in the Dispose (bool disposing) method.
             Dispose(false);
         }
 
-        // Этот код добавлен для правильной реализации шаблона высвобождаемого класса.
+        // This code has been added to properly implement the released class template.
         public void Dispose()
         {
-            // Не изменяйте этот код. Разместите код очистки выше, в методе Dispose(bool disposing).
+            // Do not modify this code. Place the cleanup code above in the Dispose (bool disposing) method.
             Dispose(true);
-            // TODO: раскомментировать следующую строку, если метод завершения переопределен выше.
+            // TODO: uncomment the next line if the completion method is overridden above.
             GC.SuppressFinalize(this);
         }
         #endregion
     }
 
     /// <summary>
-    /// Представляет пачку данных для обучения
+    /// Represents a stack of data for training
     /// </summary>
     public class Minibatch
     {
         /// <summary>
-        /// Размер пачки (количество обучающих примеров в пачке)
+        /// Pack size (number of training examples per pack)
         /// </summary>
         public int Size { get; set; }
         /// <summary>
-        /// Признаки
+        /// Signs
         /// </summary>
         public Value Features { get; set; }
         /// <summary>
-        /// Метки классов/непрерывные значения меток
+        /// Class Labels / Continuous Label Values
         /// </summary>
         public Value Labels { get; set; }
     }
     /// <summary>
-    /// Представляет пачку данных для обучения моделей с несколькими выходами
+    /// Represents a stack of data for training models with multiple outputs
     /// </summary>
     public class MinibatchMultiOutput
     {
         /// <summary>
-        /// Размер пачки (количество обучающих примеров в пачке)
+        /// Pack size (number of training examples per pack)
         /// </summary>
         public int Size { get; set; }
         /// <summary>
-        /// Признаки
+        /// Signs
         /// </summary>
         public Value Features { get; set; }
         /// <summary>
-        /// Метки классов/непрерывные значения меток, для каждого выхода модели
+        /// Class labels / continuous label values, for each model output
         /// </summary>
         public Value[] Labels { get; set; }
     }

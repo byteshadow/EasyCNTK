@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -15,7 +15,7 @@ using System.Text;
 namespace EasyCNTK.Learning.Reinforcement
 {
     /// <summary>
-    /// Реализует механизм обучения методом Actor Critic
+    /// Implements Actor Critic learning mechanism
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class ActorCriticTeacher<T> : AgentTeacher<T> where T : IConvertible
@@ -23,18 +23,18 @@ namespace EasyCNTK.Learning.Reinforcement
         public ActorCriticTeacher(Environment environment, DeviceDescriptor device) : base(environment, device) { }
 
         /// <summary>
-        /// Обучает агента, модель которого представлена сетью прямого распространения (не рекуррентной) с двумя выходами(не путать с размерностью выхода). Используется в случае когда модель оперирует только текущим состоянием среды, не учитывая предыдущие состояния.
+        /// Teaches an agent whose model is represented by a direct distribution network (non-recurrent) with two outputs (not to be confused with the output dimension). Used when the model operates only with the current state of the environment, not taking into account previous states.
         /// </summary>
-        /// <param name="agent">Агент для обучения, сеть заданной архитектуры с двумя выходами: 1 выход - действия агента, 2 выход - средняя награда при выполнении действия(одно число)</param>
-        /// <param name="iterationCount">Количество итераций обучения (эпох)</param>
-        /// <param name="rolloutCount">Количество прогонов(в случае игры - прохождений уровня до окончания игры <seealso cref="Environment.IsTerminated"/>), которое будет пройдено прежде чем обновятся веса.
-        /// Можно интерпретировать как количество обучающих данных на одну эпоху.</param>
-        /// <param name="minibatchSize">Размер минибатча для обучения</param>
-        /// <param name="actionPerIteration">Произвольное действие, которое требуется выполнять каждую эпоху. Позволяет прервать процесс тренировки. Входные параметры: эпоха, loss-ошибка, evaluation-ошибка. 
-        /// Выходные: true - прервать процесс тренировки, false - продолжить тренировку.
-        /// Используется для осуществления логирования, отображения процесса обучения, сохранения промежуточных чекпоинтов модели и т.п.</param>
-        /// <param name="gamma">Коэффициент затухания награды(reward), при вычислении Discounted reward</param>
-        /// <param name="epsilon">Величина, на которую должны отличаться два вещественных числа, чтобы считаться разными. Необходимо для вычисления похожих состояний среды.</param>
+        /// <param name="agent">An agent for training, a network of a given architecture with two outputs: 1 output - agent actions, 2 output - average reward when an action is performed (one number)</param>
+        /// <param name="iterationCount">Number of learning iterations (eras)</param>
+        /// <param name="rolloutCount">The number of runs (in the case of a game - passing the level until the end of the game <seealso cref="Environment.IsTerminated"/> ), which will be completed before the weights are updated.
+        /// It can be interpreted as the amount of training data for one era.</param>
+        /// <param name="minibatchSize">Minibatch size for training</param>
+        /// <param name="actionPerIteration">The arbitrary action that each epoch requires. Allows you to interrupt the training process. Input parameters: era, loss error, evaluation error. 
+        /// Weekend: true - interrupt the training process, false - continue the training.
+        /// Used for logging, displaying the learning process, saving intermediate model checkpoints, etc.</param>
+        /// <param name="gamma">Reward attenuation coefficient (reward) when calculating Discounted reward</param>
+        /// <param name="epsilon">The value by which two real numbers must differ in order to be considered different. It is necessary to calculate similar environmental conditions.</param>
         /// <returns></returns>
         public SequentialMultiOutput<T> Teach(SequentialMultiOutput<T> agent, int iterationCount, int rolloutCount, int minibatchSize, Func<int, double[], double[], bool> actionPerIteration = null, double gamma = 0.99, double epsilon = 0.01)
         {
@@ -60,7 +60,7 @@ namespace EasyCNTK.Learning.Reinforcement
                     }
                     Environment.Reset();
                 }
-                //1 - сначала посчитать средний reward для каждого состояния = baseline, присвоить состоянию его средний reward(который отдает Environment - baseline) - это будут метки для обучения второй головы
+                //1 - first, calculate the average reward for each state = baseline, assign the state its average reward (which gives the Environment - baseline) - these will be marks for training the second head
                 var baselines = data
                     .GroupBy(p => p.state, new TVectorComparer<T>(epsilon))
                     .ToDictionary(p => p.Key, q => q.Average(z => z.reward.ToDouble(CultureInfo.InvariantCulture)), new TVectorComparer<T>(epsilon));
@@ -68,13 +68,13 @@ namespace EasyCNTK.Learning.Reinforcement
                     .Select(p => baselines[p.state])
                     .ToArray();
 
-                //2 - потом посчитать уже advatageReward по формуле: Yi*(reward - agentReward) - это будут метки для обучения первой головы
+                //2 - then count already advatageReward according to the formula: Yi * (reward - agentReward) - these will be marks for training the first head
                 var elementTypeCode = data.First.Value.reward.GetTypeCode();
                 var advantageReward = new T[data.Count];
                 foreach (var rollout in data.GroupBy(p => p.rollout))
                 {
                     var steps = rollout.ToList();
-                    steps.Sort((a, b) => a.actionNumber > b.actionNumber ? 1 : a.actionNumber < b.actionNumber ? -1 : 0); //во возрастанию actionNumber
+                    steps.Sort((a, b) => a.actionNumber > b.actionNumber ? 1 : a.actionNumber < b.actionNumber ? -1 : 0); //ascending actionNumber
                     for (int i = 0; i < steps.Count; i++)
                     {
                         var remainingRewards = steps.GetRange(i, steps.Count - i)
@@ -109,19 +109,19 @@ namespace EasyCNTK.Learning.Reinforcement
             return agent;
         }
         /// <summary>
-        /// Обучает агента, модель которого представлена рекуррентной сетью с двумя выходами(не путать с размерностью выхода). Используется в случае когда модель оперирует цепочкой состояний среды.
+        /// Teaches an agent whose model is represented by a recurrent network with two outputs (not to be confused with the output dimension). It is used when the model operates with a chain of environmental states.
         /// </summary>
-        /// <param name="agent">Агент для обучения, сеть заданной архитектуры с двумя выходами: 1 выход - действия агента, 2 выход - средняя награда при выполнении действия(одно число)</param>
-        /// <param name="iterationCount">Количество итераций обучения (эпох)</param>
-        /// <param name="rolloutCount">Количество прогонов(в случае игры - прохождений уровня до окончания игры <seealso cref="Environment.IsTerminated"/>), которое будет пройдено прежде чем обновятся веса.
-        /// Можно интерпретировать как количество обучающих данных на одну эпоху.</param>
-        /// <param name="minibatchSize">Размер минибатча для обучения</param>
-        /// <param name="sequenceLength">Длина последовательности: цепочка из предыдущих состояних среды на каждом действии.</param>
-        /// <param name="actionPerIteration">Произвольное действие, которое требуется выполнять каждую эпоху. Позволяет прервать процесс тренировки. Входные параметры: эпоха, loss-ошибка, evaluation-ошибка. 
-        /// Выходные: true - прервать процесс тренировки, false - продолжить тренировку.
-        /// Используется для осуществления логирования, отображения процесса обучения, сохранения промежуточных чекпоинтов модели и т.п.</param>
-        /// <param name="gamma">Коэффициент затухания награды(reward), при вычислении Discounted reward</param>
-        /// <param name="epsilon">Величина, на которую должны отличаться два вещественных числа, чтобы считаться разными. Необходимо для вычисления похожих состояний среды.</param>
+        /// <param name="agent">An agent for training, a network of a given architecture with two outputs: 1 output - agent actions, 2 output - average reward when an action is performed (one number)</param>
+        /// <param name="iterationCount">Number of learning iterations (eras)</param>
+        /// <param name="rolloutCount">The number of runs (in the case of a game - passing the level until the end of the game <seealso cref="Environment.IsTerminated"/> ), which will be completed before the weights are updated.
+        /// It can be interpreted as the amount of training data for one era.</param>
+        /// <param name="minibatchSize">Minibatch size for training</param>
+        /// <param name="sequenceLength">Sequence length: a chain of previous state environments on each action.</param>
+        /// <param name="actionPerIteration">The arbitrary action that each epoch requires. Allows you to interrupt the training process. Input parameters: era, loss error, evaluation error. 
+        /// Weekend: true - interrupt the training process, false - continue the training.
+        /// Used for logging, displaying the learning process, saving intermediate model checkpoints, etc.</param>
+        /// <param name="gamma">Reward attenuation coefficient (reward) when calculating Discounted reward</param>
+        /// <param name="epsilon">The value by which two real numbers must differ in order to be considered different. It is necessary to calculate similar environmental conditions.</param>
         /// <returns></returns>
         public SequentialMultiOutput<T> Teach(SequentialMultiOutput<T> agent, int iterationCount, int rolloutCount, int minibatchSize, int sequenceLength, Func<int, double[], double[], bool> actionPerIteration = null, double gamma = 0.99, double epsilon = 0.01)
         {
@@ -154,7 +154,7 @@ namespace EasyCNTK.Learning.Reinforcement
                     }
                     Environment.Reset();
                 }
-                //1 - сначала посчитать средний reward для каждого состояния = baseline, присвоить состоянию его средний reward(который отдает Environment - baseline) - это будут метки для обучения второй головы
+                //1 - first, calculate the average reward for each state = baseline, assign the state its average reward (which gives the Environment - baseline) - these will be marks for training the second head
                 var baselines = data
                     .GroupBy(p => p.state, new TVectorComparer<T>(epsilon))
                     .ToDictionary(p => p.Key, q => q.Average(z => z.reward.ToDouble(CultureInfo.InvariantCulture)), new TVectorComparer<T>(epsilon));
@@ -162,13 +162,13 @@ namespace EasyCNTK.Learning.Reinforcement
                     .Select(p => baselines[p.state])
                     .ToArray();
 
-                //2 - потом посчитать уже advatageReward по формуле: Yi*(reward - agentReward) - это будут метки для обучения первой головы
+                //2 - then count already advatageReward according to the formula: Yi * (reward - agentReward) - these will be marks for training the first head
                 var elementTypeCode = data[0].reward.GetTypeCode();
                 var advantageReward = new T[data.Count];
                 foreach (var rollout in data.GroupBy(p => p.rollout))
                 {
                     var steps = rollout.ToList();
-                    steps.Sort((a, b) => a.actionNumber > b.actionNumber ? 1 : a.actionNumber < b.actionNumber ? -1 : 0); //во возрастанию actionNumber
+                    steps.Sort((a, b) => a.actionNumber > b.actionNumber ? 1 : a.actionNumber < b.actionNumber ? -1 : 0); //ascending actionNumber
                     for (int i = 0; i < steps.Count; i++)
                     {
                         var remainingRewards = steps.GetRange(i, steps.Count - i)
@@ -191,7 +191,7 @@ namespace EasyCNTK.Learning.Reinforcement
                 foreach (var rollout in dataWithAdvantageRewardAndBaselines)
                 {
                     var steps = rollout.ToList();
-                    steps.Sort((a, b) => a.dat.actionNumber > b.dat.actionNumber ? 1 : a.dat.actionNumber < b.dat.actionNumber ? -1 : 0); //во возрастанию actionNumber
+                    steps.Sort((a, b) => a.dat.actionNumber > b.dat.actionNumber ? 1 : a.dat.actionNumber < b.dat.actionNumber ? -1 : 0); //ascending actionNumber
                     for (int i = 0; i < steps.Count; i++)
                     {
                         if (i < sequenceLength)

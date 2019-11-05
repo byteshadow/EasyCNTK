@@ -1,4 +1,4 @@
-﻿using CNTK;
+using CNTK;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,15 +16,15 @@ namespace SinusoidRegressionLSTM
     {
         static void Main(string[] args)
         {
-            CNTKLib.SetFixedRandomSeed(0); //для воспроизводимости. т.к. инициализация весов в слоях нейросети
-                                           //зависит от генератора случайных чисел CNTK
+            CNTKLib.SetFixedRandomSeed(0); //for reproducibility. because initialization of weights in neural network layers
+                                           //depends on CNTK random number generator
 
-            //создаем симулированный датасет из последовательностей описывающих синусоиду
+            //create a simulated dataset from sequences describing a sinusoid
             var dataset = Enumerable.Range(1, 2000)
-                .Select(p => Math.Sin(p / 100.0)) //уменьшаем шаг, чтобы синусоида была плавнее
-                .Segment(10) //разбиваем синусоиду на сегменты по 10 элементов
-                .Select(p => (featureSequence: p.Take(9).Select(q => new[] { q }).ToArray(), //задаем последовательность из 9 элементов, каждый элемент размерности 1 (может быть: 1, 2, 3...n)
-                                        label: new[] { p[9] })) //задаем метку для последовательности размерности 1 (может быть: 1, 2, 3...n)
+                .Select(p => Math.Sin(p / 100.0)) //decrease the pitch so that the sine wave is smoother
+                .Segment(10) //break the sinusoid into segments of 10 elements
+                .Select(p => (featureSequence: p.Take(9).Select(q => new[] { q }).ToArray(), //set a sequence of 9 elements, each element of dimension 1 (maybe: 1, 2, 3 ... n)
+                                        label: new[] { p[9] })) //set a label for a sequence of dimension 1 (maybe: 1, 2, 3 ... n)
                 .ToArray();
             dataset.Split(0.7, out var train, out var test);
 
@@ -37,15 +37,15 @@ namespace SinusoidRegressionLSTM
             model.Add(new LSTM(1, selfStabilizerLayer: new SelfStabilization()));
             model.Add(new Residual2(1, new Tanh()));
 
-            //можно стыковать слои LSTM друг за другом как в комментарии ниже:
+            //it is possible to join LSTM layers one after another as in the comment below:
             //var model = new Sequential<double>(device, new[] { inputDimension });
             //model.Add(new Dense(3, new Tanh())); 
-            //model.Add(new LSTM(10, isLastLstm: false)); //LSTM так же может быть первым слоем в модели
+            //model.Add (new LSTM (10, isLastLstm: false)); // LSTM can also be the first layer in the model
             //model.Add(new LSTM(5, isLastLstm: false));
             //model.Add(new LSTM(2, selfStabilizerLayer: new SelfStabilization())); 
             //model.Add(new Residual2(1, new Tanh()));
 
-            //используется одна из нескольких перегрузок, которые способны обучать реккурентные сети
+            //uses one of several overloads that can train recursive networks
             var fitResult = model.Fit(features:     train.Select(p => p.featureSequence).ToArray(), 
                 labels:                             train.Select(p => p.label).ToArray(),
                 minibatchSize:                      minibatchSize,
@@ -59,7 +59,7 @@ namespace SinusoidRegressionLSTM
                 actionPerEpoch: (epoch, loss, eval) =>
                 {
                     Console.WriteLine($"Loss: {loss:F10} Eval: {eval:F3} Epoch: {epoch}");
-                    if (loss < 0.05) //критерий остановки достигнут, сохраем модель в файл и заканчиваем обучение (приблизительно на 112 эпохе)
+                    if (loss < 0.05) //stopping criterion is reached, save the model to a file and finish training (approximately 112 epochs)
                     {
                         model.SaveModel($"{model}.model", saveArchitectureDescription: false);
                         return true;

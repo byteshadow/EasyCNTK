@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -9,7 +9,7 @@
 namespace EasyCNTK.Learning.Metrics
 {
     /// <summary>
-    /// Метрики оценки бинарной классификации
+    /// Binary Classification Assessment Metrics
     /// </summary>
     public class BinaryClassificationMetrics
     {

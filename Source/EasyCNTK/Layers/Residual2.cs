@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -13,7 +13,7 @@ using EasyCNTK.ActivationFunctions;
 namespace EasyCNTK.Layers
 {
     /// <summary>
-    /// Реализует остаточный слой с 2 внутренними слоями
+    /// Implements a residual layer with 2 inner layers
     /// </summary>
     public sealed class Residual2 : Layer
     {
@@ -25,7 +25,7 @@ namespace EasyCNTK.Layers
         {
             var dataType = input.Output.DataType;
                           
-            //проброс входа мимо 1 слоя    
+            //forwarding of the entrance past 1 layer    
             var forwarding = input;
             if (outputDimension != input.Output.Shape[0])
             {
@@ -33,23 +33,23 @@ namespace EasyCNTK.Layers
                 forwarding = CNTKLib.Times(scales, forwarding);
             }
 
-            //создание 1 слоя
+            //create 1 layer
             input = Dense.Build(input, outputDimension, activationFunction, device, "");
-            //создание 2 слоя без функции активации
+            //creation of 2 layers without activation function
             input = Dense.Build(input, outputDimension, null, device, "");
-            //соединение с проброшенным входом
+            //connection with forwarded input
             input = CNTKLib.Plus(input, forwarding);
 
             input = activationFunction?.ApplyActivationFunction(input, device) ?? input;
             return Function.Alias(input, name);
         }
         /// <summary>
-        /// Создает остаточный слой с 2 внутренними слоями
+        /// Creates a residual layer with 2 inner layers
         /// </summary>        
-        /// <param name="input">Вход</param>
-        /// <param name="outputDimension">Разрядность выходного слоя</param>
-        /// <param name="activationFunction">Функция активации, null если не требуется</param>
-        /// <param name="device">Устройство для расчетов</param>
+        /// <param name="input">entrance</param>
+        /// <param name="outputDimension">Output layer depth</param>
+        /// <param name="activationFunction">Activation function, null if not required</param>
+        /// <param name="device">Device for calculations</param>
         /// <param name="name"></param>
         /// <returns></returns>
         public static Function Build(Function input, int outputDimension, ActivationFunction activationFunction, DeviceDescriptor device, string name = "Residual2")
@@ -57,10 +57,10 @@ namespace EasyCNTK.Layers
             return createResidualLayer2(input, outputDimension, activationFunction, device, name);
         }
         /// <summary>
-        /// Создает остаточный слой с 2 внутренними слоями
+        /// Creates a residual layer with 2 inner layers
         /// </summary>
-        /// <param name="outputDimension">Разрядность выходного слоя</param>
-        /// <param name="activationFunction">Функция активации, null если не требуется</param>
+        /// <param name="outputDimension">Output layer depth</param>
+        /// <param name="activationFunction">Activation function, null if not required</param>
         /// <param name="name"></param>
         public Residual2(int outputDimension, ActivationFunction activationFunction, string name = "Residual2")
         {

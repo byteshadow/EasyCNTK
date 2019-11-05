@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -11,17 +11,17 @@ using System.Collections.Generic;
 namespace EasyCNTK.Learning
 {
     /// <summary>
-    /// Представляет реальные и вычисленные моделью значения выхода
+    /// Represents real and model calculated output values
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public struct EvaluateItem<T> where T:IConvertible
     {
         /// <summary>
-        /// Реальные значения, ожидаемые на выходе
+        /// Actual Expected Outputs
         /// </summary>
         public IList<T> ExpectedValue { get; set; }
         /// <summary>
-        /// Вычисленные моделью значения на выходе
+        /// Model-calculated output values
         /// </summary>
         public IList<T> EvaluatedValue { get; set; }
         public EvaluateItem(IList<T> expectedValue, IList<T> evaluatedValue)

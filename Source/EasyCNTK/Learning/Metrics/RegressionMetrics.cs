@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -9,7 +9,7 @@
 namespace EasyCNTK.Learning.Metrics
 {
     /// <summary>
-    /// Метрики оценки регрессии
+    /// Regression Evaluation Metrics
     /// </summary>
     public class RegressionMetrics
     {

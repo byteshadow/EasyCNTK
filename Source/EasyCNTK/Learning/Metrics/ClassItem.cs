@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -9,28 +9,28 @@
 namespace EasyCNTK.Learning.Metrics
 {
     /// <summary>
-    /// Содержит дополнительные метрики классификации по конкретному классу
+    /// Contains additional classification metrics for a specific class
     /// </summary>
     public class ClassItem
     {
         /// <summary>
-        /// Индекс позиции в выходном векторе модели, закрепленной за определенным классом
+        /// The index of the position in the output vector of the model assigned to a certain class
         ///</summary>
         public int Index { get; set; }
         /// <summary>
-        /// Точность, с которой модель определяет этот класс. Вычисляется по формуле: точность = [количество верно определенных примеров этого класса] / [количество примеров классифицированных как этот класс]
+        /// The accuracy with which the model defines this class. It is calculated by the formula: accuracy = [number of correctly defined examples of this class] / [number of examples classified as this class]
         /// </summary>
         public double Precision { get; set; }
         /// <summary>
-        /// Полнота, с которой модель определяет этот класс. Вычисляется по формуле: полнота = [количество верно определенных примеров этого класса] / [количество всех примеров этого класса]
+        /// The completeness with which the model defines this class. It is calculated by the formula: completeness = [number of correctly defined examples of this class] / [number of all examples of this class]
         /// </summary>
         public double Recall { get; set; }
         /// <summary>
-        /// Средняя гармоника между <seealso cref="Precision"/> и <seealso cref="Recall"/>. Вычисляется по формуле: F1Score = 2 * Precision * Recall / (Precision + Recall)
+        /// Harmonic between <seealso cref="Precision"/> and <seealso cref="Recall"/> . Calculated by the formula: F1Score = 2 * Precision * Recall / (Precision + Recall)
         /// </summary>
         public double F1Score { get; set; }
         /// <summary>
-        /// Доля примеров данного класса во всем датасете
+        /// The proportion of examples of this class in the entire dataset
         /// </summary>
         public double Fraction { get; set; }        
     }

@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -10,7 +10,7 @@ using System.Collections.Generic;
 namespace EasyCNTK.Learning.Metrics
 {
     /// <summary>
-    /// Метрики оценки одноклассовой классификации
+    /// Classification Assessment Metrics
     /// </summary>
     public class OneLabelClassificationMetrics
     {

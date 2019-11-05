@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -14,7 +14,7 @@ using CNTK;
 namespace EasyCNTK.Learning.Optimizers
 {
     /// <summary>
-    /// Оптимизатор RMSProp. Аналог <seealso cref="AdaDelta"/>. Первоисточник: http://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf
+    /// Optimizer RMSProp. Analogue <seealso cref="AdaDelta"/> . Source: http://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf
     /// </summary>
     public sealed class RMSProp : Optimizer
     {
@@ -30,19 +30,19 @@ namespace EasyCNTK.Learning.Optimizers
         public override int MinibatchSize { get; set; }
 
         /// <summary>
-        /// Инициализирует оптимизатор RMSProp 
+        /// Initializes the RMSProp Optimizer 
         /// </summary>
-        /// <param name="learningRate">Скорость обучения</param>
-        /// <param name="minibatchSize">Размер минипакета, требуется CNTK чтобы масштабировать параметры оптимизатора для более эффективного обучения. Если равен 0, то будет использован размер митибатча при обучении.</param>
-        /// <param name="gamma">Коэффициент передачи для предыдущего градиента. Должен быть в пределах [0;1]</param>
-        /// <param name="increment">Коэффициент увеличения скорости обучения. Должен быть больше 1. По умолчанию увеличение на 5%</param>
-        /// <param name="decrement">Коэффициент уменьшения скорости обучения. Должен быть в пределах [0;1]. По умолчанию уменьшение на 5%</param>
-        /// <param name="max">Максимальная скорость обучения. Должна быть больше 0 и min</param>
-        /// <param name="min">Минимальная скорость обучения. Должна быть больше 0 и меньше max</param>
-        /// <param name="l1RegularizationWeight">Коэффициент L1 нормы, если 0 - регуляризация не применяется</param>
-        /// <param name="l2RegularizationWeight">Коэффициент L2 нормы, если 0 - регуляризация не применяется</param>
-        /// <param name="gradientClippingThresholdPerSample">Порог отсечения градиента на каждый пример обучения, используется преимущественно для борьбы с взрывным градиентом в глубоких реккурентных сетях.
-        /// По умолчанию установлен в <seealso cref="double.PositiveInfinity"/> - отсечение не используется. Для использования установите необходимый порог.</param>
+        /// <param name="learningRate">Learning speed</param>
+        /// <param name="minibatchSize">The mini-packet size is required by CNTK to scale optimizer parameters for more effective training. If equal to 0, then the mitibatch size will be used during training.</param>
+        /// <param name="gamma">Gain for the previous gradient. Must be within [0; 1]</param>
+        /// <param name="increment">The rate of increase in learning speed. Must be greater than 1. Default 5% increase</param>
+        /// <param name="decrement">The rate of decrease in learning speed. Must be within [0; 1]. 5% reduction by default</param>
+        /// <param name="max">Maximum learning speed. Must be greater than 0 and min</param>
+        /// <param name="min">Minimum learning speed. Must be greater than 0 and less than max</param>
+        /// <param name="l1RegularizationWeight">Coefficient L1 of norm, if 0 - regularization is not applied</param>
+        /// <param name="l2RegularizationWeight">Coefficient L2 of norm, if 0 - regularization is not applied</param>
+        /// <param name="gradientClippingThresholdPerSample">The gradient cutoff threshold for each training example is used primarily to combat the explosive gradient in deep recursive networks.
+        /// The default is set to<seealso cref="double.PositiveInfinity"/> - отсечение не используется. Для использования установите необходимый порог.</param>
         public RMSProp(double learningRate,
             int minibatchSize = 0,
             double gamma = 0.95,

@@ -1,10 +1,10 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-// Общие сведения об этой сборке предоставляются следующим набором
-// набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
-// связанные со сборкой.
+// General information about this assembly is provided by the following set
+// set of attributes. Change the values of these attributes to change the information,
+// related to assembly.
 [assembly: AssemblyTitle("MNISTClassifier")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
@@ -14,23 +14,23 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// Установка значения False для параметра ComVisible делает типы в этой сборке невидимыми
-// для компонентов COM. Если необходимо обратиться к типу в этой сборке через
-// COM, задайте атрибуту ComVisible значение TRUE для этого типа.
+// Setting False to ComVisible makes the types in this assembly invisible.
+// for COM components. If you need to refer to the type in this assembly through
+// COM, set the ComVisible attribute to TRUE for this type.
 [assembly: ComVisible(false)]
 
-// Следующий GUID служит для идентификации библиотеки типов, если этот проект будет видимым для COM
+// The following GUID is used to identify the type library if this project is visible to COM
 [assembly: Guid("88bc2b32-48d1-46c1-a7c7-f5c94c30e8f5")]
 
-// Сведения о версии сборки состоят из следующих четырех значений:
+// Assembly version information consists of the following four values:
 //
-//      Основной номер версии
-//      Дополнительный номер версии
-//   Номер сборки
-//      Редакция
+//      Major version number
+//      Additional version number
+//   Build number
+//      Editors
 //
-// Можно задать все значения или принять номер сборки и номер редакции по умолчанию.
-// используя "*", как показано ниже:
+// You can set all values or accept the assembly number and default revision number.
+// using &quot;*&quot; as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

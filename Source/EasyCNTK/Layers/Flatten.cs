@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -13,7 +13,7 @@ using CNTK;
 namespace EasyCNTK.Layers
 {
     /// <summary>
-    /// Реализует слой преобразующий вход в "плоское" представление (вектор)
+    /// Implements a layer that converts input into a &quot;flat&quot; representation (vector)
     /// </summary>
     public sealed class Flatten : Layer
     {

@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -13,15 +13,15 @@ using System;
 namespace EasyCNTK.LossFunctions
 {
     /// <summary>
-    /// Функция ошибки при бинарной, одноклассовой и многоклассовой классификации. Допускается использование с Softmax выходом, при этом создается условие классификации: класс должен иметь вероятность выше заданного порога, иначе он не будет классифицирован.
+    /// Error function for binary, single-class and multi-class classification. It can be used with a Softmax output, and a classification condition is created: the class must have a probability above a given threshold, otherwise it will not be classified.
     /// </summary>
     public sealed class ClassificationError : Loss
     {
         private double _thresholdValue;
         /// <summary>
-        /// Функция ошибки при бинарной, одноклассовой и многоклассовой классификации. Допускается использование с Softmax выходом, при этом создается условие классификации: класс должен иметь вероятность выше заданного порога, иначе он не будет классифицирован.
+        /// Error function for binary, single-class and multi-class classification. It can be used with a Softmax output, and a classification condition is created: the class must have a probability above a given threshold, otherwise it will not be classified.
         /// </summary>
-        /// <param name="threshold">Пороговое значение для действительного значения выхода нейросети, ниже которого класс не распознается. Другими словами - это минимальная вероятность, которую должен выдать классификатор для конкретного класса, чтобы этот класс был учтен как распознанный.</param>
+        /// <param name="threshold">The threshold value for the actual value of the output of the neural network, below which the class is not recognized. In other words, this is the minimum probability that the classifier must give for a particular class so that this class is considered as recognized.</param>
         public ClassificationError(double threshold = 0.5)
         {
             if (threshold <= 0 || threshold >= 1) throw new ArgumentOutOfRangeException("threshold", "Порог должен быть в диапазоне: (0;1)");

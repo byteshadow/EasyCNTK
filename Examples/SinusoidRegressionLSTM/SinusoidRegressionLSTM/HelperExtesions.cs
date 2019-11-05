@@ -1,15 +1,15 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 namespace SinusoidRegressionLSTM
 {
     static class HelperExtesions
     {
         /// <summary>
-        /// Разбивает входную последовательность на сегменты (подпоследовательности) равного размера
+        /// Splits an input sequence into segments (subsequences) of equal size
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="source">Исходная последовательность</param>
-        /// <param name="segmentSize">Размер сегмента (количество элементов)</param>
+        /// <param name="source">Source sequence</param>
+        /// <param name="segmentSize">Segment size (number of elements)</param>
         /// <returns></returns>
         public static IEnumerable<IList<T>> Segment<T>(this IEnumerable<T> source, int segmentSize)
         {

@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -12,7 +12,7 @@ using CNTK;
 namespace EasyCNTK.Layers
 {
     /// <summary>
-    /// Реализует пуллинг слой для двумерного вектора
+    /// Implements a pulling layer for a two-dimensional vector
     /// </summary>
     public sealed class Pooling2D : Layer
     {
@@ -23,13 +23,13 @@ namespace EasyCNTK.Layers
         private PoolingType _poolingType;
         private string _name;
         /// <summary>
-        /// Добавляет пуллинг слой для двумерного вектора. Если предыдущий слой имеет не двумерный выход, выбрасывается исключение
+        /// Adds a pulling layer for a two-dimensional vector. If the previous layer has a non-two-dimensional output, an exception is thrown
         /// </summary>
-        /// <param name="poolingWindowWidth">Ширина окна пуллинга</param>
-        /// <param name="poolingWindowHeight">Высота окна пуллинга</param>
-        /// <param name="hStride">Шаг смещения окна пуллинга по горизонтали (по столбцам матрицы)</param>
-        /// <param name="vStride">Шаг смещения окна пуллинга по вертикали (по строкам матрицы)</param>
-        /// <param name="poolingType">Тип пуллинга. Максимальный или средний</param>
+        /// <param name="poolingWindowWidth">Pulling window width</param>
+        /// <param name="poolingWindowHeight">Pulling window height</param>
+        /// <param name="hStride">Horizontal displacement step of the pulling window (according to matrix columns)</param>
+        /// <param name="vStride">Step of shifting the pulling window vertically (along the rows of the matrix)</param>
+        /// <param name="poolingType">Type of pulling. Maximum or medium</param>
         /// <param name="name"></param>
         public static Function Build(Variable input, int poolingWindowWidth, int poolingWindowHeight, int hStride, int vStride, PoolingType poolingType, string name)
         {
@@ -41,13 +41,13 @@ namespace EasyCNTK.Layers
             return Build(input, _poolingWindowWidth, _poolingWindowHeight, _hStride, _vStride, _poolingType, _name);
         }
         /// <summary>
-        /// Создает пуллинг слой для двумерного вектора. Если предыдущий слой имеет не двумерный выход, выбрасывается исключение
+        /// Creates a pulling layer for a two-dimensional vector. If the previous layer has a non-two-dimensional output, an exception is thrown
         /// </summary>
-        /// <param name="poolingWindowWidth">Ширина окна пуллинга</param>
-        /// <param name="poolingWindowHeight">Высота окна пуллинга</param>
-        /// <param name="hStride">Шаг смещения окна пуллинга по горизонтали (по столбцам матрицы)</param>
-        /// <param name="vStride">Шаг смещения окна пуллинга по вертикали (по строкам матрицы)</param>
-        /// <param name="poolingType">Тип пуллинга. Максимальный или средний</param>
+        /// <param name="poolingWindowWidth">Pulling window width</param>
+        /// <param name="poolingWindowHeight">Pulling window height</param>
+        /// <param name="hStride">Horizontal displacement step of the pulling window (according to matrix columns)</param>
+        /// <param name="vStride">Step of shifting the pulling window vertically (along the rows of the matrix)</param>
+        /// <param name="poolingType">Type of pulling. Maximum or medium</param>
         /// <param name="name"></param>
         public Pooling2D(int poolingWindowWidth, int poolingWindowHeight, int hStride, int vStride, PoolingType poolingType, string name = "Pooling2D")
         {

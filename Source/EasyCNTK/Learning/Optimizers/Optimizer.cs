@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -14,7 +14,7 @@ using System.Collections.Generic;
 namespace EasyCNTK.Learning.Optimizers
 {
     /// <summary>
-    /// Базовый класс для реализации оптимизаторов
+    /// Base class for implementing optimizers
     /// </summary>
     public abstract class Optimizer
     {

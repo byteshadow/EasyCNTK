@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -42,8 +42,8 @@ namespace MNISTClassifier
                         .Select(p => p.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                         .Where(p => p.Length > 0)
                         .Select(p => p.Select(q => double.Parse(q)).ToArray())                        
-                        .Select(p => p.Skip(1) //1 столбец - метка, пропускаем
-                            .Concat(MnistOneHotEncoding((int)p[0]))//переносим метку в конец массива с признаками, и сразу кодируем в one-hot-encoding
+                        .Select(p => p.Skip(1) //1 column - label, skip
+                            .Concat(MnistOneHotEncoding((int)p[0]))//we transfer the label to the end of the array with signs, and immediately encode in one-hot-encoding
                             .ToArray())
                         .ToList();
                 }
@@ -86,7 +86,7 @@ namespace MNISTClassifier
                 actionPerEpoch: (epoch, loss, eval) =>
                 {
                     Console.WriteLine($"Loss: {loss:F10} Eval: {eval:F3} Epoch: {epoch}");
-                    if (eval < 0.05) //ошибка классфикации меньше 5%, сохраем модель в файл и заканчиваем обучение
+                    if (eval < 0.05) //classification error less than 5%, save the model to a file and finish training
                     {
                         model.SaveModel($"{model}.model", saveArchitectureDescription: false);
                         return true;

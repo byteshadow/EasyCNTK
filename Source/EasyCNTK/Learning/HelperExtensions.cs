@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -15,11 +15,11 @@ namespace EasyCNTK.Learning
     public static class HelperExtensions
     {
         /// <summary>
-        /// Перемешивает данные в коллекции.
+        /// Shuffles data in a collection.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
-        /// <param name="seed">Начальное значение для генератора случайных чисел (<seealso cref="Random"/>), если 0 - используется генератор по умолчанию </param>
+        /// <param name="seed">The initial value for the random number generator (<seealso cref="Random"/>), если 0 - используется генератор по умолчанию </param>
         public static void Shuffle<T>(this IList<T> source, int seed = 0)
         {
             Random random = seed== 0 ? new Random() : new Random(seed);
@@ -34,15 +34,15 @@ namespace EasyCNTK.Learning
             }
         }
         /// <summary>
-        /// Разбивает набор данных на 2 части в заданном соотношении
+        /// Splits a data set into 2 parts in a given ratio
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="source">Исходный набор данных</param>
-        /// <param name="percent">Размер первого набора данных в процентах от исходной коллекции. Должен быть в диапазоне [0;1].</param>
-        /// <param name="first">Первый набор данных</param>
-        /// <param name="second">Второй набор данных</param>
-        /// <param name="randomizeSplit">Случайное разбиение (данные для наборов берутся случайно из всей выборки)</param>        
-        /// <param name="seed">Начальное значение для генератора случайных чисел, если 0 - используется генератор по умолчанию</param>
+        /// <param name="source">Source dataset</param>
+        /// <param name="percent">The size of the first data set as a percentage of the original collection. Must be in the range [0; 1].</param>
+        /// <param name="first">First data set</param>
+        /// <param name="second">Second data set</param>
+        /// <param name="randomizeSplit"&gt; Random partitioning (data for sets are taken randomly from the entire sample)</param>        
+        /// <param name="seed">The initial value for the random number generator, if 0 - the default generator is used</param>
         public static void Split<T>(this IList<T> source, double percent, out IList<T> first, out IList<T> second, bool randomizeSplit = false, int seed = 0)
         {
             if (percent > 1 || percent < 0)
@@ -59,18 +59,18 @@ namespace EasyCNTK.Learning
             second = new List<T>(source.Skip(firstCount));
         }
         /// <summary>
-        /// Разбивает набор данных на 2 части в заданном соотношении, сохраняя исходное распределение классов неизменным для обоих коллекций. Подразумевает, что один пример содержит один класс (Задача одноклассовой классификации).
+        /// Splits a data set into 2 parts in a given ratio, keeping the original class distribution unchanged for both collections. Assumes that one example contains one class (The task of a single-class classification).
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="U"></typeparam>
-        /// <param name="source">Исходный набор данных</param>
-        /// <param name="percent">Размер первого набора данных в процентах от исходной коллекции. Должен быть в диапазоне [0;1].</param>
-        /// <param name="labelSelector">Селектор, извлекающий метку класса</param>
-        /// <param name="labelComparer">Компаратор, используется для определения равенства меток двух классов</param>
-        /// <param name="first">Первый набор данных</param>
-        /// <param name="second">Второй набор данных</param>
-        /// <param name="randomizeSplit">>Случайное разбиение (данные для наборов берутся случайно из всей выборки)</param>
-        /// <param name="seed">Начальное значение для генератора случайных чисел, если 0 - используется генератор по умолчанию</param>
+        /// <param name="source">Source dataset</param>
+        /// <param name="percent">The size of the first data set as a percentage of the original collection. Must be in the range [0; 1].</param>
+        /// <param name="labelSelector">Class label selector</param>
+        /// <param name="labelComparer">Comparator, used to determine the equality of labels of two classes</param>
+        /// <param name="first">First data set</param>
+        /// <param name="second">Second data set</param>
+        /// <param name="randomizeSplit">&gt; Random partitioning (data for sets are taken randomly from the entire sample)</param>
+        /// <param name="seed">The initial value for the random number generator, if 0 - the default generator is used</param>
         public static void SplitBalanced<T, U>(this IList<T> source, double percent, Func<T, U> labelSelector, IEqualityComparer<U> labelComparer, out IList<T> first, out IList<T> second, bool randomizeSplit = false, int seed = 0)
         {
             if (percent > 1 || percent < 0)
@@ -113,31 +113,31 @@ namespace EasyCNTK.Learning
         }
 
         /// <summary>
-        /// Разбивает набор данных на 2 части в заданном соотношении, сохраняя исходное распределение классов неизменным для обоих коллекций.
+        /// Splits a data set into 2 parts in a given ratio, keeping the original class distribution unchanged for both collections.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <typeparam name="U"></typeparam>
-        /// <param name="source">Исходный набор данных</param>
-        /// <param name="percent">Размер первого набора данных в процентах от исходной коллекции. Должен быть в диапазоне [0;1].</param>
-        /// <param name="labelSelector">Селектор, извлекающий метку класса</param>
-        /// <param name="first">Первый набор данных</param>
-        /// <param name="second">Второй набор данных</param>
-        /// <param name="randomizeSplit">>Случайное разбиение (данные для наборов берутся случайно из всей выборки)</param>
-        /// <param name="seed">Начальное значение для генератора случайных чисел, если 0 - используется генератор по умолчанию</param>
+        /// <param name="source">Source dataset</param>
+        /// <param name="percent">The size of the first data set as a percentage of the original collection. Must be in the range [0; 1].</param>
+        /// <param name="labelSelector">Class label selector</param>
+        /// <param name="first">First data set</param>
+        /// <param name="second">Second data set</param>
+        /// <param name="randomizeSplit">&gt; Random partitioning (data for sets are taken randomly from the entire sample)</param>
+        /// <param name="seed">The initial value for the random number generator, if 0 - the default generator is used</param>
         public static void SplitBalanced<T, U>(this IList<T> source, double percent, Func<T, U> labelSelector, out IList<T> first, out IList<T> second, bool randomizeSplit = false, int seed = 0)
         {
             source.SplitBalanced(percent, labelSelector, null, out first, out second, randomizeSplit, seed);
         }
 
         /// <summary>
-        /// На основе заданного множества примеров одного класса, создает необходимое количество синтетических примеров этого же класса, используя метод Synthetic Minority Over-sampling Technique (SMOTE)
-        /// Для корректной генерации входные данные должны быть нормализованы.
+        /// Based on a given set of examples of one class, creates the required number of synthetic examples of the same class using the Synthetic Minority Over-sampling Technique (SMOTE) method
+        /// For correct generation, the input data must be normalized.
         /// </summary>
-        /// <typeparam name="T">Тип элементов, поддеживаются все типы, реализующие <seealso cref="IConvertible"/></typeparam>
+        /// <typeparam name="T">Type of elements; all types implementing<seealso cref="IConvertible"/></typeparam>
         /// <param name="source"></param>
-        /// <param name="similarSampleCount">Количество похожих синтетических примеров, которое требуется создать</param>
-        /// <param name="nearestNeighborsCount">Количество ближаших соседей, используемых для геренации синтетического примера</param>
-        /// <param name="seed">Начальное значение для генератора случайных чисел, если 0 - используется генератор по умолчанию</param>
+        /// <param name="similarSampleCount">Number of similar synthetic examples to create</param>
+        /// <param name="nearestNeighborsCount">The number of nearest neighbors used for the generation of a synthetic example</param>
+        /// <param name="seed">The initial value for the random number generator, if 0 - the default generator is used</param>
         /// <returns></returns>
         public static IList<T[]> MakeSimilarSamplesBySMOTE<T>(this IList<T[]> source, int similarSampleCount, int nearestNeighborsCount = 5, int seed = 0) where T : IConvertible
         {
@@ -154,7 +154,7 @@ namespace EasyCNTK.Learning
             }
 
             if (source.Count < 2)
-                throw new ArgumentException("Исходная коллекция должна содержать минимум 2 элемента.", "source");
+                throw new ArgumentException("Source collection должна содержать минимум 2 элемента.", "source");
             if (similarSampleCount < 1)
                 throw new ArgumentOutOfRangeException("similarSampleCount", "Число синтезируемых примеров должно быть больше 0.");
             if (nearestNeighborsCount < 1)
@@ -181,14 +181,14 @@ namespace EasyCNTK.Learning
                         if (a.distance < b.distance)
                             return 1;
                         return 0;
-                    }); //сортировка текущих соседей по убыванию дистанции
+                    }); //sorting current neighbors in descending order of distance
                     for (int k = 0; k < nearestNeighborsIndexes[first].Count; k++)
                     {
                         if (distance < nearestNeighborsIndexes[first][k].distance)
                         {
                             nearestNeighborsIndexes[first][k] = (second, distance);
 
-                            //если у второго(сравниваемого) соседа есть более дальние соседи, заменям их на первого(текущего) соседа
+                            //if the second (compared) neighbor has more distant neighbors, replace them with the first (current) neighbor
                             int indexWorstNeighbor = nearestNeighborsIndexes[second].FindIndex(p => p.distance > distance);
                             if (indexWorstNeighbor != -1)
                             {
@@ -230,11 +230,11 @@ namespace EasyCNTK.Learning
         }
 
         /// <summary>
-        /// Вычисляет статистику для каждого элемента коллекции. Допускает потерю точности при вычислении значений вне диапазона <seealso cref="double"/>
+        /// Calculates statistics for each item in the collection. Allows loss of accuracy when calculating values out of range<seealso cref="double"/>
         /// </summary>
-        /// <typeparam name="T">Поддерживается: <seealso cref="int"/>, <seealso cref="long"/>, <seealso cref="float"/>, <seealso cref="double"/>, <seealso cref="decimal"/></typeparam>
-        /// <param name="source">Набор данных. Массивы с одинаковой длинной</param>
-        /// <param name="epsilon">Разница, на которую должны отличаться 2 числа с плавающей точкой, чтобы считаться разными</param>
+        /// <typeparam name="T">It is supported:<seealso cref="int"/>, <seealso cref="long"/>, <seealso cref="float"/>, <seealso cref="double"/>, <seealso cref="decimal"/></typeparam>
+        /// <param name="source">Data set. Arrays with the same length</param>
+        /// <param name="epsilon">The difference by which 2 floating-point numbers must be different in order to be considered different</param>
         /// <returns></returns>
         public static List<FeatureStatistic> ComputeStatisticForCollection<T>(this IEnumerable<IList<T>> source, double epsilon = 0.5) where T: IConvertible
         {
@@ -294,13 +294,13 @@ namespace EasyCNTK.Learning
                 p.StandardDeviation = Math.Sqrt(p.Variance);
 
                 #region поиск медианы
-                int halfItems = countItems / 2; //половина записей
-                int countElements = 0; //накопляемое число элементов при поиске медианы
+                int halfItems = countItems / 2; //half records
+                int countElements = 0; //cumulative number of elements when searching for the median
 
                 for (int i = 0; i < p.UniqueValues.Count; i++)
                 {
                     countElements += p.UniqueValues.Values[i];
-                    if (countItems % 2 == 0) //четное число элементов
+                    if (countItems % 2 == 0) //even number of elements
                     {
                         if (countElements == halfItems) // 122|345
                         {
@@ -315,7 +315,7 @@ namespace EasyCNTK.Learning
                     }
                     else
                     {
-                        if (countElements >= halfItems + 1) //12|2|34 или 12|2|24  PS +1 потому что halfItems при делении int/int  будет на единицу меньше чем фактическое количество элементов
+                        if (countElements >= halfItems + 1) //12 | 2 | 34 or 12 | 2 | 24 PS +1 because halfItems when dividing int / int will be one less than the actual number of elements
                         {
                             p.Median = p.UniqueValues.Keys[i];
                             break;
@@ -329,12 +329,12 @@ namespace EasyCNTK.Learning
             return result;
         }
         /// <summary>
-        /// Вычисляет статистику по объекту для каждого свойства типа: <seealso cref="int"/>, <seealso cref="long"/>, <seealso cref="float"/>, <seealso cref="double"/>, <seealso cref="decimal"/>. Допускает потерю точности при вычислении значений вне диапазона <seealso cref="double"/>
+        /// Computes object statistics for each type property:<seealso cref="int"/>, <seealso cref="long"/>, <seealso cref="float"/>, <seealso cref="double"/>, <seealso cref="decimal"/>. Допускает потерю точности при вычислении значений вне диапазона <seealso cref="double"/>
         /// </summary>
         /// <typeparam name="TModel"></typeparam>
-        /// <param name="source">Набор данных</param>
-        /// <param name="withoutProperties">Свойства, для которых не нужно рассчитывать статистику</param>
-        /// <param name="epsilon">Разница, на которую должны отличаться 2 числа с плавающей точкой, чтобы считаться разными</param>
+        /// <param name="source">Data set</param>
+        /// <param name="withoutProperties">Properties for which you do not need to calculate statistics</param>
+        /// <param name="epsilon">The difference by which 2 floating-point numbers must be different in order to be considered different</param>
         /// <returns></returns>
         public static List<FeatureStatistic> ComputeStatisticForObject<TModel>(this IEnumerable<TModel> source, double epsilon = 0.5, string[] withoutProperties = null) where TModel : class
         {
@@ -408,13 +408,13 @@ namespace EasyCNTK.Learning
                 p.StandardDeviation = Math.Sqrt(p.Variance);
 
                 #region поиск медианы
-                int halfItems = countItems / 2; //половина записей
-                int countElements = 0; //накопляемое число элементов при поиске медианы
+                int halfItems = countItems / 2; //half records
+                int countElements = 0; //cumulative number of elements when searching for the median
 
                 for (int i = 0; i < p.UniqueValues.Count; i++)
                 {
                     countElements += p.UniqueValues.Values[i];
-                    if (countItems % 2 == 0) //четное число элементов
+                    if (countItems % 2 == 0) //even number of elements
                     {
                         if (countElements == halfItems) // 122|345
                         {
@@ -429,7 +429,7 @@ namespace EasyCNTK.Learning
                     }
                     else
                     {
-                        if (countElements >= halfItems + 1) //12|2|34 или 12|2|24  PS +1 потому что halfItems при делении int/int  будет на единицу меньше чем фактическое количество элементов
+                        if (countElements >= halfItems + 1) //12 | 2 | 34 or 12 | 2 | 24 PS +1 because halfItems when dividing int / int will be one less than the actual number of elements
                         {
                             p.Median = p.UniqueValues.Keys[i];
                             break;
@@ -481,14 +481,14 @@ namespace EasyCNTK.Learning
             return source;
         }
         /// <summary>
-        /// Выполняет нормализацию каждого выбранного свойства по формуле: Xnorm = X / (|Xmax-Xmin|) (приводит Xnorm к диапазону [0;1]). Изменения затрагивают и исходную коллекцию. Поддерживаются типы свойств: <seealso cref="int"/>, <seealso cref="long"/>, <seealso cref="float"/>, <seealso cref="double"/>, <seealso cref="decimal"/>
+        /// Performs normalization of each selected property by the formula: Xnorm = X / (| Xmax-Xmin |) (brings Xnorm to the range [0; 1]). Changes affect the original collection. Supported property types:<seealso cref="int"/>, <seealso cref="long"/>, <seealso cref="float"/>, <seealso cref="double"/>, <seealso cref="decimal"/>
         /// </summary>
-        /// <typeparam name="TModel">Тип класса, для свойств которого требуется произвести нормализацию</typeparam>
-        /// <param name="source">Исходная коллекция</param>
-        /// <param name="modelMaxes">Экземпляр типа, который инициализрован максимумами соответсующих значений</param>
-        /// <param name="modelMins">Экземпляр типа, который инициализрован минимумами соответсующих значений</param>
-        /// <param name="propertyNames">Имена свойств, для которых требуется выполнить нормализацию. Если null или пустой, выполняет нормализацию для всех поддерживаемых свойств</param>
-        /// <param name="centerOnXaxis">Указывает, требуется ли приводить нормированное значение к диапазону [-1;1]. В случае если значение элемента из исходной коллекции больше/меньше максимума/минимума заданными соответсвующими параметрами, то возможен выход за диапазон [-1;1]</param>
+        /// <typeparam name="TModel">The type of class whose properties you want to normalize</typeparam>
+        /// <param name="source">Source collection</param>
+        /// <param name="modelMaxes">An instance of a type that is initialized by the maxima of the corresponding values</param>
+        /// <param name="modelMins">An instance of a type that is initialized with the minima of the corresponding values</param>
+        /// <param name="propertyNames">The names of the properties for which normalization is required. If null or empty, performs normalization for all supported properties</param>
+        /// <param name="centerOnXaxis">Indicates whether to normalize a value to the range [-1; one]. If the value of an element from the original collection is more / less than the maximum / minimum by the specified corresponding parameters, then it is possible to go beyond the range [-1; 1]</param>
         /// <returns></returns>
         public static IList<TModel> MinMaxNormalize<TModel>(this IList<TModel> source, TModel modelMaxes, TModel modelMins, bool centerOnXaxis, IList<string> propertyNames = null) where TModel : class
         {
@@ -562,12 +562,12 @@ namespace EasyCNTK.Learning
             return source;
         }
         /// <summary>
-        /// Выполняет нормализацию каждого выбранного свойства по формуле: Xnorm = X / (|Xmax-Xmin|) (приводит Xnorm к диапазону [0;1]). Изменения затрагивают и исходную коллекцию. Поддерживаются типы свойств: <seealso cref="int"/>, <seealso cref="long"/>, <seealso cref="float"/>, <seealso cref="double"/>, <seealso cref="decimal"/> 
+        /// Performs normalization of each selected property by the formula: Xnorm = X / (| Xmax-Xmin |) (brings Xnorm to the range [0; 1]). Changes affect the original collection. Supported property types:<seealso cref="int"/>, <seealso cref="long"/>, <seealso cref="float"/>, <seealso cref="double"/>, <seealso cref="decimal"/> 
         /// </summary>
         /// <typeparam name="TModel"></typeparam>
-        /// <param name="source">Исходная коллекция</param>
-        /// <param name="centerOnXaxis">Указывает, требуется ли приводить нормированное значение к диапазону [-1;1].</param>
-        /// <param name="propertyNames">Имена свойств, для которых требуется выполнить нормализацию. Если null или пустой, выполняет нормализацию для всех поддерживаемых свойств</param>
+        /// <param name="source">Source collection</param>
+        /// <param name="centerOnXaxis">Indicates whether to normalize a value to the range [-1; 1].</param>
+        /// <param name="propertyNames">The names of the properties for which normalization is required. If null or empty, performs normalization for all supported properties</param>
         /// <returns></returns>
         public static IList<TModel> MinMaxNormalize<TModel>(this IList<TModel> source, bool centerOnXaxis, IList<string> propertyNames = null) where TModel : class
         {

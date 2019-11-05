@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -10,50 +10,50 @@ using System.Collections.Generic;
 namespace EasyCNTK.Learning
 {
     /// <summary>
-    /// Представляет сбоную статистику по переменной в наборе данных
+    /// Represents variable statistics in a dataset
     /// </summary>
     public class FeatureStatistic
     {
         /// <summary>
-        /// Имя свойства класса, представляющего признак/переменную
+        /// Property name of the class representing the characteristic / variable
         /// </summary>
         public string FeatureName { get; set; }    
         /// <summary>
-        /// Среднее значение
+        /// Average value
         /// </summary>
         public double Average { get; set; }
         /// <summary>
-        /// Медиана
+        /// Median
         /// </summary>
         public double Median { get; set; }
         /// <summary>
-        /// Минимальное значение переменной
+        /// The minimum value of the variable
         /// </summary>
         public double Min { get; set; }
         /// <summary>
-        /// Максимальное значение переменной
+        /// The maximum value of the variable
         /// </summary>
         public double Max { get; set; }
         /// <summary>
-        /// Среднеквадратичное отклонение
+        /// Standard deviation
         /// </summary>
         public double StandardDeviation { get; set; }
         /// <summary>
-        /// Дисперсия
+        /// Dispersion
         /// </summary>
         public double Variance { get; set; }
         /// <summary>
-        /// Среднее абсолютное отклонение
+        /// Mean Absolute Deviation
         /// </summary>
         public double MeanAbsoluteDeviation { get; set; }
         /// <summary>
-        /// Упорядоченный список уникальных значений переменной. Key - значение переменной, Value - количество переменных с таким значением
+        /// An ordered list of unique variable values. Key - the value of the variable, Value - the number of variables with this value
         /// </summary>
         public SortedList<double, int> UniqueValues { get; set; } 
         /// <summary>
-        /// Инициализирует класс
+        /// Initializes class
         /// </summary>
-        /// <param name="epsilon">Погрешность. Задает минимум, на который должны отличаться два числа, чтобы считаться разными</param>
+        /// <param name="epsilon">Error. Sets the minimum by which two numbers must differ in order to be considered different.</param>
         public FeatureStatistic(double epsilon = 0.01)
         {
             UniqueValues = new SortedList<double, int>(new DoubleComparer(epsilon));            

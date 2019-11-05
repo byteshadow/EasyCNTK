@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -14,7 +14,7 @@ using EasyCNTK.ActivationFunctions;
 namespace EasyCNTK.Layers
 {
     /// <summary>
-    /// Реализует сверточный слой для двумерного вектора
+    /// Implements a convolutional layer for a two-dimensional vector
     /// </summary>
     public sealed class Convolution2D : Layer
     {
@@ -27,15 +27,15 @@ namespace EasyCNTK.Layers
         private ActivationFunction _activationFunction;
         private string _name;
         /// <summary>
-        /// Добавляет сверточный слой для двумерного вектора. Если предыдущий слой имеет не двумерный выход, выбрасывается исключение
+        /// Adds a convolution layer for a two-dimensional vector. If the previous layer has a non-two-dimensional output, an exception is thrown
         /// </summary>
-        /// <param name="kernelWidth">Ширина ядра свертки (столбцы в двумерной матрице)</param>
-        /// <param name="kernelHeight">Высота ядра свертки (строки в двумерной матрице)</param>
-        /// <param name="outFeatureMapCount">Разрядность выходной ячейки после свертки</param>
-        /// <param name="activationFunction">Функция активации для выходного слоя. Если не требуется - передать null</param>
-        /// <param name="hStride">Шаг спещения окна свертки по горизонтали (по столбцам матрицы)</param>
-        /// <param name="vStride">Шаг смещения окна свертки по вертикали (по строкам матрицы)</param>
-        /// <param name="padding">Заполнение при использовании сверток</param>
+        /// <param name="kernelWidth">Convolution core width (columns in a two-dimensional matrix)</param>
+        /// <param name="kernelHeight">Convolution core height (rows in a two-dimensional matrix)</param>
+        /// <param name="outFeatureMapCount">Bit depth of the output cell after convolution</param>
+        /// <param name="activationFunction">Activation function for the output layer. If not required, pass null</param>
+        /// <param name="hStride">The step of moving down the convolution window horizontally (along the matrix columns)</param>
+        /// <param name="vStride">Step of shifting the convolution window vertically (along the rows of the matrix)</param>
+        /// <param name="padding">Fill when using convolution</param>
         /// <param name="name"></param>
         public static Function Build(Variable input, int kernelWidth, int kernelHeight, DeviceDescriptor device, int outFeatureMapCount = 1, int hStride = 1, int vStride = 1, Padding padding = Padding.Valid, ActivationFunction activationFunction = null, string name = "Conv2D")
         {
@@ -61,15 +61,15 @@ namespace EasyCNTK.Layers
             return Build(input, _kernelWidth, _kernelHeight, device, _outFeatureMapCount, _hStride, _vStride, _padding, _activationFunction, _name);
         }
         /// <summary>
-        /// Добавляет сверточный слой для двумерного вектора. Если предыдущий слой имеет не двумерный выход, выбрасывается исключение
+        /// Adds a convolution layer for a two-dimensional vector. If the previous layer has a non-two-dimensional output, an exception is thrown
         /// </summary>
-        /// <param name="kernelWidth">Ширина ядра свертки (столбцы в двумерной матрице)</param>
-        /// <param name="kernelHeight">Высота ядра свертки (строки в двумерной матрице)</param>
-        /// <param name="outFeatureMapCount">Разрядность выходной ячейки после свертки</param>
-        /// <param name="activationFunction">Функция активации для выходного слоя. Если не требуется - передать null</param>
-        /// <param name="hStride">Шаг спещения окна свертки по горизонтали (по столбцам матрицы)</param>
-        /// <param name="vStride">Шаг смещения окна свертки по вертикали (по строкам матрицы)</param>
-        /// <param name="padding">Заполнение при использовании сверток</param>
+        /// <param name="kernelWidth">Convolution core width (columns in a two-dimensional matrix)</param>
+        /// <param name="kernelHeight">Convolution core height (rows in a two-dimensional matrix)</param>
+        /// <param name="outFeatureMapCount">Bit depth of the output cell after convolution</param>
+        /// <param name="activationFunction">Activation function for the output layer. If not required, pass null</param>
+        /// <param name="hStride">The step of moving down the convolution window horizontally (along the matrix columns)</param>
+        /// <param name="vStride">Step of shifting the convolution window vertically (along the rows of the matrix)</param>
+        /// <param name="padding">Fill when using convolution</param>
         /// <param name="name"></param>
         public Convolution2D(int kernelWidth, int kernelHeight, int outFeatureMapCount = 1, int hStride = 1, int vStride = 1, Padding padding = Padding.Valid, ActivationFunction activationFunction = null, string name = "Conv2D")
         {
@@ -88,16 +88,16 @@ namespace EasyCNTK.Layers
         }
     }
     /// <summary>
-    /// Задает заполнение при использовании сверток
+    /// Specifies padding when using convolution
     /// </summary>
     public enum Padding
     {
         /// <summary>
-        /// Заполнения краев нет (перемещения ядра свертки строго ограничено размерами изображения), изображение сворачивается по классике: n-f+1 x n-f+1
+        /// There is no filling of the edges (convolution core movement is strictly limited by the image size), the image is minimized according to the classics: n-f + 1 x n-f + 1
         /// </summary>
         Valid,
         /// <summary>
-        /// Заполнения краев есть (перемещения ядра свертки выходит за границы изображения, лишняя часть дополняется нолями, выходное изображение остается того же размера что и до свертки), изображение сворачивается: n+2p-f+1 x n+2p-f+1
+        /// There are fillings of the edges (the convolution core moves beyond the boundaries of the image, the excess is supplemented with zeros, the output image remains the same size as before the convolution), the image is minimized: n + 2p-f + 1 x n + 2p-f + 1
         /// </summary>
         Same
     }

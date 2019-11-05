@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -14,9 +14,9 @@ using CNTK;
 namespace EasyCNTK.Layers
 {
     /// <summary>
-    /// Реализует слой LSTM.
-    /// Клеточное состояние (С) имеет независимую размерность, все гейты имеют размерность выхода (H), масштабирование производится непосредственно при записи в клеточное состояние.
-    /// Вход (X[t]) масштабируется к выходу (H[t-1]) и суммируется (X[t]+H[t-1]), ячейка памяти (С) масштабируется к выходу (H). 
+    /// Implements the LSTM layer.
+    /// The cellular state (C) has an independent dimension, all gates have an output dimension (H), scaling is performed directly when writing to the cellular state.
+    /// The input (X [t]) is scaled to the output (H [t-1]) and summed (X [t] + H [t-1]), the memory cell (C) is scaled to the output (H). 
     /// </summary>
     public sealed class LSTMv1 : Layer
     {
@@ -28,16 +28,16 @@ namespace EasyCNTK.Layers
         private Layer _selfStabilizerLayer;
 
         /// <summary>
-        /// Создает ЛСТМ ячейку, которая реализует один шаг повторения в реккурентной сети.
-        /// В качестве аргументов принимает предыдущие состояния ячейки(c - cell state) и выхода(h - hidden state).
-        /// Возвращает кортеж нового состояния ячейки(c - cell state) и выхода(h - hidden state).      
+        /// Creates a LSTM cell that implements one repetition step in a recursive network.
+        /// It takes the previous state of the cell (c - cell state) and output (h - hidden state) as arguments.
+        /// Returns a tuple of the new state of the cell (c - cell state) and exit (h - hidden state).      
         /// </summary>
-        /// <param name="input">Вход в ЛСТМ (Х на шаге t)</param>
-        /// <param name="prevOutput">Предыдущее состояние выхода ЛСТМ (h на шаге t-1)</param>
-        /// <param name="prevCellState">Предыдущее состояние ячейки ЛСТМ (с на шаге t-1)</param>
-        /// <param name="useShortcutConnections">Указывает, следует ли создавать ShortcutConnections для этой ячейки</param>
-        /// <param name="selfStabilizerLayer">Слой, реализующий самостабилизацию к входам prevOutput и prevCellState</param>
-        /// <param name="device">Устройтсво для расчетов</param>
+        /// <param name="input">Entrance to LSTM (X at step t)</param>
+        /// <param name="prevOutput">The previous state of the output LSTM (h at step t-1)</param>
+        /// <param name="prevCellState">The previous state of the LSTM cell (s in step t-1)</param>
+        /// <param name="useShortcutConnections">Specifies whether to create ShortcutConnections for this cell.</param>
+        /// <param name="selfStabilizerLayer">Self-stabilization layer to the prevOutput and prevCellState inputs</param>
+        /// <param name="device">Device for calculations</param>
         /// <returns></returns>
         private static Tuple<Function, Function> LSTMCell(Variable input, Variable prevOutput,
             Variable prevCellState,  bool useShortcutConnections, Layer selfStabilizerLayer, DeviceDescriptor device)
@@ -55,7 +55,7 @@ namespace EasyCNTK.Layers
             }
 
             uint seed = CNTKLib.GetRandomSeed();
-            //создаем входную проекцию данных из входа X[t] и скрытого состояния H[t-1]
+            //create an input projection of data from the input X [t] and the hidden state H [t-1]
             Func<int, Variable> createInput = (outputDim) =>
             {
                 var inputWeigths = new Parameter(new[] { outputDim, NDShape.InferredDimension }, dataType, CNTKLib.GlorotUniformInitializer(1.0, 1, 0, seed++), device);
@@ -78,20 +78,20 @@ namespace EasyCNTK.Layers
             Variable candidateProjection = createInput(lstmOutputDimension);
             Variable outputProjection = createInput(lstmOutputDimension);
 
-            Function forgetGate = CNTKLib.Sigmoid(forgetProjection); // вентиль "забывания" (из входных данных на шаге t)  
-            Function inputGate = CNTKLib.Sigmoid(inputProjection); //вентиль входа (из входных данных на шаге t)         
-            Function candidateGate = CNTKLib.Tanh(candidateProjection); //вентиль выбора кандидатов для запоминания в клеточном состоянии (из входных данных на шаге t)
-            Function outputGate = CNTKLib.Sigmoid(outputProjection); //вентиль выхода (из входных данных на шаге t)  
+            Function forgetGate = CNTKLib.Sigmoid(forgetProjection); // forget valve (from the input in step t)  
+            Function inputGate = CNTKLib.Sigmoid(inputProjection); //input gate (from the input in step t)         
+            Function candidateGate = CNTKLib.Tanh(candidateProjection); //the candidate selection gate for storing in the cellular state (from the input in step t)
+            Function outputGate = CNTKLib.Sigmoid(outputProjection); //output gate (from the input in step t)  
 
             forgetGate = hasDifferentOutputAndCellDimension ? createProjection(lstmCellDimension, forgetGate) : (Variable)forgetGate;
-            Function forgetState = CNTKLib.ElementTimes(prevCellState, forgetGate); //забываем то что нужно забыть в клеточном состоянии
+            Function forgetState = CNTKLib.ElementTimes(prevCellState, forgetGate); //forget what you need to forget in the cellular state
 
-            Function inputState = CNTKLib.ElementTimes(inputGate, candidateProjection); //получаем то что нужно сохранить в клеточном состоянии (из входных данных на шаге t) 
+            Function inputState = CNTKLib.ElementTimes(inputGate, candidateProjection); //we get what we need to save in the cellular state (from the input in step t) 
             inputState = hasDifferentOutputAndCellDimension ? createProjection(lstmCellDimension, inputState) : (Variable)inputState;
-            Function cellState = CNTKLib.Plus(forgetState, inputState); //добавляем новую информацию в клеточное состояние
+            Function cellState = CNTKLib.Plus(forgetState, inputState); //add new information to the cellular state
 
             Variable cellToOutputProjection = hasDifferentOutputAndCellDimension ? createProjection(lstmOutputDimension, cellState) : (Variable)cellState;
-            Function h = CNTKLib.ElementTimes(outputGate, CNTKLib.Tanh(cellToOutputProjection)); //получаем выход/скрытое состояние
+            Function h = CNTKLib.ElementTimes(outputGate, CNTKLib.Tanh(cellToOutputProjection)); //get exit / hidden state
             Function c = cellState;
 
             if (useShortcutConnections)
@@ -123,17 +123,17 @@ namespace EasyCNTK.Layers
             return new Tuple<Function, Function>(lstmCell.Item1, lstmCell.Item2);
         }
         /// <summary>
-        /// Создает слой LSTM. 
-        /// Клеточное состояние (С) имеет независимую размерность, все гейты имеют размерность выхода (H), масштабирование производится непосредвенно при записи в клеточное состояние.
-        /// Вход (X[t]) масштабируется к выходу (H[t-1]) и суммируется (X[t]+H[t-1]), ячейка памяти (С) масштабируется к выходу (H). 
+        /// Creates an LSTM layer. 
+        /// The cellular state (C) has an independent dimension, all gates have an output dimension (H), scaling is performed directly when writing to the cellular state.
+        /// The input (X [t]) is scaled to the output (H [t-1]) and summed (X [t] + H [t-1]), the memory cell (C) is scaled to the output (H). 
         /// </summary>
-        /// <param name="input">Вход (X)</param>
-        /// <param name="lstmDimension">Разрядность выходного слоя (H)</param>        
-        /// <param name="cellDimension">Разрядность внутреннего слоя ячейки памяти, если 0 - устанавливается разрядность выходного слоя (C)</param>
-        /// <param name="useShortcutConnections">Если true, использовать проброс входа параллельно слою. По умолчанию включено.</param>
-        /// <param name="selfStabilizerLayer">Слой, реализующий самостабилизацию</param>
-        /// <param name="isLastLstm">Указывает, будет ли это последний из слоев LSTM (следующие слои в сети нерекуррентные). Для того чтобы стыковать LSTM слои друг за другом, у всех слоев, кроме последнего, нужно установить false</param>
-        /// <param name="outputName">название слоя</param>
+        /// <param name="input">Entrance (X)</param>
+        /// <param name="lstmDimension">Output layer depth (H)</param>        
+        /// <param name="cellDimension">Bit depth of the inner layer of the memory cell, if 0 - sets the bit depth of the output layer (C)</param>
+        /// <param name="useShortcutConnections">If true, use input forwarding parallel to the layer. Enabled by default.</param>
+        /// <param name="selfStabilizerLayer">Self-stabilization layer</param>
+        /// <param name="isLastLstm">Indicates whether this will be the last of the LSTM layers (the next layers on the network are non-recursive). In order to join LSTM layers one after another, all layers except the last one must be set to false</param>
+        /// <param name="outputName">layer name</param>
         /// <returns></returns>
         public static Function Build(Function input, int lstmDimension, DeviceDescriptor device, int cellDimension = 0, bool useShortcutConnections = true, bool isLastLstm = true, Layer selfStabilizerLayer = null, string outputName = "")
         {
@@ -154,15 +154,15 @@ namespace EasyCNTK.Layers
             return Build(input, _lstmOutputDim, device, _lstmCellDim, _useShortcutConnections, _isLastLstmLayer, _selfStabilizerLayer, _name);
         }
         /// <summary>
-        /// Создает слой LSTM. 
-        /// Клеточное состояние (С) имеет независимую размерность, все гейты имеют размерность выхода (H), масштабирование производится непосредвенно при записи в клеточное состояние.
-        /// Вход (X[t]) масштабируется к выходу (H[t-1]), ячейка памяти (С) масштабируется к выходу (H). 
+        /// Creates an LSTM layer. 
+        /// The cellular state (C) has an independent dimension, all gates have an output dimension (H), scaling is performed directly when writing to the cellular state.
+        /// The input (X [t]) is scaled to the output (H [t-1]), the memory cell (C) is scaled to the output (H). 
         /// </summary>
-        /// <param name="lstmOutputDim">Разрядность выходного слоя (H)</param>        
-        /// <param name="lstmCellDim">Разрядность внутреннего слоя ячейки памяти, если 0 - устанавливается разрядность выходного слоя (C)</param>
-        /// <param name="useShortcutConnections">Если true, использовать проброс входа параллельно слою. По умолчанию включено.</param>
-        /// <param name="selfStabilizerLayer">Слой, реализующий самостабилизацию</param>
-        /// <param name="isLastLstm">Указывает, будет ли это последний из слоев LSTM (следующие слои в сети нерекуррентные). Для того чтобы стыковать LSTM слои друг за другом, у всех слоев, кроме последнего, нужно установить false</param>
+        /// <param name="lstmOutputDim">Output layer depth (H)</param>        
+        /// <param name="lstmCellDim">Bit depth of the inner layer of the memory cell, if 0 - sets the bit depth of the output layer (C)</param>
+        /// <param name="useShortcutConnections">If true, use input forwarding parallel to the layer. Enabled by default.</param>
+        /// <param name="selfStabilizerLayer">Self-stabilization layer</param>
+        /// <param name="isLastLstm">Indicates whether this will be the last of the LSTM layers (the next layers on the network are non-recursive). In order to join LSTM layers one after another, all layers except the last one must be set to false</param>
         /// <param name="name"></param>
         public LSTMv1(int lstmOutputDim, int lstmCellDim = 0, bool useShortcutConnections = true, bool isLastLstm = true, Layer selfStabilizerLayer = null, string name = "LSTMv1")
         {

@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -12,23 +12,23 @@ using CNTK;
 namespace EasyCNTK.LossFunctions
 {
     /// <summary>
-    /// Функция ошибки для одноклассовой классификации при использовании Softmax выхода 
+    /// Error function for single-class classification when using Softmax output 
     /// </summary>
     public sealed class SoftmaxClassificationError : Loss
     {
         private int _numberAxis;
 
         /// <summary>
-        /// Функция ошибки для одноклассовой классификации при использовании Softmax выхода 
+        /// Error function for single-class classification when using Softmax output 
         /// </summary>
         public SoftmaxClassificationError()
         {
             _numberAxis = -1;
         }
         /// <summary>
-        /// Функция ошибки для одноклассовой классификации при использовании Softmax выхода 
+        /// Error function for single-class classification when using Softmax output 
         /// </summary>
-        /// <param name="numberAxis">Номер оси, вдоль которой применяется оценка классификации</param>
+        /// <param name="numberAxis">Axis number along which the classification score is applied</param>
         public SoftmaxClassificationError(int numberAxis)
         {
             _numberAxis = numberAxis;

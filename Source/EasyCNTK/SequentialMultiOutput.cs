@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -19,9 +19,9 @@ using System.Text;
 namespace EasyCNTK
 {
     /// <summary>
-    /// Реализует операции конструирования модели прямого распространения c одним входом и несколькими выходами
+    /// It implements the operations of constructing a direct distribution model with one input and several outputs
     /// </summary>
-    /// <typeparam name="T">Тип данных. Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
+    /// <typeparam name="T">Data type. Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
     public sealed class SequentialMultiOutput<T>: IDisposable where T:IConvertible
     {
         class Branch
@@ -54,27 +54,27 @@ namespace EasyCNTK
         }
 
         /// <summary>
-        /// Загружает модель из файла. Так же пытается прочитать описание архитектуры сети: 
-        /// 1) Из файла ArchitectureDescription{имя_файла_модели}.txt 
-        /// 2) Из имени файла модели ориентируясь на наличение [IN] и [OUT] тегов. Если это не удается, то описание конфигурации: Unknown.
+        /// Loads a model from a file. Also trying to read the description of the network architecture: 
+        /// 1) From the file ArchitectureDescription {model_file_name} .txt 
+        /// 2) From the model file name, focusing on the presence of [IN] and [OUT] tags. If this fails, then the configuration description is: Unknown.
         /// </summary>
-        /// <typeparam name="T">Тип данных. Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
-        /// <param name="device">Устройство для загрузки</param>
-        /// <param name="filePath">Путь к файлу модели</param>
-        /// <param name="modelFormat">Формат модели</param>
+        /// <typeparam name="T">Data type. Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <param name="device">Boot device</param>
+        /// <param name="filePath">Model file path</param>
+        /// <param name="modelFormat">Model Format</param>
         /// <returns></returns>
         public static SequentialMultiOutput<T> LoadModel(DeviceDescriptor device, string filePath, ModelFormat modelFormat = ModelFormat.CNTKv2)
         {
             return new SequentialMultiOutput<T>(device, filePath, modelFormat);
         }
         /// <summary>
-        /// Инициализирeует нейросеть с размерностью входного вектора без слоев
+        /// Initializes a neural network with the dimension of the input vector without layers
         /// </summary>
-        /// <param name="inputShape">Тензор, описывающий форму входа нейросети (входных данных)</param>
-        /// <param name="device">Устройство на котором создается сеть</param>
-        /// <param name="outputIsSequence">Указывает, что выход сети - последовательность.</param>
-        /// <param name="inputName">Имя входа нейросети</param>
-        /// <param name="isSparce">Указывает, что вход это вектор One-Hot-Encoding и следует использовать внутреннюю оптимизацию CNTK для увеличения производительности.</param>
+        /// <param name="inputShape">Tensor describing the input form of the neural network (input data)</param>
+        /// <param name="device">The device on which the network is created</param>
+        /// <param name="outputIsSequence">Indicates that the network output is a sequence.</param>
+        /// <param name="inputName">Neural Network Login</param>
+        /// <param name="isSparce">Indicates that the input is a One-Hot-Encoding vector and that CNTK&#39;s internal optimization should be used to increase performance.</param>
         public SequentialMultiOutput(DeviceDescriptor device, int[] inputShape, bool outputIsSequence = false, string inputName = "Input", bool isSparce = false)
         {
             _device = device;
@@ -130,9 +130,9 @@ namespace EasyCNTK
             }
         }
         /// <summary>
-        /// Добавляет заданный слой (стыкует к последнему добавленному слою)
+        /// Adds the specified layer (joins the last added layer)
         /// </summary>
-        /// <param name="layer">Слой для стыковки</param>
+        /// <param name="layer">Docking layer</param>
         public void Add(Layer layer)
         {
             if (_isCompiled)
@@ -141,10 +141,10 @@ namespace EasyCNTK
             _architectureDescription += $"-{layer.GetDescription()}";
         }
         /// <summary>
-        /// Добавляет заданный слой в указанную ветвь (стыкует к последнему добавленному слою ветви)
+        /// Adds the specified layer to the specified branch (joins the last added layer of the branch)
         /// </summary>
-        /// <param name="branch">Имя ветви. Должно совпадать с одним из имен указанных при вызове <seealso cref="SplitToBranches(string[])"/></param>
-        /// <param name="layer">Слой для стыковки</param>
+        /// <param name="branch">The name of the branch. Must match one of the names specified during the call<seealso cref="SplitToBranches(string[])"/></param>
+        /// <param name="layer">Docking layer</param>
         public void AddToBranch(string branch, Layer layer)
         {
             if (_isCompiled)
@@ -162,9 +162,9 @@ namespace EasyCNTK
             }
         }
         /// <summary>
-        /// Разбивает основную последовательность слоев на несколько ветвей
+        /// Splits the main sequence of layers into several branches
         /// </summary>
-        /// <param name="branchNames">Названия ветвей, каждой ветви в порядке перечисления будет сопоставлен соответсвующий выход сети. Названия должны быть уникальны.</param>
+        /// <param name="branchNames">The names of the branches, each branch in the order of listing will be associated with the corresponding output of the network. Names must be unique.</param>
         public void SplitToBranches(params string[] branchNames)
         {
             if (_isCompiled)
@@ -184,7 +184,7 @@ namespace EasyCNTK
                 });                      
         }
         /// <summary>
-        /// Компилирует все созданные ветви в одну модель
+        /// Compiles all created branches into one model
         /// </summary>
         public void Compile()
         {
@@ -213,7 +213,7 @@ namespace EasyCNTK
         //    _isDisposed = true;
         //}
         /// <summary>
-        /// Скомпилированная модель CNTK 
+        /// Compiled CNTK Model 
         /// </summary>
         public Function Model
         {
@@ -229,10 +229,10 @@ namespace EasyCNTK
             return getArchitectureDescription();
         }
         /// <summary>
-        /// Сохраняет модель в файл.
+        /// Saves the model to a file.
         /// </summary>
-        /// <param name="filePath">Путь для сохранения модели (включая имя файла и расширение)</param>
-        /// <param name="saveArchitectureDescription">Указывает, следует ли сохранить описание архитектуры в отдельном файле: ArchitectureDescription_{имя-файла-модели}.txt</param>
+        /// <param name="filePath">Path to save the model (including file name and extension)</param>
+        /// <param name="saveArchitectureDescription">Specifies whether to save the architecture description in a separate file: ArchitectureDescription_ {model-filename} .txt</param>
         public void SaveModel(string filePath, bool saveArchitectureDescription = true)
         {
             Model.Save(filePath);
@@ -249,7 +249,7 @@ namespace EasyCNTK
         }
 
         #region IDisposable Support
-        private bool disposedValue = false; // Для определения избыточных вызовов
+        private bool disposedValue = false; // To identify redundant calls
 
         void Dispose(bool disposing)
         {
@@ -257,7 +257,7 @@ namespace EasyCNTK
             {
                 if (disposing)
                 {
-                    // TODO: освободить управляемое состояние (управляемые объекты).
+                    // TODO: release managed state (managed objects).
                     _device.Dispose();
                     _model.Dispose();
                     foreach (var item in _branches.Values)
@@ -266,8 +266,8 @@ namespace EasyCNTK
                     }
                 }
 
-                // TODO: освободить неуправляемые ресурсы (неуправляемые объекты) и переопределить ниже метод завершения.
-                // TODO: задать большим полям значение NULL.
+                // TODO: Release unmanaged resources (unmanaged objects) and override the completion method below.
+                // TODO: set large fields to NULL.
                 _device = null;
                 _model = null;
                 _branches = null;
@@ -276,19 +276,19 @@ namespace EasyCNTK
             }
         }
 
-        // TODO: переопределить метод завершения, только если Dispose(bool disposing) выше включает код для освобождения неуправляемых ресурсов.
+        // TODO: Override the completion method only if Dispose (bool disposing) above includes code to free unmanaged resources.
         ~SequentialMultiOutput()
         {
-            // Не изменяйте этот код. Разместите код очистки выше, в методе Dispose(bool disposing).
+            // Do not modify this code. Place the cleanup code above in the Dispose (bool disposing) method.
             Dispose(false);
         }
 
-        // Этот код добавлен для правильной реализации шаблона высвобождаемого класса.
+        // This code has been added to properly implement the released class template.
         public void Dispose()
         {
-            // Не изменяйте этот код. Разместите код очистки выше, в методе Dispose(bool disposing).
+            // Do not modify this code. Place the cleanup code above in the Dispose (bool disposing) method.
             Dispose(true);
-            // TODO: раскомментировать следующую строку, если метод завершения переопределен выше.
+            // TODO: uncomment the next line if the completion method is overridden above.
             GC.SuppressFinalize(this);
         }
         #endregion

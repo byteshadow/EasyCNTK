@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -15,7 +15,7 @@ using CNTK;
 namespace EasyCNTK.Learning.Optimizers
 {
     /// <summary>
-    /// Оптимизатор AdaGrad. Хорош для работы с разряженными данными.
+    /// AdaGrad Optimizer. Good for working with discharged data.
     /// </summary>
     public sealed class AdaGrad : Optimizer
     {
@@ -26,14 +26,14 @@ namespace EasyCNTK.Learning.Optimizers
         public override int MinibatchSize { get; set; }
 
         /// <summary>
-        /// Инициализирует оптимизатор AdaGrad
+        /// Initializes AdaGrad Optimizer
         /// </summary>
-        /// <param name="learningRate">Скорость обучения</param>
-        /// <param name="minibatchSize">Размер минипакета, требуется CNTK чтобы масштабировать параметры оптимизатора для более эффективного обучения. Если равен 0, то будет использован размер митибатча при обучении.</param>
-        /// <param name="l1RegularizationWeight">Коэффициент L1 нормы, если 0 - регуляризация не применяется</param>
-        /// <param name="l2RegularizationWeight">Коэффициент L2 нормы, если 0 - регуляризация не применяется</param>
-        /// <param name="gradientClippingThresholdPerSample">Порог отсечения градиента на каждый пример обучения, используется преимущественно для борьбы с взрывным градиентом в глубоких реккурентных сетях.
-        /// По умолчанию установлен в <seealso cref="double.PositiveInfinity"/> - отсечение не используется. Для использования установите необходимый порог.</param>
+        /// <param name="learningRate">Learning speed</param>
+        /// <param name="minibatchSize">The mini-packet size is required by CNTK to scale optimizer parameters for more effective training. If equal to 0, then the mitibatch size will be used during training.</param>
+        /// <param name="l1RegularizationWeight">Coefficient L1 of norm, if 0 - regularization is not applied</param>
+        /// <param name="l2RegularizationWeight">Coefficient L2 of norm, if 0 - regularization is not applied</param>
+        /// <param name="gradientClippingThresholdPerSample">The gradient cutoff threshold for each training example is used primarily to combat the explosive gradient in deep recursive networks.
+        /// The default is set to<seealso cref="double.PositiveInfinity"/> - отсечение не используется. Для использования установите необходимый порог.</param>
         public AdaGrad(double learningRate,
             int minibatchSize = 0,            
             double l1RegularizationWeight = 0,

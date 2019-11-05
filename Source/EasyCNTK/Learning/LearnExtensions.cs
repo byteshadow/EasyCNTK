@@ -1,4 +1,4 @@
-﻿//
+//
 // Copyright (c) Stanislav Grigoriev. All rights reserved.
 // grigorievstas9@gmail.com 
 // https://github.com/StanislavGrigoriev/EasyCNTK
@@ -21,21 +21,21 @@ namespace EasyCNTK.Learning
     {
         #region Extensions for Function
         /// <summary>
-        /// Обучает модель. Поддерживает реккурентные сети.
+        /// Teaches a model. Supports recursive networks.
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="trainDataSelector">Селектор, позволяющий указать для каждой эпохи свой набор данных для обучения.</param>
-        /// <param name="lossFunctions">Функция потерь</param>
-        /// <param name="evaluationFunctions">Оценочная функция</param>
-        /// <param name="optimizers">Оптимизатор, используемый для обучения</param>
-        /// <param name="epochCount">Количество эпох обучения</param>
-        /// <param name="isReccurentModel">Указывает, что требуется обучать реккурентную модель</param>
-        /// <param name="device">Устройство для обучения</param>
-        /// <param name="ruleUpdateLearningRate">Правило обновления скорости обучения. Входные параметры: эпоха, текущая скорость обучения. Выходные: новая скорость обучения.</param>
-        /// <param name="actionPerEpoch">Произвольное действие, которое требуется выполнять каждую эпоху. Позволяет прервать процесс тренировки. Входные параметры: эпоха, loss-ошибка, evaluation-ошибка. 
-        /// Выходные: true - прервать процесс тренировки, false - продолжить тренировку.
-        /// Используется для осуществления логирования, отображения процесса обучения, сохранения промежуточных чекпоинтов модели и т.п.</param>
-        /// <param name="inputName">Имя входного слоя. Имя должно быть уникальным для всей сети. Входов может быть несколько, этот параметр указывает на какой из них подавать данные.</param>
+        /// <param name="trainDataSelector">A selector that allows you to specify for each era its own set of data for training.</param>
+        /// <param name="lossFunctions">Loss function</param>
+        /// <param name="evaluationFunctions">Evaluation function</param>
+        /// <param name="optimizers">The optimizer used for training</param>
+        /// <param name="epochCount">Number of learning eras</param>
+        /// <param name="isReccurentModel">Indicates that a recursive model needs to be trained</param>
+        /// <param name="device">Training device</param>
+        /// <param name="ruleUpdateLearningRate">Rule for updating learning speed. Input parameters: era, current learning speed. Weekend: new learning speed.</param>
+        /// <param name="actionPerEpoch">The arbitrary action that each epoch requires. Allows you to interrupt the training process. Input parameters: era, loss error, evaluation error. 
+        /// Weekend: true - interrupt the training process, false - continue the training.
+        /// Used for logging, displaying the learning process, saving intermediate model checkpoints, etc.</param>
+        /// <param name="inputName">The name of the input layer. The name must be unique throughout the network. There can be several inputs, this parameter indicates which of them serves data.</param>
         /// <returns></returns>
         private static FitResult[] FitMultiOutput(this Function source,
            Func<int, IEnumerable<MinibatchMultiOutput>> trainDataSelector,
@@ -154,21 +154,21 @@ namespace EasyCNTK.Learning
         }
 
         /// <summary>
-        /// Обучает модель. Поддерживает реккурентные сети.
+        /// Teaches a model. Supports recursive networks.
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="trainDataSelector">Селектор, позволяющий указать для каждой эпохи свой набор данных для обучения.</param>
-        /// <param name="lossFunction">Функция потерь</param>
-        /// <param name="evaluationFunction">Оценочная функция</param>
-        /// <param name="optimizer">Оптимизатор, используемый для обучения</param>
-        /// <param name="epochCount">Количество эпох обучения</param>
-        /// <param name="isReccurentModel">Указывает, что требуется обучать реккурентную модель</param>
-        /// <param name="device">Устройство для обучения</param>
-        /// <param name="ruleUpdateLearningRate">Правило обновления скорости обучения. Входные параметры: эпоха, текущая скорость обучения. Выходные: новая скорость обучения.</param>
-        /// <param name="actionPerEpoch">Произвольное действие, которое требуется выполнять каждую эпоху. Позволяет прервать процесс тренировки. Входные параметры: эпоха, loss-ошибка, evaluation-ошибка. 
-        /// Выходные: true - прервать процесс тренировки, false - продолжить тренировку.
-        /// Используется для осуществления логирования, отображения процесса обучения, сохранения промежуточных чекпоинтов модели и т.п.</param>
-        /// <param name="inputName">Имя входного слоя. Имя должно быть уникальным для всей сети. Входов может быть несколько, этот параметр указывает на какой из них подавать данные.</param>
+        /// <param name="trainDataSelector">A selector that allows you to specify for each era its own set of data for training.</param>
+        /// <param name="lossFunction">Loss function</param>
+        /// <param name="evaluationFunction">Evaluation function</param>
+        /// <param name="optimizer">The optimizer used for training</param>
+        /// <param name="epochCount">Number of learning eras</param>
+        /// <param name="isReccurentModel">Indicates that a recursive model needs to be trained</param>
+        /// <param name="device">Training device</param>
+        /// <param name="ruleUpdateLearningRate">Rule for updating learning speed. Input parameters: era, current learning speed. Weekend: new learning speed.</param>
+        /// <param name="actionPerEpoch">The arbitrary action that each epoch requires. Allows you to interrupt the training process. Input parameters: era, loss error, evaluation error. 
+        /// Weekend: true - interrupt the training process, false - continue the training.
+        /// Used for logging, displaying the learning process, saving intermediate model checkpoints, etc.</param>
+        /// <param name="inputName">The name of the input layer. The name must be unique throughout the network. There can be several inputs, this parameter indicates which of them serves data.</param>
         /// <returns></returns>
         private static FitResult Fit(this Function source,
            Func<int, IEnumerable<Minibatch>> trainDataSelector,
@@ -257,21 +257,21 @@ namespace EasyCNTK.Learning
 
         #region One input - onr output
         /// <summary>
-        /// Обучает модель. Поддерживает реккурентные сети.
+        /// Teaches a model. Supports recursive networks.
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="trainDataSelector">Селектор, позволяющий указать для каждой эпохи свой набор данных для обучения.</param>
-        /// <param name="lossFunction">Функция потерь</param>
-        /// <param name="evaluationFunction">Оценочная функция</param>
-        /// <param name="optimizer">Оптимизатор, используемый для обучения</param>
-        /// <param name="epochCount">Количество эпох обучения</param>
-        /// <param name="isReccurentModel">Указывает, что требуется обучать реккурентную модель</param>
-        /// <param name="device">Устройство для обучения</param>
-        /// <param name="ruleUpdateLearningRate">Правило обновления скорости обучения. Входные параметры: эпоха, текущая скорость обучения. Выходные: новая скорость обучения.</param>
-        /// <param name="actionPerEpoch">Произвольное действие, которое требуется выполнять каждую эпоху. Позволяет прервать процесс тренировки. Входные параметры: эпоха, loss-ошибка, evaluation-ошибка. 
-        /// Выходные: true - прервать процесс тренировки, false - продолжить тренировку.
-        /// Используется для осуществления логирования, отображения процесса обучения, сохранения промежуточных чекпоинтов модели и т.п.</param>
-        /// <param name="inputName">Имя входного слоя. Имя должно быть уникальным для всей сети. Входов может быть несколько, этот параметр указывает на какой из них подавать данные.</param>
+        /// <param name="trainDataSelector">A selector that allows you to specify for each era its own set of data for training.</param>
+        /// <param name="lossFunction">Loss function</param>
+        /// <param name="evaluationFunction">Evaluation function</param>
+        /// <param name="optimizer">The optimizer used for training</param>
+        /// <param name="epochCount">Number of learning eras</param>
+        /// <param name="isReccurentModel">Indicates that a recursive model needs to be trained</param>
+        /// <param name="device">Training device</param>
+        /// <param name="ruleUpdateLearningRate">Rule for updating learning speed. Input parameters: era, current learning speed. Weekend: new learning speed.</param>
+        /// <param name="actionPerEpoch">The arbitrary action that each epoch requires. Allows you to interrupt the training process. Input parameters: era, loss error, evaluation error. 
+        /// Weekend: true - interrupt the training process, false - continue the training.
+        /// Used for logging, displaying the learning process, saving intermediate model checkpoints, etc.</param>
+        /// <param name="inputName">The name of the input layer. The name must be unique throughout the network. There can be several inputs, this parameter indicates which of them serves data.</param>
         /// <returns></returns>
         public static FitResult Fit<T>(this Sequential<T> source,
            Func<int, IEnumerable<Minibatch>> trainDataSelector,
@@ -288,21 +288,21 @@ namespace EasyCNTK.Learning
             return source.Model.Fit(trainDataSelector, lossFunction, evaluationFunction, optimizer, epochCount, isReccurentModel, device, ruleUpdateLearningRate, actionPerEpoch, inputName);
         }
         /// <summary>
-        /// Обучает модель. Поддерживает реккурентные сети.
+        /// Teaches a model. Supports recursive networks.
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="trainData">Набор данных для обучения.</param>
-        /// <param name="lossFunction">Функция потерь</param>
-        /// <param name="evaluationFunction">Оценочная функция</param>
-        /// <param name="optimizer">Оптимизатор, используемый для обучения</param>
-        /// <param name="epochCount">Количество эпох обучения</param>
-        /// <param name="isReccurentModel">Указывает, что требуется обучать реккурентную модель</param>
-        /// <param name="device">Устройство для обучения</param>
-        /// <param name="ruleUpdateLearningRate">Правило обновления скорости обучения. Входные параметры: эпоха, текущая скорость обучения. Выходные: новая скорость обучения.</param>
-        /// <param name="actionPerEpoch">Произвольное действие, которое требуется выполнять каждую эпоху. Позволяет прервать процесс тренировки. Входные параметры: эпоха, loss-ошибка, evaluation-ошибка. 
-        /// Выходные: true - прервать процесс тренировки, false - продолжить тренировку.
-        /// Используется для осуществления логирования, отображения процесса обучения, сохранения промежуточных чекпоинтов модели и т.п.</param>
-        /// <param name="inputName">Имя входного слоя. Имя должно быть уникальным для всей сети. Входов может быть несколько, этот параметр указывает на какой из них подавать данные.</param>
+        /// <param name="trainData">A dataset for training.</param>
+        /// <param name="lossFunction">Loss function</param>
+        /// <param name="evaluationFunction">Evaluation function</param>
+        /// <param name="optimizer">The optimizer used for training</param>
+        /// <param name="epochCount">Number of learning eras</param>
+        /// <param name="isReccurentModel">Indicates that a recursive model needs to be trained</param>
+        /// <param name="device">Training device</param>
+        /// <param name="ruleUpdateLearningRate">Rule for updating learning speed. Input parameters: era, current learning speed. Weekend: new learning speed.</param>
+        /// <param name="actionPerEpoch">The arbitrary action that each epoch requires. Allows you to interrupt the training process. Input parameters: era, loss error, evaluation error. 
+        /// Weekend: true - interrupt the training process, false - continue the training.
+        /// Used for logging, displaying the learning process, saving intermediate model checkpoints, etc.</param>
+        /// <param name="inputName">The name of the input layer. The name must be unique throughout the network. There can be several inputs, this parameter indicates which of them serves data.</param>
         /// <returns></returns>
         public static FitResult Fit<T>(this Sequential<T> source,
             IEnumerable<Minibatch> trainData,
@@ -319,25 +319,25 @@ namespace EasyCNTK.Learning
             return source.Model.Fit(p => trainData, lossFunction, evaluationFunction, optimizer, epochCount, isReccurentModel, device, ruleUpdateLearningRate, actionPerEpoch, inputName);
         }
         /// <summary>
-        /// Обучает модель. Не применим для обучения реккуретных сетей.
+        /// Teaches a model. Not applicable for training recruitment networks.
         /// </summary>
-        /// <typeparam name="T">Тип данных. Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <typeparam name="T">Data type. Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
         /// <param name="source"></param>
-        /// <param name="trainData">Набор данных для обучения. Каждый пример должен содержать в начале массива признаки размерностью inputDim, а в конце метки классов размерностью outputDim.
-        /// Например inputDim = 3, outputDim = 2: [f1, f2, f3, l1, l2]</param>
-        /// <param name="inputDim">Размерность признаков (разрядность)</param>
-        /// <param name="minibatchSize">Размер минипакета</param>
-        /// <param name="lossFunction">Функция потерь</param>
-        /// <param name="evaluationFunction">Оценочная функция</param>
-        /// <param name="optimizer">Оптимизатор, используемый для обучения</param>
-        /// <param name="epochCount">Количество эпох обучения</param>        
-        /// <param name="device">Устройство для обучения</param>
-        /// <param name="shuffleSampleInMinibatchesPerEpoch">Указывает, что необходимо каждую эпоху перемешивать обучающие примеры для формирования новых минипакетов.</param>
-        /// <param name="ruleUpdateLearningRate">Правило обновления скорости обучения. Входные параметры: эпоха, текущая скорость обучения. Выходные: новая скорость обучения.</param>
-        /// <param name="actionPerEpoch">Произвольное действие, которое требуется выполнять каждую эпоху. Позволяет прервать процесс тренировки. Входные параметры: эпоха, loss-ошибка, evaluation-ошибка. 
-        /// Выходные: true - прервать процесс тренировки, false - продолжить тренировку.
-        /// Используется для осуществления логирования, отображения процесса обучения, сохранения промежуточных чекпоинтов модели и т.п.</param>
-        /// <param name="inputName">Имя входного слоя. Имя должно быть уникальным для всей сети. Входов может быть несколько, этот параметр указывает на какой из них подавать данные.</param>
+        /// <param name="trainData">A dataset for training. Each example should contain signs at the beginning of the array with dimensions of inputDim, and at the end of class labels with dimensions of outputDim.
+        /// For example, inputDim = 3, outputDim = 2: [f1, f2, f3, l1, l2]</param>
+        /// <param name="inputDim">Dimension of signs (capacity)</param>
+        /// <param name="minibatchSize">Minipack size</param>
+        /// <param name="lossFunction">Loss function</param>
+        /// <param name="evaluationFunction">Evaluation function</param>
+        /// <param name="optimizer">The optimizer used for training</param>
+        /// <param name="epochCount">Number of learning eras</param>        
+        /// <param name="device">Training device</param>
+        /// <param name="shuffleSampleInMinibatchesPerEpoch">Indicates that it is necessary to mix training examples for each era to form new mini-packages.</param>
+        /// <param name="ruleUpdateLearningRate">Rule for updating learning speed. Input parameters: era, current learning speed. Weekend: new learning speed.</param>
+        /// <param name="actionPerEpoch">The arbitrary action that each epoch requires. Allows you to interrupt the training process. Input parameters: era, loss error, evaluation error. 
+        /// Weekend: true - interrupt the training process, false - continue the training.
+        /// Used for logging, displaying the learning process, saving intermediate model checkpoints, etc.</param>
+        /// <param name="inputName">The name of the input layer. The name must be unique throughout the network. There can be several inputs, this parameter indicates which of them serves data.</param>
         /// <returns></returns>
         public static FitResult Fit<T>(this Sequential<T> source,
             IList<T[]> trainData,
@@ -371,24 +371,24 @@ namespace EasyCNTK.Learning
             return source.Model.Fit(getMinibatches, lossFunction, evaluationFunction, optimizer, epochCount, false, device, ruleUpdateLearningRate, actionPerEpoch, inputName);
         }
         /// <summary> 
-        /// Обучает реккурентную модель.
+        /// Teaches a recursive model.
         /// </summary>
-        /// <typeparam name="T">Тип данных. Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <typeparam name="T">Data type. Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
         /// <param name="source"></param>
-        /// <param name="features">Набор последовательностей (признаков). Каждая последовательность может быть переменной длинны, но одинаковой размерности (массивы из которых состоит последовательность, должны иметь одинаковую длину)</param>
-        /// <param name="labels">Набор меток. Размерность меток должна быть одинаковая.</param>
-        /// <param name="minibatchSize">Размер минипакета</param>
-        /// <param name="lossFunction">Функция потерь</param>
-        /// <param name="evaluationFunction">Оценочная функция</param>
-        /// <param name="optimizer">Оптимизатор, используемый для обучения</param>
-        /// <param name="epochCount">Количество эпох обучения</param>        
-        /// <param name="device">Устройство для обучения</param>
-        /// <param name="shuffleSampleInMinibatchesPerEpoch">Указывает, что необходимо каждую эпоху перемешивать обучающие примеры для формирования новых минипакетов.</param>
-        /// <param name="ruleUpdateLearningRate">Правило обновления скорости обучения. Входные параметры: эпоха, текущая скорость обучения. Выходные: новая скорость обучения.</param>
-        /// <param name="actionPerEpoch">Произвольное действие, которое требуется выполнять каждую эпоху. Позволяет прервать процесс тренировки. Входные параметры: эпоха, loss-ошибка, evaluation-ошибка. 
-        /// Выходные: true - прервать процесс тренировки, false - продолжить тренировку.
-        /// Используется для осуществления логирования, отображения процесса обучения, сохранения промежуточных чекпоинтов модели и т.п.</param>
-        /// <param name="inputName">Имя входного слоя. Имя должно быть уникальным для всей сети. Входов может быть несколько, этот параметр указывает на какой из них подавать данные.</param>
+        /// <param name="features">A set of sequences (traits). Each sequence can be of variable length, but of the same dimension (the arrays of which the sequence consists must have the same length)</param>
+        /// <param name="labels">Set of labels. The dimension of the labels should be the same.</param>
+        /// <param name="minibatchSize">Minipack size</param>
+        /// <param name="lossFunction">Loss function</param>
+        /// <param name="evaluationFunction">Evaluation function</param>
+        /// <param name="optimizer">The optimizer used for training</param>
+        /// <param name="epochCount">Number of learning eras</param>        
+        /// <param name="device">Training device</param>
+        /// <param name="shuffleSampleInMinibatchesPerEpoch">Indicates that it is necessary to mix training examples for each era to form new mini-packages.</param>
+        /// <param name="ruleUpdateLearningRate">Rule for updating learning speed. Input parameters: era, current learning speed. Weekend: new learning speed.</param>
+        /// <param name="actionPerEpoch">The arbitrary action that each epoch requires. Allows you to interrupt the training process. Input parameters: era, loss error, evaluation error. 
+        /// Weekend: true - interrupt the training process, false - continue the training.
+        /// Used for logging, displaying the learning process, saving intermediate model checkpoints, etc.</param>
+        /// <param name="inputName">The name of the input layer. The name must be unique throughout the network. There can be several inputs, this parameter indicates which of them serves data.</param>
         /// <returns></returns>
         public static FitResult Fit<T>(this Sequential<T> source,
             IList<IList<T[]>> features,
@@ -426,23 +426,23 @@ namespace EasyCNTK.Learning
             return source.Model.Fit(getMinibatches, lossFunction, evaluationFunction, optimizer, epochCount, true, device, ruleUpdateLearningRate, actionPerEpoch, inputName);
         }
         /// <summary>
-        /// Обучает модель с двумерным входом. Не применим для обучения реккуретных сетей.
+        /// Teaches a two-dimensional input model. Not applicable for training recruitment networks.
         /// </summary>
-        /// <typeparam name="T">Тип данных. Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <typeparam name="T">Data type. Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
         /// <param name="source"></param>
-        /// <param name="features">Набор данных для обучения.</param>
-        /// <param name="minibatchSize">Размер минипакета</param>
-        /// <param name="lossFunction">Функция потерь</param>
-        /// <param name="evaluationFunction">Оценочная функция</param>
-        /// <param name="optimizer">Оптимизатор, используемый для обучения</param>
-        /// <param name="epochCount">Количество эпох обучения</param>        
-        /// <param name="device">Устройство для обучения</param>  
-        /// <param name="shuffleSampleInMinibatchesPerEpoch">Указывает, что необходимо каждую эпоху перемешивать обучающие примеры для формирования новых минипакетов.</param>
-        /// <param name="ruleUpdateLearningRate">Правило обновления скорости обучения. Входные параметры: эпоха, текущая скорость обучения. Выходные: новая скорость обучения.</param>
-        /// <param name="actionPerEpoch">Произвольное действие, которое требуется выполнять каждую эпоху. Позволяет прервать процесс тренировки. Входные параметры: эпоха, loss-ошибка, evaluation-ошибка. 
-        /// Выходные: true - прервать процесс тренировки, false - продолжить тренировку.
-        /// Используется для осуществления логирования, отображения процесса обучения, сохранения промежуточных чекпоинтов модели и т.п.</param>
-        /// <param name="inputName">Имя входного слоя. Имя должно быть уникальным для всей сети. Входов может быть несколько, этот параметр указывает на какой из них подавать данные.</param>
+        /// <param name="features">A dataset for training.</param>
+        /// <param name="minibatchSize">Minipack size</param>
+        /// <param name="lossFunction">Loss function</param>
+        /// <param name="evaluationFunction">Evaluation function</param>
+        /// <param name="optimizer">The optimizer used for training</param>
+        /// <param name="epochCount">Number of learning eras</param>        
+        /// <param name="device">Training device</param>  
+        /// <param name="shuffleSampleInMinibatchesPerEpoch">Indicates that it is necessary to mix training examples for each era to form new mini-packages.</param>
+        /// <param name="ruleUpdateLearningRate">Rule for updating learning speed. Input parameters: era, current learning speed. Weekend: new learning speed.</param>
+        /// <param name="actionPerEpoch">The arbitrary action that each epoch requires. Allows you to interrupt the training process. Input parameters: era, loss error, evaluation error. 
+        /// Weekend: true - interrupt the training process, false - continue the training.
+        /// Used for logging, displaying the learning process, saving intermediate model checkpoints, etc.</param>
+        /// <param name="inputName">The name of the input layer. The name must be unique throughout the network. There can be several inputs, this parameter indicates which of them serves data.</param>
         /// <returns></returns>
         public static FitResult Fit<T>(this Sequential<T> source,
             IList<T[,]> features,
@@ -479,24 +479,24 @@ namespace EasyCNTK.Learning
             return source.Model.Fit(getMinibatches, lossFunction, evaluationFunction, optimizer, epochCount, false, device, ruleUpdateLearningRate, actionPerEpoch, inputName);
         }
         /// <summary>
-        /// Обучает модель. Не применим для обучения реккуретных сетей.
+        /// Teaches a model. Not applicable for training recruitment networks.
         /// </summary>
-        /// <typeparam name="T">Тип данных. Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <typeparam name="T">Data type. Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
         /// <param name="source"></param>
-        /// <param name="trainData">Набор данных для обучения. Каждый пример должен содержать в начале массива признаки размерностью inputDim, а в конце метки классов размерностью outputDim.
-        /// Например inputDim = 3, outputDim = 2: [f1, f2, f3, l1, l2]</param>
-        /// <param name="inputDim">Размерность признаков (разрядность)</param>
-        /// <param name="minibatchSize">Размер минипакета</param>
-        /// <param name="lossFunction">Функция потерь</param>
-        /// <param name="evaluationFunction">Оценочная функция</param>
-        /// <param name="optimizer">Оптимизатор, используемый для обучения</param>
-        /// <param name="epochCount">Количество эпох обучения</param>        
-        /// <param name="device">Устройство для обучения</param>       
-        /// <param name="ruleUpdateLearningRate">Правило обновления скорости обучения. Входные параметры: эпоха, текущая скорость обучения. Выходные: новая скорость обучения.</param>
-        /// <param name="actionPerEpoch">Произвольное действие, которое требуется выполнять каждую эпоху. Позволяет прервать процесс тренировки. Входные параметры: эпоха, loss-ошибка, evaluation-ошибка. 
-        /// Выходные: true - прервать процесс тренировки, false - продолжить тренировку.
-        /// Используется для осуществления логирования, отображения процесса обучения, сохранения промежуточных чекпоинтов модели и т.п.</param>
-        /// <param name="inputName">Имя входного слоя. Имя должно быть уникальным для всей сети. Входов может быть несколько, этот параметр указывает на какой из них подавать данные.</param>
+        /// <param name="trainData">A dataset for training. Each example should contain signs at the beginning of the array with dimensions of inputDim, and at the end of class labels with dimensions of outputDim.
+        /// For example, inputDim = 3, outputDim = 2: [f1, f2, f3, l1, l2]</param>
+        /// <param name="inputDim">Dimension of signs (capacity)</param>
+        /// <param name="minibatchSize">Minipack size</param>
+        /// <param name="lossFunction">Loss function</param>
+        /// <param name="evaluationFunction">Evaluation function</param>
+        /// <param name="optimizer">The optimizer used for training</param>
+        /// <param name="epochCount">Number of learning eras</param>        
+        /// <param name="device">Training device</param>       
+        /// <param name="ruleUpdateLearningRate">Rule for updating learning speed. Input parameters: era, current learning speed. Weekend: new learning speed.</param>
+        /// <param name="actionPerEpoch">The arbitrary action that each epoch requires. Allows you to interrupt the training process. Input parameters: era, loss error, evaluation error. 
+        /// Weekend: true - interrupt the training process, false - continue the training.
+        /// Used for logging, displaying the learning process, saving intermediate model checkpoints, etc.</param>
+        /// <param name="inputName">The name of the input layer. The name must be unique throughout the network. There can be several inputs, this parameter indicates which of them serves data.</param>
         /// <returns></returns>
         public static FitResult Fit<T>(this Sequential<T> source,
             IEnumerable<T[]> trainData,
@@ -516,23 +516,23 @@ namespace EasyCNTK.Learning
             return source.Model.Fit(p => minibatches, lossFunction, evaluationFunction, optimizer, epochCount, false, device, ruleUpdateLearningRate, actionPerEpoch, inputName);
         }
         /// <summary>
-        /// Обучает реккурентную модель.
+        /// Teaches a recursive model.
         /// </summary>
-        /// <typeparam name="T">Тип данных. Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <typeparam name="T">Data type. Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
         /// <param name="source"></param>
-        /// <param name="features">Набор последовательностей (признаков). Каждая последовательность может быть переменной длинны, но одинаковой размерности (массивы из которых состоит последовательность, должны иметь одинаковую длину)</param>
-        /// <param name="labels">Набор меток. Размерность меток должна быть одинаковая.</param>
-        /// <param name="minibatchSize">Размер минипакета</param>
-        /// <param name="lossFunction">Функция потерь</param>
-        /// <param name="evaluationFunction">Оценочная функция</param>
-        /// <param name="optimizer">Оптимизатор, используемый для обучения</param>
-        /// <param name="epochCount">Количество эпох обучения</param>        
-        /// <param name="device">Устройство для обучения</param>        
-        /// <param name="ruleUpdateLearningRate">Правило обновления скорости обучения. Входные параметры: эпоха, текущая скорость обучения. Выходные: новая скорость обучения.</param>
-        /// <param name="actionPerEpoch">Произвольное действие, которое требуется выполнять каждую эпоху. Позволяет прервать процесс тренировки. Входные параметры: эпоха, loss-ошибка, evaluation-ошибка. 
-        /// Выходные: true - прервать процесс тренировки, false - продолжить тренировку.
-        /// Используется для осуществления логирования, отображения процесса обучения, сохранения промежуточных чекпоинтов модели и т.п.</param>
-        /// <param name="inputName">Имя входного слоя. Имя должно быть уникальным для всей сети. Входов может быть несколько, этот параметр указывает на какой из них подавать данные.</param>
+        /// <param name="features">A set of sequences (traits). Each sequence can be of variable length, but of the same dimension (the arrays of which the sequence consists must have the same length)</param>
+        /// <param name="labels">Set of labels. The dimension of the labels should be the same.</param>
+        /// <param name="minibatchSize">Minipack size</param>
+        /// <param name="lossFunction">Loss function</param>
+        /// <param name="evaluationFunction">Evaluation function</param>
+        /// <param name="optimizer">The optimizer used for training</param>
+        /// <param name="epochCount">Number of learning eras</param>        
+        /// <param name="device">Training device</param>        
+        /// <param name="ruleUpdateLearningRate">Rule for updating learning speed. Input parameters: era, current learning speed. Weekend: new learning speed.</param>
+        /// <param name="actionPerEpoch">The arbitrary action that each epoch requires. Allows you to interrupt the training process. Input parameters: era, loss error, evaluation error. 
+        /// Weekend: true - interrupt the training process, false - continue the training.
+        /// Used for logging, displaying the learning process, saving intermediate model checkpoints, etc.</param>
+        /// <param name="inputName">The name of the input layer. The name must be unique throughout the network. There can be several inputs, this parameter indicates which of them serves data.</param>
         /// <returns></returns>
         public static FitResult Fit<T>(this Sequential<T> source,
             IEnumerable<IList<T[]>> features,
@@ -551,22 +551,22 @@ namespace EasyCNTK.Learning
             return source.Fit(p => minibatches, lossFunction, evaluationFunction, optimizer, epochCount, true, device, ruleUpdateLearningRate, actionPerEpoch);
         }
         /// <summary>
-        /// Обучает модель с двумерным входом. Не применим для обучения реккуретных сетей.
+        /// Teaches a two-dimensional input model. Not applicable for training recruitment networks.
         /// </summary>
-        /// <typeparam name="T">Тип данных. Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <typeparam name="T">Data type. Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
         /// <param name="source"></param>
-        /// <param name="features">Набор данных для обучения.</param>
-        /// <param name="minibatchSize">Размер минипакета</param>
-        /// <param name="lossFunction">Функция потерь</param>
-        /// <param name="evaluationFunction">Оценочная функция</param>
-        /// <param name="optimizer">Оптимизатор, используемый для обучения</param>
-        /// <param name="epochCount">Количество эпох обучения</param>        
-        /// <param name="device">Устройство для обучения</param>          
-        /// <param name="ruleUpdateLearningRate">Правило обновления скорости обучения. Входные параметры: эпоха, текущая скорость обучения. Выходные: новая скорость обучения.</param>
-        /// <param name="actionPerEpoch">Произвольное действие, которое требуется выполнять каждую эпоху. Позволяет прервать процесс тренировки. Входные параметры: эпоха, loss-ошибка, evaluation-ошибка. 
-        /// Выходные: true - прервать процесс тренировки, false - продолжить тренировку.
-        /// Используется для осуществления логирования, отображения процесса обучения, сохранения промежуточных чекпоинтов модели и т.п.</param>
-        /// <param name="inputName">Имя входного слоя. Имя должно быть уникальным для всей сети. Входов может быть несколько, этот параметр указывает на какой из них подавать данные.</param>
+        /// <param name="features">A dataset for training.</param>
+        /// <param name="minibatchSize">Minipack size</param>
+        /// <param name="lossFunction">Loss function</param>
+        /// <param name="evaluationFunction">Evaluation function</param>
+        /// <param name="optimizer">The optimizer used for training</param>
+        /// <param name="epochCount">Number of learning eras</param>        
+        /// <param name="device">Training device</param>          
+        /// <param name="ruleUpdateLearningRate">Rule for updating learning speed. Input parameters: era, current learning speed. Weekend: new learning speed.</param>
+        /// <param name="actionPerEpoch">The arbitrary action that each epoch requires. Allows you to interrupt the training process. Input parameters: era, loss error, evaluation error. 
+        /// Weekend: true - interrupt the training process, false - continue the training.
+        /// Used for logging, displaying the learning process, saving intermediate model checkpoints, etc.</param>
+        /// <param name="inputName">The name of the input layer. The name must be unique throughout the network. There can be several inputs, this parameter indicates which of them serves data.</param>
         /// <returns></returns>
         public static FitResult Fit<T>(this Sequential<T> source,
             IEnumerable<T[,]> features,
@@ -590,21 +590,21 @@ namespace EasyCNTK.Learning
 
         #region One input - multi output
         /// <summary>
-        /// Обучает модель. Поддерживает реккурентные сети.
+        /// Teaches a model. Supports recursive networks.
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="trainDataSelector">Селектор, позволяющий указать для каждой эпохи свой набор данных для обучения.</param>
-        /// <param name="lossFunctions">Функция потерь</param>
-        /// <param name="evaluationFunctions">Оценочная функция</param>
-        /// <param name="optimizers">Оптимизатор, используемый для обучения</param>
-        /// <param name="epochCount">Количество эпох обучения</param>
-        /// <param name="isReccurentModel">Указывает, что требуется обучать реккурентную модель</param>
-        /// <param name="device">Устройство для обучения</param>
-        /// <param name="ruleUpdateLearningRate">Правило обновления скорости обучения. Входные параметры: эпоха, текущая скорость обучения. Выходные: новая скорость обучения.</param>
-        /// <param name="actionPerEpoch">Произвольное действие, которое требуется выполнять каждую эпоху. Позволяет прервать процесс тренировки. Входные параметры: эпоха, loss-ошибка, evaluation-ошибка. 
-        /// Выходные: true - прервать процесс тренировки, false - продолжить тренировку.
-        /// Используется для осуществления логирования, отображения процесса обучения, сохранения промежуточных чекпоинтов модели и т.п.</param>
-        /// <param name="inputName">Имя входного слоя. Имя должно быть уникальным для всей сети. Входов может быть несколько, этот параметр указывает на какой из них подавать данные.</param>
+        /// <param name="trainDataSelector">A selector that allows you to specify for each era its own set of data for training.</param>
+        /// <param name="lossFunctions">Loss function</param>
+        /// <param name="evaluationFunctions">Evaluation function</param>
+        /// <param name="optimizers">The optimizer used for training</param>
+        /// <param name="epochCount">Number of learning eras</param>
+        /// <param name="isReccurentModel">Indicates that a recursive model needs to be trained</param>
+        /// <param name="device">Training device</param>
+        /// <param name="ruleUpdateLearningRate">Rule for updating learning speed. Input parameters: era, current learning speed. Weekend: new learning speed.</param>
+        /// <param name="actionPerEpoch">The arbitrary action that each epoch requires. Allows you to interrupt the training process. Input parameters: era, loss error, evaluation error. 
+        /// Weekend: true - interrupt the training process, false - continue the training.
+        /// Used for logging, displaying the learning process, saving intermediate model checkpoints, etc.</param>
+        /// <param name="inputName">The name of the input layer. The name must be unique throughout the network. There can be several inputs, this parameter indicates which of them serves data.</param>
         /// <returns></returns>
         public static FitResult[] Fit<T>(this SequentialMultiOutput<T> source,
            Func<int, IEnumerable<MinibatchMultiOutput>> trainDataSelector,
@@ -621,21 +621,21 @@ namespace EasyCNTK.Learning
             return source.Model.FitMultiOutput(trainDataSelector, lossFunctions, evaluationFunctions, optimizers, epochCount, isReccurentModel, device, ruleUpdateLearningRate, actionPerEpoch, inputName);
         }
         /// <summary>
-        /// Обучает модель. Поддерживает реккурентные сети.
+        /// Teaches a model. Supports recursive networks.
         /// </summary>
         /// <param name="source"></param>
-        /// <param name="trainData">Набор данных для обучения.</param>
-        /// <param name="lossFunctions">Функция потерь</param>
-        /// <param name="evaluationFunctions">Оценочная функция</param>
-        /// <param name="optimizers">Оптимизатор, используемый для обучения</param>
-        /// <param name="epochCount">Количество эпох обучения</param>
-        /// <param name="isReccurentModel">Указывает, что требуется обучать реккурентную модель</param>
-        /// <param name="device">Устройство для обучения</param>
-        /// <param name="ruleUpdateLearningRate">Правило обновления скорости обучения. Входные параметры: эпоха, текущая скорость обучения. Выходные: новая скорость обучения.</param>
-        /// <param name="actionPerEpoch">Произвольное действие, которое требуется выполнять каждую эпоху. Позволяет прервать процесс тренировки. Входные параметры: эпоха, loss-ошибка, evaluation-ошибка. 
-        /// Выходные: true - прервать процесс тренировки, false - продолжить тренировку.
-        /// Используется для осуществления логирования, отображения процесса обучения, сохранения промежуточных чекпоинтов модели и т.п.</param>
-        /// <param name="inputName">Имя входного слоя. Имя должно быть уникальным для всей сети. Входов может быть несколько, этот параметр указывает на какой из них подавать данные.</param>
+        /// <param name="trainData">A dataset for training.</param>
+        /// <param name="lossFunctions">Loss function</param>
+        /// <param name="evaluationFunctions">Evaluation function</param>
+        /// <param name="optimizers">The optimizer used for training</param>
+        /// <param name="epochCount">Number of learning eras</param>
+        /// <param name="isReccurentModel">Indicates that a recursive model needs to be trained</param>
+        /// <param name="device">Training device</param>
+        /// <param name="ruleUpdateLearningRate">Rule for updating learning speed. Input parameters: era, current learning speed. Weekend: new learning speed.</param>
+        /// <param name="actionPerEpoch">The arbitrary action that each epoch requires. Allows you to interrupt the training process. Input parameters: era, loss error, evaluation error. 
+        /// Weekend: true - interrupt the training process, false - continue the training.
+        /// Used for logging, displaying the learning process, saving intermediate model checkpoints, etc.</param>
+        /// <param name="inputName">The name of the input layer. The name must be unique throughout the network. There can be several inputs, this parameter indicates which of them serves data.</param>
         /// <returns></returns>
         public static FitResult[] Fit<T>(this SequentialMultiOutput<T> source,
             IEnumerable<MinibatchMultiOutput> trainData,
@@ -652,24 +652,24 @@ namespace EasyCNTK.Learning
             return source.Model.FitMultiOutput(p => trainData, lossFunctions, evaluationFunctions, optimizers, epochCount, isReccurentModel, device, ruleUpdateLearningRate, actionPerEpoch, inputName);
         }
         /// <summary>
-        /// Обучает модель. Не применим для обучения реккуретных сетей.
+        /// Teaches a model. Not applicable for training recruitment networks.
         /// </summary>
-        /// <typeparam name="T">Тип данных. Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <typeparam name="T">Data type. Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
         /// <param name="source"></param>
-        /// <param name="features">Набор данных для обучения.</param>       
-        /// <param name="labels">Набор меток для каждой головы(выхода сети).</param>
-        /// <param name="minibatchSize">Размер минипакета</param>
-        /// <param name="lossFunctions">Функция потерь</param>
-        /// <param name="evaluationFunctions">Оценочная функция</param>
-        /// <param name="optimizers">Оптимизатор, используемый для обучения</param>
-        /// <param name="epochCount">Количество эпох обучения</param>        
-        /// <param name="device">Устройство для обучения</param>
-        /// <param name="shuffleSampleInMinibatchesPerEpoch">Указывает, что необходимо каждую эпоху перемешивать обучающие примеры для формирования новых минипакетов.</param>
-        /// <param name="ruleUpdateLearningRate">Правило обновления скорости обучения. Входные параметры: эпоха, текущая скорость обучения. Выходные: новая скорость обучения.</param>
-        /// <param name="actionPerEpoch">Произвольное действие, которое требуется выполнять каждую эпоху. Позволяет прервать процесс тренировки. Входные параметры: эпоха, loss-ошибка, evaluation-ошибка. 
-        /// Выходные: true - прервать процесс тренировки, false - продолжить тренировку.
-        /// Используется для осуществления логирования, отображения процесса обучения, сохранения промежуточных чекпоинтов модели и т.п.</param>
-        /// <param name="inputName">Имя входного слоя. Имя должно быть уникальным для всей сети. Входов может быть несколько, этот параметр указывает на какой из них подавать данные.</param>
+        /// <param name="features">A dataset for training.</param>       
+        /// <param name="labels">A set of labels for each head (network output).</param>
+        /// <param name="minibatchSize">Minipack size</param>
+        /// <param name="lossFunctions">Loss function</param>
+        /// <param name="evaluationFunctions">Evaluation function</param>
+        /// <param name="optimizers">The optimizer used for training</param>
+        /// <param name="epochCount">Number of learning eras</param>        
+        /// <param name="device">Training device</param>
+        /// <param name="shuffleSampleInMinibatchesPerEpoch">Indicates that it is necessary to mix training examples for each era to form new mini-packages.</param>
+        /// <param name="ruleUpdateLearningRate">Rule for updating learning speed. Input parameters: era, current learning speed. Weekend: new learning speed.</param>
+        /// <param name="actionPerEpoch">The arbitrary action that each epoch requires. Allows you to interrupt the training process. Input parameters: era, loss error, evaluation error. 
+        /// Weekend: true - interrupt the training process, false - continue the training.
+        /// Used for logging, displaying the learning process, saving intermediate model checkpoints, etc.</param>
+        /// <param name="inputName">The name of the input layer. The name must be unique throughout the network. There can be several inputs, this parameter indicates which of them serves data.</param>
         /// <returns></returns>
         public static FitResult[] Fit<T>(this SequentialMultiOutput<T> source,
             IList<T[]> features,
@@ -705,24 +705,24 @@ namespace EasyCNTK.Learning
             return source.Model.FitMultiOutput(getMinibatches, lossFunctions, evaluationFunctions, optimizers, epochCount, false, device, ruleUpdateLearningRate, actionPerEpoch, inputName);
         }
         /// <summary> 
-        /// Обучает реккурентную модель.
+        /// Teaches a recursive model.
         /// </summary>
-        /// <typeparam name="T">Тип данных. Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <typeparam name="T">Data type. Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
         /// <param name="source"></param>
-        /// <param name="features">Набор последовательностей (признаков). Каждая последовательность может быть переменной длинны, но одинаковой размерности (массивы из которых состоит последовательность, должны иметь одинаковую длину)</param>
-        /// <param name="labels">Набор меток для каждой головы(выхода сети).</param>
-        /// <param name="minibatchSize">Размер минипакета</param>
-        /// <param name="lossFunctions">Функция потерь</param>
-        /// <param name="evaluationFunctions">Оценочная функция</param>
-        /// <param name="optimizers">Оптимизатор, используемый для обучения</param>
-        /// <param name="epochCount">Количество эпох обучения</param>        
-        /// <param name="device">Устройство для обучения</param>
-        /// <param name="shuffleSampleInMinibatchesPerEpoch">Указывает, что необходимо каждую эпоху перемешивать обучающие примеры для формирования новых минипакетов.</param>
-        /// <param name="ruleUpdateLearningRate">Правило обновления скорости обучения. Входные параметры: эпоха, текущая скорость обучения. Выходные: новая скорость обучения.</param>
-        /// <param name="actionPerEpoch">Произвольное действие, которое требуется выполнять каждую эпоху. Позволяет прервать процесс тренировки. Входные параметры: эпоха, loss-ошибка, evaluation-ошибка. 
-        /// Выходные: true - прервать процесс тренировки, false - продолжить тренировку.
-        /// Используется для осуществления логирования, отображения процесса обучения, сохранения промежуточных чекпоинтов модели и т.п.</param>
-        /// <param name="inputName">Имя входного слоя. Имя должно быть уникальным для всей сети. Входов может быть несколько, этот параметр указывает на какой из них подавать данные.</param>
+        /// <param name="features">A set of sequences (traits). Each sequence can be of variable length, but of the same dimension (the arrays of which the sequence consists must have the same length)</param>
+        /// <param name="labels">A set of labels for each head (network output).</param>
+        /// <param name="minibatchSize">Minipack size</param>
+        /// <param name="lossFunctions">Loss function</param>
+        /// <param name="evaluationFunctions">Evaluation function</param>
+        /// <param name="optimizers">The optimizer used for training</param>
+        /// <param name="epochCount">Number of learning eras</param>        
+        /// <param name="device">Training device</param>
+        /// <param name="shuffleSampleInMinibatchesPerEpoch">Indicates that it is necessary to mix training examples for each era to form new mini-packages.</param>
+        /// <param name="ruleUpdateLearningRate">Rule for updating learning speed. Input parameters: era, current learning speed. Weekend: new learning speed.</param>
+        /// <param name="actionPerEpoch">The arbitrary action that each epoch requires. Allows you to interrupt the training process. Input parameters: era, loss error, evaluation error. 
+        /// Weekend: true - interrupt the training process, false - continue the training.
+        /// Used for logging, displaying the learning process, saving intermediate model checkpoints, etc.</param>
+        /// <param name="inputName">The name of the input layer. The name must be unique throughout the network. There can be several inputs, this parameter indicates which of them serves data.</param>
         /// <returns></returns>
         public static FitResult[] Fit<T>(this SequentialMultiOutput<T> source,
             IList<IList<T[]>> features,
@@ -761,24 +761,24 @@ namespace EasyCNTK.Learning
             return source.Model.FitMultiOutput(getMinibatches, lossFunctions, evaluationFunctions, optimizers, epochCount, true, device, ruleUpdateLearningRate, actionPerEpoch, inputName);
         }
         /// <summary>
-        /// Обучает модель с двумерным входом. Не применим для обучения реккуретных сетей.
+        /// Teaches a two-dimensional input model. Not applicable for training recruitment networks.
         /// </summary>
-        /// <typeparam name="T">Тип данных. Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <typeparam name="T">Data type. Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
         /// <param name="source"></param>
-        /// <param name="features">Набор данных для обучения.</param>
-        /// <param name="labels">Набор меток для каждой головы(выхода сети).</param>
-        /// <param name="minibatchSize">Размер минипакета</param>
-        /// <param name="lossFunctions">Функция потерь</param>
-        /// <param name="evaluationFunctions">Оценочная функция</param>
-        /// <param name="optimizers">Оптимизатор, используемый для обучения</param>
-        /// <param name="epochCount">Количество эпох обучения</param>        
-        /// <param name="device">Устройство для обучения</param>  
-        /// <param name="shuffleSampleInMinibatchesPerEpoch">Указывает, что необходимо каждую эпоху перемешивать обучающие примеры для формирования новых минипакетов.</param>
-        /// <param name="ruleUpdateLearningRate">Правило обновления скорости обучения. Входные параметры: эпоха, текущая скорость обучения. Выходные: новая скорость обучения.</param>
-        /// <param name="actionPerEpoch">Произвольное действие, которое требуется выполнять каждую эпоху. Позволяет прервать процесс тренировки. Входные параметры: эпоха, loss-ошибка, evaluation-ошибка. 
-        /// Выходные: true - прервать процесс тренировки, false - продолжить тренировку.
-        /// Используется для осуществления логирования, отображения процесса обучения, сохранения промежуточных чекпоинтов модели и т.п.</param>
-        /// <param name="inputName">Имя входного слоя. Имя должно быть уникальным для всей сети. Входов может быть несколько, этот параметр указывает на какой из них подавать данные.</param>
+        /// <param name="features">A dataset for training.</param>
+        /// <param name="labels">A set of labels for each head (network output).</param>
+        /// <param name="minibatchSize">Minipack size</param>
+        /// <param name="lossFunctions">Loss function</param>
+        /// <param name="evaluationFunctions">Evaluation function</param>
+        /// <param name="optimizers">The optimizer used for training</param>
+        /// <param name="epochCount">Number of learning eras</param>        
+        /// <param name="device">Training device</param>  
+        /// <param name="shuffleSampleInMinibatchesPerEpoch">Indicates that it is necessary to mix training examples for each era to form new mini-packages.</param>
+        /// <param name="ruleUpdateLearningRate">Rule for updating learning speed. Input parameters: era, current learning speed. Weekend: new learning speed.</param>
+        /// <param name="actionPerEpoch">The arbitrary action that each epoch requires. Allows you to interrupt the training process. Input parameters: era, loss error, evaluation error. 
+        /// Weekend: true - interrupt the training process, false - continue the training.
+        /// Used for logging, displaying the learning process, saving intermediate model checkpoints, etc.</param>
+        /// <param name="inputName">The name of the input layer. The name must be unique throughout the network. There can be several inputs, this parameter indicates which of them serves data.</param>
         /// <returns></returns>
         public static FitResult[] Fit<T>(this SequentialMultiOutput<T> source,
             IList<T[,]> features,
@@ -817,23 +817,23 @@ namespace EasyCNTK.Learning
             return source.Model.FitMultiOutput(getMinibatches, lossFunctions, evaluationFunctions, optimizers, epochCount, false, device, ruleUpdateLearningRate, actionPerEpoch, inputName);
         }
         /// <summary>
-        /// Обучает модель. Не применим для обучения реккуретных сетей.
+        /// Teaches a model. Not applicable for training recruitment networks.
         /// </summary>
-        /// <typeparam name="T">Тип данных. Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <typeparam name="T">Data type. Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
         /// <param name="source"></param>       
-        ///<param name="features">Набор данных для обучения.</param>
-        ///<param name="labels">Набор меток для каждой головы(выхода сети).</param>
-        /// <param name="minibatchSize">Размер минипакета</param>
-        /// <param name="lossFunctions">Функция потерь</param>
-        /// <param name="evaluationFunctions">Оценочная функция</param>
-        /// <param name="optimizers">Оптимизатор, используемый для обучения</param>
-        /// <param name="epochCount">Количество эпох обучения</param>        
-        /// <param name="device">Устройство для обучения</param>       
-        /// <param name="ruleUpdateLearningRate">Правило обновления скорости обучения. Входные параметры: эпоха, текущая скорость обучения. Выходные: новая скорость обучения.</param>
-        /// <param name="actionPerEpoch">Произвольное действие, которое требуется выполнять каждую эпоху. Позволяет прервать процесс тренировки. Входные параметры: эпоха, loss-ошибка, evaluation-ошибка. 
-        /// Выходные: true - прервать процесс тренировки, false - продолжить тренировку.
-        /// Используется для осуществления логирования, отображения процесса обучения, сохранения промежуточных чекпоинтов модели и т.п.</param>
-        /// <param name="inputName">Имя входного слоя. Имя должно быть уникальным для всей сети. Входов может быть несколько, этот параметр указывает на какой из них подавать данные.</param>
+        ///<param name="features">A dataset for training.</param>
+        ///<param name="labels">A set of labels for each head (network output).</param>
+        /// <param name="minibatchSize">Minipack size</param>
+        /// <param name="lossFunctions">Loss function</param>
+        /// <param name="evaluationFunctions">Evaluation function</param>
+        /// <param name="optimizers">The optimizer used for training</param>
+        /// <param name="epochCount">Number of learning eras</param>        
+        /// <param name="device">Training device</param>       
+        /// <param name="ruleUpdateLearningRate">Rule for updating learning speed. Input parameters: era, current learning speed. Weekend: new learning speed.</param>
+        /// <param name="actionPerEpoch">The arbitrary action that each epoch requires. Allows you to interrupt the training process. Input parameters: era, loss error, evaluation error. 
+        /// Weekend: true - interrupt the training process, false - continue the training.
+        /// Used for logging, displaying the learning process, saving intermediate model checkpoints, etc.</param>
+        /// <param name="inputName">The name of the input layer. The name must be unique throughout the network. There can be several inputs, this parameter indicates which of them serves data.</param>
         /// <returns></returns>
         public static FitResult[] Fit<T>(this SequentialMultiOutput<T> source,
             IEnumerable<T[]> features,
@@ -853,23 +853,23 @@ namespace EasyCNTK.Learning
             return source.Model.FitMultiOutput(p => minibatches, lossFunctions, evaluationFunctions, optimizers, epochCount, false, device, ruleUpdateLearningRate, actionPerEpoch, inputName);
         }
         /// <summary>
-        /// Обучает реккурентную модель.
+        /// Teaches a recursive model.
         /// </summary>
-        /// <typeparam name="T">Тип данных. Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <typeparam name="T">Data type. Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
         /// <param name="source"></param>
-        /// <param name="features">Набор последовательностей (признаков). Каждая последовательность может быть переменной длинны, но одинаковой размерности (массивы из которых состоит последовательность, должны иметь одинаковую длину)</param>
-        /// <param name="labels">Набор меток для каждой головы(выхода сети).</param>
-        /// <param name="minibatchSize">Размер минипакета</param>
-        /// <param name="lossFunctions">Функция потерь</param>
-        /// <param name="evaluationFunctions">Оценочная функция</param>
-        /// <param name="optimizers">Оптимизатор, используемый для обучения</param>
-        /// <param name="epochCount">Количество эпох обучения</param>        
-        /// <param name="device">Устройство для обучения</param>        
-        /// <param name="ruleUpdateLearningRate">Правило обновления скорости обучения. Входные параметры: эпоха, текущая скорость обучения. Выходные: новая скорость обучения.</param>
-        /// <param name="actionPerEpoch">Произвольное действие, которое требуется выполнять каждую эпоху. Позволяет прервать процесс тренировки. Входные параметры: эпоха, loss-ошибка, evaluation-ошибка. 
-        /// Выходные: true - прервать процесс тренировки, false - продолжить тренировку.
-        /// Используется для осуществления логирования, отображения процесса обучения, сохранения промежуточных чекпоинтов модели и т.п.</param>
-        /// <param name="inputName">Имя входного слоя. Имя должно быть уникальным для всей сети. Входов может быть несколько, этот параметр указывает на какой из них подавать данные.</param>
+        /// <param name="features">A set of sequences (traits). Each sequence can be of variable length, but of the same dimension (the arrays of which the sequence consists must have the same length)</param>
+        /// <param name="labels">A set of labels for each head (network output).</param>
+        /// <param name="minibatchSize">Minipack size</param>
+        /// <param name="lossFunctions">Loss function</param>
+        /// <param name="evaluationFunctions">Evaluation function</param>
+        /// <param name="optimizers">The optimizer used for training</param>
+        /// <param name="epochCount">Number of learning eras</param>        
+        /// <param name="device">Training device</param>        
+        /// <param name="ruleUpdateLearningRate">Rule for updating learning speed. Input parameters: era, current learning speed. Weekend: new learning speed.</param>
+        /// <param name="actionPerEpoch">The arbitrary action that each epoch requires. Allows you to interrupt the training process. Input parameters: era, loss error, evaluation error. 
+        /// Weekend: true - interrupt the training process, false - continue the training.
+        /// Used for logging, displaying the learning process, saving intermediate model checkpoints, etc.</param>
+        /// <param name="inputName">The name of the input layer. The name must be unique throughout the network. There can be several inputs, this parameter indicates which of them serves data.</param>
         /// <returns></returns>
         public static FitResult[] Fit<T>(this SequentialMultiOutput<T> source,
             IEnumerable<IList<T[]>> features,
@@ -889,23 +889,23 @@ namespace EasyCNTK.Learning
             return source.Model.FitMultiOutput(p => minibatches, lossFunctions, evaluationFunctions, optimizers, epochCount, true, device, ruleUpdateLearningRate, actionPerEpoch, inputName);
         }
         /// <summary>
-        /// Обучает модель с двумерным входом. Не применим для обучения реккуретных сетей.
+        /// Teaches a two-dimensional input model. Not applicable for training recruitment networks.
         /// </summary>
-        /// <typeparam name="T">Тип данных. Поддерживается <seealso cref="float"/>, <seealso cref="double"/></typeparam>
+        /// <typeparam name="T">Data type. Supported by<seealso cref="float"/>, <seealso cref="double"/></typeparam>
         /// <param name="source"></param>
-        /// <param name="features">Набор данных для обучения.</param>
-        /// <param name="labels">Набор меток для каждой головы(выхода сети).</param>
-        /// <param name="minibatchSize">Размер минипакета</param>
-        /// <param name="lossFunctions">Функция потерь</param>
-        /// <param name="evaluationFunctions">Оценочная функция</param>
-        /// <param name="optimizers">Оптимизатор, используемый для обучения</param>
-        /// <param name="epochCount">Количество эпох обучения</param>        
-        /// <param name="device">Устройство для обучения</param>          
-        /// <param name="ruleUpdateLearningRate">Правило обновления скорости обучения. Входные параметры: эпоха, текущая скорость обучения. Выходные: новая скорость обучения.</param>
-        /// <param name="actionPerEpoch">Произвольное действие, которое требуется выполнять каждую эпоху. Позволяет прервать процесс тренировки. Входные параметры: эпоха, loss-ошибка, evaluation-ошибка. 
-        /// Выходные: true - прервать процесс тренировки, false - продолжить тренировку.
-        /// Используется для осуществления логирования, отображения процесса обучения, сохранения промежуточных чекпоинтов модели и т.п.</param>
-        /// <param name="inputName">Имя входного слоя. Имя должно быть уникальным для всей сети. Входов может быть несколько, этот параметр указывает на какой из них подавать данные.</param>
+        /// <param name="features">A dataset for training.</param>
+        /// <param name="labels">A set of labels for each head (network output).</param>
+        /// <param name="minibatchSize">Minipack size</param>
+        /// <param name="lossFunctions">Loss function</param>
+        /// <param name="evaluationFunctions">Evaluation function</param>
+        /// <param name="optimizers">The optimizer used for training</param>
+        /// <param name="epochCount">Number of learning eras</param>        
+        /// <param name="device">Training device</param>          
+        /// <param name="ruleUpdateLearningRate">Rule for updating learning speed. Input parameters: era, current learning speed. Weekend: new learning speed.</param>
+        /// <param name="actionPerEpoch">The arbitrary action that each epoch requires. Allows you to interrupt the training process. Input parameters: era, loss error, evaluation error. 
+        /// Weekend: true - interrupt the training process, false - continue the training.
+        /// Used for logging, displaying the learning process, saving intermediate model checkpoints, etc.</param>
+        /// <param name="inputName">The name of the input layer. The name must be unique throughout the network. There can be several inputs, this parameter indicates which of them serves data.</param>
         /// <returns></returns>
         public static FitResult[] Fit<T>(this SequentialMultiOutput<T> source,
             IEnumerable<T[,]> features,
