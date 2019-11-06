@@ -36,7 +36,7 @@ namespace EasyCNTK.Learning.Optimizers
         /// <param name="l1RegularizationWeight">Coefficient L1 of norm, if 0 - regularization is not applied</param>
         /// <param name="l2RegularizationWeight">Coefficient L2 of norm, if 0 - regularization is not applied</param>
         /// <param name="gradientClippingThresholdPerSample">The gradient cutoff threshold for each training example is used primarily to combat the explosive gradient in deep recursive networks.
-        /// The default is set to<seealso cref="double.PositiveInfinity"/> - отсечение не используется. Для использования установите необходимый порог.</param>
+        /// The default is set to<seealso cref="double.PositiveInfinity"/> - clipping is not used. To use, set the required threshold..</param>
         /// <param name="unitGain">Indicates that the torque is used in gain mode.</param> 
         public MomentumSGD(double learningRate,
             double momentum,

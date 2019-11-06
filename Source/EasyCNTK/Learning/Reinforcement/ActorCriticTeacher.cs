@@ -39,9 +39,9 @@ namespace EasyCNTK.Learning.Reinforcement
         public SequentialMultiOutput<T> Teach(SequentialMultiOutput<T> agent, int iterationCount, int rolloutCount, int minibatchSize, Func<int, double[], double[], bool> actionPerIteration = null, double gamma = 0.99, double epsilon = 0.01)
         {
             if (agent.Model.Outputs.Count != 2)
-                throw new NotSupportedException("Количество выходов(ветвей) агента должно быть равно 2. Другие конфигурации не поддерживаются.");
+                throw new NotSupportedException("Number of outputs(branches) agent must be equal 2. Other configurations are not supported..");
             if (agent.Model.Outputs[1].Shape.Rank != 1 || agent.Model.Outputs[1].Shape.Dimensions[0] != 1)
-                throw new NotSupportedException("Размерность второго выхода агента должна быть равна 1(выход должен возвращать одно число). Другие конфигурации не поддерживаются.");
+                throw new NotSupportedException("The dimension of the second agent output should be equal to 1(output should return a single number). Other configurations are not supported..");
 
             for (int iteration = 0; iteration < iterationCount; iteration++)
             {
@@ -126,9 +126,9 @@ namespace EasyCNTK.Learning.Reinforcement
         public SequentialMultiOutput<T> Teach(SequentialMultiOutput<T> agent, int iterationCount, int rolloutCount, int minibatchSize, int sequenceLength, Func<int, double[], double[], bool> actionPerIteration = null, double gamma = 0.99, double epsilon = 0.01)
         {
             if (agent.Model.Outputs.Count != 2)
-                throw new NotSupportedException("Количество выходов(ветвей) агента должно быть равно 2. Другие конфигурации не поддерживаются.");
+                throw new NotSupportedException("Number of outputs(branches) agent must be equal 2. Other configurations are not supported..");
             if (agent.Model.Outputs[1].Shape.Rank != 1 || agent.Model.Outputs[1].Shape.Dimensions[0] != 1)
-                throw new NotSupportedException("Размерность второго выхода агента должна быть равна 1(выход должен возвращать одно число). Другие конфигурации не поддерживаются.");
+                throw new NotSupportedException("The dimension of the second agent output should be equal to 1(output should return a single number). Other configurations are not supported..");
 
             for (int iteration = 0; iteration < iterationCount; iteration++)
             {

@@ -28,7 +28,7 @@ namespace EasyCNTK.Learning
         {
             if (expectedValue.Count != evaluatedValue.Count)
             {
-                throw new ArgumentException($"Несоответсвие размерности ожидаемых({expectedValue.Count}) и оцененных({evaluatedValue.Count}) значений.");
+                throw new ArgumentException($"Inconsistency of expected dimensions({expectedValue.Count}) and evaluated({evaluatedValue.Count}) values.");
             }
             ExpectedValue = expectedValue;
             EvaluatedValue = evaluatedValue;

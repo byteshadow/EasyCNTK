@@ -24,7 +24,7 @@ namespace EasyCNTK.LossFunctions
         /// <param name="threshold">The threshold value for the actual value of the output of the neural network, below which the class is not recognized. In other words, this is the minimum probability that the classifier must give for a particular class so that this class is considered as recognized.</param>
         public ClassificationError(double threshold = 0.5)
         {
-            if (threshold <= 0 || threshold >= 1) throw new ArgumentOutOfRangeException("threshold", "Порог должен быть в диапазоне: (0;1)");
+            if (threshold <= 0 || threshold >= 1) throw new ArgumentOutOfRangeException("threshold", "The threshold must be in the range: (0;1)");
             _thresholdValue = threshold;
         }
         public override Function GetLoss(Variable prediction, Variable targets, DeviceDescriptor device)

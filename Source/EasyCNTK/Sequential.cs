@@ -86,7 +86,7 @@ namespace EasyCNTK
             var dataType = typeof(T) == typeof(double) ? DataType.Double : DataType.Float;
             if (Model.Output.DataType != dataType)
             {
-                throw new ArgumentException($"Универсальный параметр {nameof(T)} не сответствует типу данных в модели. Требуемый тип: {Model.Output.DataType}");
+                throw new ArgumentException($"Universal parameter {nameof(T)} does not match the data type in the model. Type required: {Model.Output.DataType}");
             }
             try
             {
@@ -113,7 +113,7 @@ namespace EasyCNTK
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Ошибка загрузки файла конфигурации модели. {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error loading model configuration file. {ex.Message}");
             }
         }
         /// <summary>

@@ -19,7 +19,7 @@ namespace EasyCNTK.Learning
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="source"></param>
-        /// <param name="seed">The initial value for the random number generator (<seealso cref="Random"/>), если 0 - используется генератор по умолчанию </param>
+        /// <param name="seed">The initial value for the random number generator (<seealso cref="Random"/>), if 0 - default generator used </param>
         public static void Shuffle<T>(this IList<T> source, int seed = 0)
         {
             Random random = seed== 0 ? new Random() : new Random(seed);
@@ -143,7 +143,7 @@ namespace EasyCNTK.Learning
         {
             double computeDistance(T[] first, T[] second)
             {
-                if (first.Length != second.Length) throw new IndexOutOfRangeException("Размерность одного из примеров датасета отличается от остальных");
+                if (first.Length != second.Length) throw new IndexOutOfRangeException("The dimension of one example dataset is different from the rest");
                 double distance = 0;
 
                 for (int i = 0; i < first.Length; i++)
@@ -154,13 +154,13 @@ namespace EasyCNTK.Learning
             }
 
             if (source.Count < 2)
-                throw new ArgumentException("Source collection должна содержать минимум 2 элемента.", "source");
+                throw new ArgumentException("Source collection must contain a minimum 2 element.", "source");
             if (similarSampleCount < 1)
-                throw new ArgumentOutOfRangeException("similarSampleCount", "Число синтезируемых примеров должно быть больше 0.");
+                throw new ArgumentOutOfRangeException("similarSampleCount", "The number of synthesized examples should be greater 0.");
             if (nearestNeighborsCount < 1)
-                throw new ArgumentOutOfRangeException("nearestNeighborsCount", "Число соседей должны быть больше 0.");
+                throw new ArgumentOutOfRangeException("nearestNeighborsCount", "The number of neighbors must be greater 0.");
 
-            #region находим [nearestNeighborsCount] ближайших соседей для каждого примера
+            #region we find [nearestNeighborsCount] nearest neighbors for each example
             var nearestNeighborsIndexes = source
                    .Select(p => Enumerable.Range(0, nearestNeighborsCount)
                        .Select(q => (index: -1, distance: double.MaxValue))
@@ -173,7 +173,7 @@ namespace EasyCNTK.Learning
                 {
                     double distance = computeDistance(source[first], source[second]);
 
-                    #region обновляем индексы ближайших [nearestNeighborsCount] соседей у текущего примера и сравниваемого
+                    #region update the indices of the nearest [nearestNeighborsCount] neighbors in the current example and compared
                     nearestNeighborsIndexes[first].Sort((a, b) =>
                     {
                         if (a.distance > b.distance)
@@ -202,7 +202,7 @@ namespace EasyCNTK.Learning
             }
             #endregion
 
-            #region создаем заданное количество синтетических примеров
+            #region create a given number of synthetic examples
             Random rnd = seed == 0 ? new Random() : new Random(seed);
             var elementTypeCode = source[0][0].GetTypeCode();
             var result = new List<T[]>(similarSampleCount);
@@ -293,7 +293,7 @@ namespace EasyCNTK.Learning
 
                 p.StandardDeviation = Math.Sqrt(p.Variance);
 
-                #region поиск медианы
+                #region median search
                 int halfItems = countItems / 2; //half records
                 int countElements = 0; //cumulative number of elements when searching for the median
 
@@ -329,7 +329,7 @@ namespace EasyCNTK.Learning
             return result;
         }
         /// <summary>
-        /// Computes object statistics for each type property:<seealso cref="int"/>, <seealso cref="long"/>, <seealso cref="float"/>, <seealso cref="double"/>, <seealso cref="decimal"/>. Допускает потерю точности при вычислении значений вне диапазона <seealso cref="double"/>
+        /// Computes object statistics for each type property:<seealso cref="int"/>, <seealso cref="long"/>, <seealso cref="float"/>, <seealso cref="double"/>, <seealso cref="decimal"/>. Allows loss of accuracy when calculating values out of range <seealso cref="double"/>
         /// </summary>
         /// <typeparam name="TModel"></typeparam>
         /// <param name="source">Data set</param>
@@ -407,7 +407,7 @@ namespace EasyCNTK.Learning
 
                 p.StandardDeviation = Math.Sqrt(p.Variance);
 
-                #region поиск медианы
+                #region median search
                 int halfItems = countItems / 2; //half records
                 int countElements = 0; //cumulative number of elements when searching for the median
 

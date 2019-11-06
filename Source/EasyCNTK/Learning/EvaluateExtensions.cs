@@ -29,7 +29,7 @@ namespace EasyCNTK.Learning
             var firstItem = source.FirstOrDefault();
             if (firstItem.Equals(default(EvaluateItem<T>)))
             {
-                throw new ArgumentException("Последовательность IEnumerable<EvaluateItem<T>> не содержит элементов.", "source");
+                throw new ArgumentException("Sequence IEnumerable<EvaluateItem<T>> does not contain elements.", "source");
             }
             
             var result = firstItem.EvaluatedValue
@@ -97,7 +97,7 @@ namespace EasyCNTK.Learning
             var firstItem = source.FirstOrDefault();
             if (firstItem.Equals(default(EvaluateItem<T>)))
             {
-                throw new ArgumentException("Последовательность IEnumerable<EvaluateItem<T>> не содержит элементов.", "source");
+                throw new ArgumentException("Sequence IEnumerable<EvaluateItem<T>> does not contain elements.", "source");
             }
 
             int TP = 0; //fact 1, score 1
@@ -167,7 +167,7 @@ namespace EasyCNTK.Learning
             var firstElement = source.FirstOrDefault();
             if (firstElement.Equals(default(EvaluateItem<T>)))
             {
-                throw new ArgumentException("Последовательность IEnumerable<EvaluateItem<T>> не содержит элементов.", "source");
+                throw new ArgumentException("Sequence IEnumerable<EvaluateItem<T>> does not contain elements.", "source");
             }
             
             var confusionMatrix = new double[firstElement.EvaluatedValue.Count, firstElement.EvaluatedValue.Count];
@@ -228,7 +228,7 @@ namespace EasyCNTK.Learning
             var firstElement = source.FirstOrDefault();
             if (firstElement.Equals(default(EvaluateItem<T>)))
             {
-                throw new ArgumentException("Последовательность IEnumerable<EvaluateItem<T>> не содержит элементов.", "source");
+                throw new ArgumentException("Sequence IEnumerable<EvaluateItem<T>> does not contain elements.", "source");
             }
             
             var classesDistribution = Enumerable.Range(0, firstElement.EvaluatedValue.Count)
@@ -302,7 +302,7 @@ namespace EasyCNTK.Learning
             }
             catch (InvalidOperationException ex)
             {
-                throw new InvalidOperationException("Модель имеет несколько входов с одинаковым именем.", ex);
+                throw new InvalidOperationException("The model has several inputs with the same name..", ex);
             }               
             foreach (var miniBatch in testData)
             {
@@ -333,7 +333,7 @@ namespace EasyCNTK.Learning
             }
             catch (InvalidOperationException ex)
             {
-                throw new InvalidOperationException("Модель имеет несколько входов с одинаковым именем.", ex);
+                throw new InvalidOperationException("The model has several inputs with the same name..", ex);
             }           
             foreach (var miniBatch in testData)
             {
@@ -387,7 +387,7 @@ namespace EasyCNTK.Learning
             }
             catch (InvalidOperationException ex)
             {
-                throw new InvalidOperationException("Модель имеет несколько входов с одинаковым именем.", ex);
+                throw new InvalidOperationException("The model has several inputs with the same name..", ex);
             }           
             foreach (var features in data)
             {
@@ -532,7 +532,7 @@ namespace EasyCNTK.Learning
             }
             catch (InvalidOperationException ex)
             {
-                throw new InvalidOperationException("Модель имеет несколько входов с одинаковым именем.", ex);
+                throw new InvalidOperationException("The model has several inputs with the same name..", ex);
             }
             foreach (var features in data)
             {

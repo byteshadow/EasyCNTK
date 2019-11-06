@@ -52,9 +52,9 @@ namespace EasyCNTK.Learning
             var firstMinibatch = trainDataSelector(1).FirstOrDefault();
             int outputCount = firstMinibatch.Labels.Length;           
 
-            if (outputCount != lossFunctions.Length) throw new ArgumentOutOfRangeException(nameof(lossFunctions), "Количество функций потерь не совпадает с количеством выходных голов модели.");
-            if (outputCount != evaluationFunctions.Length) throw new ArgumentOutOfRangeException(nameof(evaluationFunctions), "Количество оценочных функций не совпадает с количеством выходных голов модели.");
-            if (outputCount != optimizers.Length) throw new ArgumentOutOfRangeException(nameof(optimizers), "Количество оптимизаторов не совпадает с количеством выходных голов модели.");
+            if (outputCount != lossFunctions.Length) throw new ArgumentOutOfRangeException(nameof(lossFunctions), "The number of loss functions does not match the number of output goals of the model.");
+            if (outputCount != evaluationFunctions.Length) throw new ArgumentOutOfRangeException(nameof(evaluationFunctions), "The number of evaluation functions does not match the number of output goals of the model.");
+            if (outputCount != optimizers.Length) throw new ArgumentOutOfRangeException(nameof(optimizers), "The number of optimizers does not match the number of output goals of the model.");
 
             Variable inputVariable;
             try
@@ -63,7 +63,7 @@ namespace EasyCNTK.Learning
             }
             catch (InvalidOperationException ex)
             {
-                throw new InvalidOperationException("Модель имеет несколько входов с одинаковым именем.", ex);
+                throw new InvalidOperationException("The model has several inputs with the same name..", ex);
             }
 
             var outputVariables = new Function[outputCount];
@@ -127,7 +127,7 @@ namespace EasyCNTK.Learning
                 {
                     var proposaledLearningRate = ruleUpdateLearningRate(i, learningRates);
                     if (proposaledLearningRate.Length != outputCount)
-                        throw new ArgumentOutOfRangeException(nameof(ruleUpdateLearningRate), "Количество обновляемых скоростей обучения не соответсвует количеству выходных голов модели.");
+                        throw new ArgumentOutOfRangeException(nameof(ruleUpdateLearningRate), "The number of updated training speeds does not match the number of output goals of the model.");
                     for (int j = 0; j < outputCount; j++)
                     {
                         if (proposaledLearningRate[j] != learningRates[j])
@@ -193,7 +193,7 @@ namespace EasyCNTK.Learning
             }
             catch (InvalidOperationException ex)
             {
-                throw new InvalidOperationException("Модель имеет несколько входов с одинаковым именем.", ex);
+                throw new InvalidOperationException("The model has several inputs with the same name..", ex);
             }            
             var outputVariable = isReccurentModel ? Variable.InputVariable(source.Output.Shape, source.Output.DataType, "output", new List<Axis> { Axis.DefaultBatchAxis() })
                 : Variable.InputVariable(source.Output.Shape, source.Output.DataType, "output");
@@ -404,7 +404,7 @@ namespace EasyCNTK.Learning
             Func<int, double, double, bool> actionPerEpoch = null,
             string inputName = "Input") where T : IConvertible
         {
-            if (features.Count != labels.Count) throw new ArgumentException("Количество поледовательностей(features) и меток(labels) должно быть одинаковым.");
+            if (features.Count != labels.Count) throw new ArgumentException("Number of sequences(features) and tags(labels) should be the same.");
 
             DataConverter dataConverter = new DataConverter(device);
             IList<Minibatch> minibatches = null;
@@ -458,7 +458,7 @@ namespace EasyCNTK.Learning
             Func<int, double, double, bool> actionPerEpoch = null,
             string inputName = "Input") where T : IConvertible
         {
-            if (features.Count != labels.Count) throw new ArgumentException("Количество примеров 2D  (features) и меток(labels) должно быть одинаковым.");
+            if (features.Count != labels.Count) throw new ArgumentException("Number of examples 2D  (features) and tags(labels) should be the same.");
 
             DataConverter dataConverter = new DataConverter(device);
             IList<Minibatch> minibatches = null;
@@ -738,7 +738,7 @@ namespace EasyCNTK.Learning
             Func<int, double[], double[], bool> actionPerEpoch = null,
             string inputName = "Input") where T : IConvertible
         {
-            if (features.Count != labels.Count) throw new ArgumentException("Количество поледовательностей(features) и меток(labels) должно быть одинаковым.");
+            if (features.Count != labels.Count) throw new ArgumentException("Number of sequences(features) and tags(labels) should be the same.");
 
             DataConverter dataConverter = new DataConverter(device);
             IList<MinibatchMultiOutput> minibatches = null;
@@ -794,7 +794,7 @@ namespace EasyCNTK.Learning
             Func<int, double[], double[], bool> actionPerEpoch = null,
             string inputName = "Input") where T : IConvertible
         {
-            if (features.Count != labels.Count) throw new ArgumentException("Количество примеров 2D  (features) и меток(labels) должно быть одинаковым.");
+            if (features.Count != labels.Count) throw new ArgumentException("Number of examples 2D  (features) and tags(labels) should be the same.");
 
             DataConverter dataConverter = new DataConverter(device);
             IList<MinibatchMultiOutput> minibatches = null;

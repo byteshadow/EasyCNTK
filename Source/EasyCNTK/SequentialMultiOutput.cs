@@ -99,7 +99,7 @@ namespace EasyCNTK
             var dataType = typeof(T) == typeof(double) ? DataType.Double : DataType.Float;
             if (_model.Output.DataType != dataType)
             {
-                throw new ArgumentException($"Универсальный параметр {nameof(T)} не сответствует типу данных в модели. Требуемый тип: {_model.Output.DataType}");
+                throw new ArgumentException($"Universal parameter {nameof(T)} does not match the data type in the model. Type required: {_model.Output.DataType}");
             }
             try
             {
@@ -126,7 +126,7 @@ namespace EasyCNTK
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Ошибка загрузки файла конфигурации модели. {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Error loading model configuration file. {ex.Message}");
             }
         }
         /// <summary>
@@ -136,7 +136,7 @@ namespace EasyCNTK
         public void Add(Layer layer)
         {
             if (_isCompiled)
-                throw new NotSupportedException("Изменение скомпилированной модели не поддерживается.");
+                throw new NotSupportedException("Changing the compiled model is not supported.");
             _model = layer.Create(_model, _device);
             _architectureDescription += $"-{layer.GetDescription()}";
         }
@@ -148,9 +148,9 @@ namespace EasyCNTK
         public void AddToBranch(string branch, Layer layer)
         {
             if (_isCompiled)
-                throw new NotSupportedException("Изменение скомпилированной модели не поддерживается.");
+                throw new NotSupportedException("Changing the compiled model is not supported.");
             if (_branches.Count == 0)
-                throw new NotSupportedException("Добавления слоя к ветви без предварительного создания ветвей не поддерживается, сначала создайте ветви методом SplitToBranches()");
+                throw new NotSupportedException("Add layer to branches without first creating branches not supported, first create branches method SplitToBranches()");
             if (_branches.TryGetValue(branch, out var branchOutput))
             {
                 _branches[branch].Model = layer.Create(branchOutput.Model, _device);
@@ -158,7 +158,7 @@ namespace EasyCNTK
             }
             else
             {
-                throw new ArgumentException($"Ветви с именем '{branch}' не существует.", nameof(branch));
+                throw new ArgumentException($"Branches with the name '{branch}' does not exist.", nameof(branch));
             }
         }
         /// <summary>
@@ -168,11 +168,11 @@ namespace EasyCNTK
         public void SplitToBranches(params string[] branchNames)
         {
             if (_isCompiled)
-                throw new NotSupportedException("Изменение скомпилированной модели не поддерживается.");
+                throw new NotSupportedException("Changing the compiled model is not supported.");
             if (_branches.Count != 0)
-                throw new NotSupportedException("Повторное разбиение сущеcтвующих ветвей на новые ветви не поддерживается.");
+                throw new NotSupportedException("Re-splitting branches to new branches not supported.");
             if (branchNames.Length < 2)
-                throw new NotSupportedException("Разбиение возможно минимум на 2 ветви.");
+                throw new NotSupportedException("A split is possible at least into 2 branches.");
             _branches = branchNames
                 .Select((branch, index) => (branch, index, _model))
                 .ToDictionary(p => p.branch, q => new Branch()
@@ -220,7 +220,7 @@ namespace EasyCNTK
             get
             {
                 if (!_isCompiled)
-                    throw new NotSupportedException("Использование нескомпилированной модели не поддерживается. Скомпилируйте вызвав Compile()");
+                    throw new NotSupportedException("Using an uncompiled model is not supported. Compile by calling Compile()");
                 return _model;
             }
         }
