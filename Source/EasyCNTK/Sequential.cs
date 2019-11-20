@@ -79,6 +79,18 @@ namespace EasyCNTK
             _architectureDescription = $"[IN]{shape}";
         }
 
+        public Sequential(DeviceDescriptor device, NDShape inputShape, bool outputIsSequence = false, string inputName = "Input", bool isSparce = false)
+        {
+            _device = device;
+            var dataType = typeof(T) == typeof(double) ? DataType.Double : DataType.Float;
+            Model = outputIsSequence
+                ? Variable.InputVariable(inputShape, dataType, inputName, new[] { Axis.DefaultBatchAxis() }, isSparce)
+                : Variable.InputVariable(inputShape, dataType, inputName, null, isSparce);
+
+            var shape = string.Join("x", inputShape.Dimensions);
+            _architectureDescription = $"[IN]{shape}";
+        }
+
         private Sequential(DeviceDescriptor device, string filePath, ModelFormat modelFormat = ModelFormat.CNTKv2)
         {
             _device = device;
