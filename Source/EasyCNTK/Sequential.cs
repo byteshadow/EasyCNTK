@@ -27,6 +27,7 @@ namespace EasyCNTK
         private DeviceDescriptor _device;
         private string _architectureDescription;
         private Dictionary<string, Function> _shortcutConnectionInputs = new Dictionary<string, Function>();
+        public bool IsRecurrent { get; private set; }
 
         private string getArchitectureDescription()
         {
@@ -136,6 +137,7 @@ namespace EasyCNTK
         {
             Model = layer.Create(Model, _device);
             _architectureDescription += $"-{layer.GetDescription()}";
+            IsRecurrent |= layer.IsRecurrent;
         }
         /// <summary>
         /// Creates an entry point for SC from which you can create a connection to the following layers of the network. At least one output point must exist for one input point, otherwise the connection is ignored in the model.

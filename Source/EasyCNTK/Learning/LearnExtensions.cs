@@ -513,7 +513,7 @@ namespace EasyCNTK.Learning
         {
             DataConverter dataConverter = new DataConverter(device);
             var minibatches = dataConverter.ConvertDatasetToMinibatch(trainData, inputDim, minibatchSize);
-            return source.Model.Fit(p => minibatches, lossFunction, evaluationFunction, optimizer, epochCount, false, device, ruleUpdateLearningRate, actionPerEpoch, inputName);
+            return source.Model.Fit(p => minibatches, lossFunction, evaluationFunction, optimizer, epochCount, source.IsRecurrent, device, ruleUpdateLearningRate, actionPerEpoch, inputName);
         }
         /// <summary>
         /// Teaches a recursive model.

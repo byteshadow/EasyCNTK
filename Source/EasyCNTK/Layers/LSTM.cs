@@ -167,6 +167,7 @@ namespace EasyCNTK.Layers
             _isLastLstmLayer = isLastLstm;
             _selfStabilizerLayer = selfStabilizerLayer;
             _name = name;
+            IsRecurrent = true;
         }
 
         public LSTM(SerializationInfo info, StreamingContext context)
@@ -177,6 +178,7 @@ namespace EasyCNTK.Layers
             _useShortcutConnections = info.GetBoolean(nameof(_useShortcutConnections));
             _isLastLstmLayer = info.GetBoolean(nameof(_isLastLstmLayer));
             _selfStabilizerLayer = (Layer)info.GetValue(nameof(_selfStabilizerLayer), typeof(Layer));
+            IsRecurrent = true;
         }
 
         public override string GetDescription()

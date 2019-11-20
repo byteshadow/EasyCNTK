@@ -17,6 +17,7 @@ namespace EasyCNTK.Layers
     [Serializable]
     public abstract class Layer : ISerializable
     {
+        public bool IsRecurrent { get; set; } = false;
         public abstract Function Create(Function input, DeviceDescriptor device);
         public abstract string GetDescription();
 
